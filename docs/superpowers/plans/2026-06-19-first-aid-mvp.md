@@ -95,6 +95,7 @@
     "@vitejs/plugin-react": "^4.3.0",
     "fake-indexeddb": "^6.0.0",
     "jsdom": "^24.1.0",
+    "prettier": "^3.3.0",
     "tsx": "^4.16.0",
     "typescript": "^5.5.0",
     "vite": "^5.3.0",
