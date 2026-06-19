@@ -205,6 +205,8 @@ The rationale map indexes every `rationale` by its concept id (from `acronyms`, 
 
 **Concept-id uniqueness (build guard).** Because these ids come from multiple sources and a collision would silently overwrite a map entry (wrong "por qué", no error), `build-content.ts` runs a uniqueness pass: it collects every id-producing source and fails the build with `Duplicate concept id: {id}` if any id appears in more than one source. A fixture with a deliberate duplicate id asserts the build fails. This makes the 1:1 rationale contract that Modules 2/3 depend on actually guaranteed.
 
+**Ref-integrity scope (v1).** Referential integrity is enforced for content v1 actually renders: `worked_example.steps[].rationaleRef` (and chain phase ids are valid ref targets). The Module-2 `tarjetas` reference concepts (`secundaria`, `signos_vitales`, `niveles_evacuacion`) that have no stable concept id in the v1 model, so **card-ref validation is deferred to Module 2** — when those concepts get ids and the card→rationale contract is exercised. Card *structural* validation (schema) still runs in v1.
+
 ## 5. Module 1 "Aprender"
 
 ### 5.1 Chain model projection
