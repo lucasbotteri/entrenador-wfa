@@ -1,0 +1,7 @@
+.badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--primary); color: var(--on-critical);
+  font-family: var(--font-serif); font-weight: 800; border-radius: var(--radius-md);
+}
+.md { width: 48px; height: 48px; font-size: 24px; }
+.lg { width: 56px; height: 56px; font-size: 28px; }
