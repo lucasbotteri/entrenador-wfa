@@ -87,9 +87,9 @@ first-aid/
 │   ├── modules/
 │   │   └── learn/                  # Module 1 · Aprender
 │   │       ├── content/
-│   │       │   ├── chainModel.ts   # projects cadena + siglas → navigable node tree
-│   │       │   └── selectors.ts    # getPhases, getNodesByPhase, getNodeById, getAdjacentNodes
-│   │       ├── domain/
+│   │       │   └── selectors.ts    # getPhases, getNodesByPhase, getNodeById, getAdjacentNodes (over the model)
+│   │       ├── domain/             # view-model projection + navigation (pure, may use shared/domain)
+│   │       │   ├── chainModel.ts   # projects cadena + siglas + rationale → navigable node tree
 │   │       │   └── navigation.ts   # pure findPrevNext(model, id)
 │   │       ├── ui/
 │   │       │   ├── PhaseTimeline.tsx
@@ -125,7 +125,7 @@ first-aid/
 - `shared/*` **never** imports from `modules/*`.
 - `modules/<X>/*` may import from `shared/*`, never from `modules/<Y>/*`.
 - Within a module: `routes` → `ui` → `domain` → `content` (no cycles).
-- `content/` imports only zod + JSON. `domain/` imports no React.
+- `shared/content/` imports only zod + JSON. `shared/domain/` and any module `domain/` import no React but **may** import `shared/domain` (e.g. the rationale map). A module's `content/` holds raw-data selectors only; view-model projections that need rationale lookups live in the module's `domain/` (this is why `chainModel.ts` sits under `learn/domain/`).
 
 ### 3.3 State
 
@@ -159,6 +159,7 @@ The content files are **not** a flat list of uniform nodes. Concretely:
   - `secundaria.contenido`: `intro`, `linea_base`, `orden`, `reevaluacion`, `signos_vitales` (ref), `anamnesis` (ref `muestra`), `examen_fisico` (ref `dias` + extra).
   - `evacuacion.contenido`: `contactar_ae`, `evaluacion_continua`, `comunicacion`, `posicion` (ref `posicion_victima`), `niveles` (ref `niveles_evacuacion`).
 - Plus top-level: `signos_vitales`, `posicion_victima`, `reglas_practicas[]`, `niveles_evacuacion[]`, `temas_clinicos[]`, `tarjetas[]` (Module 2, validated but unused in v1).
+- `worked_example` — **new block authored for R1.6** (does not exist in the YAML yet; see §5.5). Shape: `{ titulo: string, steps: [{ fase: enum(escena/primaria/secundaria/evacuacion), estado: string, accion: string, racional_ref: string }] }`. Each `racional_ref` must resolve to an existing concept id (same ref-integrity pass as `cadena`/`siglas`). Authored and clinically reviewed in build-order step 6.
 
 **Schema strategy:** zod models each of these shapes precisely (phase content as a discriminated union on `fase`). Refs (`ref_sigla`, `ref`, `concepto`, `racional_ref`) are validated as strings at parse time; **referential integrity** (every ref resolves to an existing id) is checked by a dedicated validation pass in `build-content.ts` that fails the build on a dangling ref.
 
@@ -180,6 +181,7 @@ The content files are **not** a flat list of uniform nodes. Concretely:
 | `temas_clinicos` | `clinicalTopics` |
 | `signos_vitales` | `vitalSigns` |
 | `tarjetas` | `cards` |
+| `worked_example` / `steps` / `estado` / `accion` | `workedExample` / `steps` / `state` / `action` |
 
 Phase enum values map: `escena→scene`, `primaria→primary`, `secundaria→secondary`, `evacuacion→evacuation`. **User-visible strings (titles, rationale text, criteria) are NOT translated** — they stay Spanish; only the keys are anglicized.
 
@@ -201,6 +203,8 @@ export function getRationale(conceptId: string, map: Map<string, string>): strin
 
 The rationale map indexes every `rationale` by its concept id (from `acronyms`, `chain` phases, `clinicalTopics`, `practicalRules`). Module 1 shows it as the "por qué"; Modules 2/3 will look it up by `rationaleRef`/`concepto`. **No rationale text is duplicated in the UI** (PRD §9).
 
+**Concept-id uniqueness (build guard).** Because these ids come from multiple sources and a collision would silently overwrite a map entry (wrong "por qué", no error), `build-content.ts` runs a uniqueness pass: it collects every id-producing source and fails the build with `Duplicate concept id: {id}` if any id appears in more than one source. A fixture with a deliberate duplicate id asserts the build fails. This makes the 1:1 rationale contract that Modules 2/3 depend on actually guaranteed.
+
 ## 5. Module 1 "Aprender"
 
 ### 5.1 Chain model projection
@@ -219,8 +223,11 @@ interface ChainNode {
   kind: 'acronymLetter' | 'acronym' | 'topic' | 'reference'
   items: NodeItem[]          // expandable sub-items (meaning/detail/why)
   rationaleId?: string       // resolves via rationale map
-  severity?: 'critical' | 'serious' | 'mild'
 }
+// Note: no per-node severity in v1. CRÍTICO/GRAVE/LEVE (the Chip severities)
+// are a property of niveles_evacuacion only (PRD), not of procedural HABCDE
+// steps — conflating them would mislead. The evac decision node renders the
+// three Chips for the evacuation levels; individual chain steps do not carry severity.
 interface NodeItem { label: string; detail: string; why?: string }
 ```
 
@@ -295,7 +302,7 @@ findPrevNext(model, currentId): { prev?: ChainNode; next?: ChainNode }   // pure
 ```
 
 - **Typography:** serif (Georgia, system, 0 KB) for titles and the italic "por qué" quote; sans (Inter via `@fontsource/inter`, latin subset ~14 KB woff2) for body and labels. Body 16px min (no iOS zoom). Scale: 32/24/22/18 titles, 16 body, 14 detail, 12/11/10 micro.
-- **Severity:** `critical`=burgundy, `serious`=copper/amber, `mild`=olive. Used in `EvacLevel` and on critical HABCDE node chips.
+- **Severity:** `critical`=burgundy, `serious`=copper/amber, `mild`=olive. Used **only** for the evacuation levels (`niveles_evacuacion`); not applied to procedural HABCDE steps (see §5.1 note).
 - **Anti-tokens:** no new colors without updating this file; no Tailwind palette.
 
 ### 6.2 Components (`shared/ui/components`)
@@ -355,7 +362,7 @@ interface KV {
 |---|---|---|
 | `content/schemas` | unit | valid fixture parses; malformed throws with expected path |
 | `content/loader` | unit | second call does not re-parse (memoized) |
-| `content/mapping` | unit | es-key → en-key transform; dangling-ref detection |
+| `content/mapping` | unit | es-key → en-key transform; dangling-ref detection; duplicate concept-id fails the build |
 | `domain/storage` | unit | probe-fail → memory; set/get/del/clear; migrations run once |
 | `domain/rationale` | unit | `buildRationaleMap` resolves refs; missing → undefined |
 | `ui/components` | component | `Chip` severity class + aria; `LetterBadge` aria; `Breadcrumb` semantics |
@@ -391,7 +398,7 @@ JS gzip < 100 KB (single module). Lighthouse mobile on preview deploy: Performan
 ## 11. Build order (implementation sequencing)
 
 1. Scaffolding: Vite + React + TS, ESLint/Prettier, tsconfig, folder skeleton, CI.
-2. Content pipeline: zod schemas (faithful to YAML), mapping, `build-content.ts` (+ ref-integrity check), Vite plugin, loader, rationale map. Tests + fixture.
+2. Content pipeline: zod schemas (faithful to YAML, incl. `workedExample` shape), mapping, `build-content.ts` (+ ref-integrity check + concept-id uniqueness guard), Vite plugin, loader, rationale map. Tests + fixture (incl. duplicate-id and worked-example cases).
 3. Storage wrapper + tests.
 4. Design system: tokens, components, icons. Component tests.
 5. PWA shell: manifest, `vite-plugin-pwa`, `Shell`, offline indicator, ErrorBoundary, router.
