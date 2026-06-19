@@ -293,22 +293,23 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'unused-imports/no-unused-imports': 'error',
       'import/order': ['warn', { 'newlines-between': 'always', alphabetize: { order: 'asc' } }],
-      // Layer boundaries (spec §3.2): shared must not import modules.
-      'no-restricted-imports': [
-        'error',
-        { patterns: [{ group: ['@/modules/*'], message: 'shared/ must not import from modules/' }] },
-      ],
     },
   },
   {
-    // modules may not import other modules
-    files: ['src/modules/**/*.{ts,tsx}'],
+    // Layer boundaries (spec §3.2): the PURE shared layers must not depend on
+    // feature modules. The composition root (src/shared/app) is exempt — it is
+    // the one place that wires modules into the router.
+    files: [
+      'src/shared/content/**/*.{ts,tsx}',
+      'src/shared/domain/**/*.{ts,tsx}',
+      'src/shared/ui/**/*.{ts,tsx}',
+    ],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
-            { group: ['@/modules/!(learn)/**'], message: 'a module must not import another module' },
+            { group: ['@/modules/*', '@/modules/**'], message: 'shared/{content,domain,ui} must not import from modules/' },
           ],
         },
       ],
@@ -316,6 +317,8 @@ export default tseslint.config(
   },
 )
 ```
+
+> Note: the composition root `src/shared/app/router.tsx` legitimately imports `learnRoutes` from `@/modules/learn` — that is why the import ban is scoped to `content/domain/ui`, not all of `shared`. A cross-module import ban (`@/modules/<X>` from `@/modules/<Y>`) is deferred until a second module exists (YAGNI — v1 has only `learn`).
 
 - [ ] **Step 4: Run lint to verify config loads**
 
