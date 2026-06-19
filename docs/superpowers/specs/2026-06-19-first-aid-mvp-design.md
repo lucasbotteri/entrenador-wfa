@@ -201,7 +201,7 @@ export function buildRationaleMap(content: Content): Map<string, string>
 export function getRationale(conceptId: string, map: Map<string, string>): string | undefined
 ```
 
-The rationale map indexes every `rationale` by its concept id (from `acronyms`, `chain` phases, `clinicalTopics`, `practicalRules`). Module 1 shows it as the "por qué"; Modules 2/3 will look it up by `rationaleRef`/`concepto`. **No rationale text is duplicated in the UI** (PRD §9).
+The rationale map indexes every `rationale` by its **unique id**: acronym `id`, chain phase `id` (English, e.g. `scene`), and clinicalTopic `id`. It is **not** keyed by `acronym.concept` — `concept` is a category (e.g. `tev` and `mdd` both have concept `escena`), so keying by it would silently overwrite a rationale. `practicalRules` carry no rationale text and contribute no key. Module 1 shows the resolved rationale as the "por qué"; Modules 2/3 look it up by `rationaleRef`/`concepto`. **No rationale text is duplicated in the UI** (PRD §9).
 
 **Concept-id uniqueness (build guard).** Because these ids come from multiple sources and a collision would silently overwrite a map entry (wrong "por qué", no error), `build-content.ts` runs a uniqueness pass: it collects every id-producing source and fails the build with `Duplicate concept id: {id}` if any id appears in more than one source. A fixture with a deliberate duplicate id asserts the build fails. This makes the 1:1 rationale contract that Modules 2/3 depend on actually guaranteed.
 

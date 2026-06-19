@@ -925,7 +925,7 @@ worked_example:
     - fase: "escena"
       estado: "Tu compañero cae varios metros en un canal de pedrero. Sangra del muslo y no se mueve."
       accion: "Mirás el terreno, asegurás la zona y te ponés guantes antes de acercarte."
-      racional_ref: "escena"
+      racional_ref: "scene"
     - fase: "primaria"
       estado: "No responde, respira; sangrado pulsátil en el muslo; casco puesto."
       accion: "H: controlás la hemorragia masiva con presión directa antes que nada."
@@ -1095,8 +1095,8 @@ const base = {
 } as any
 
 describe('integrity', () => {
-  it('collects all concept ids', () => {
-    expect(collectConceptIds(base)).toEqual(expect.arrayContaining(['habcde', 'shock', 'hemorragia']))
+  it('collects the rationale-key surface (acronym id, phase, topic id)', () => {
+    expect(collectConceptIds(base)).toEqual(expect.arrayContaining(['habcde', 'primary', 'shock']))
   })
 
   it('detects duplicate ids across sources', () => {
@@ -1129,13 +1129,14 @@ Expected: FAIL (missing `scripts/integrity`).
 ```ts
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// Every source that produces a concept id used as a rationale key (spec §4.4).
+// Valid rationale-ref targets = the rationale-map key surface (spec §4.4):
+// acronym id, chain phase id, clinicalTopic id. `concept` is a category (not
+// unique, not a key); practicalRules carry no rationale text.
 export function collectConceptIds(c: any): string[] {
   const ids: string[] = []
-  for (const a of c.acronyms ?? []) ids.push(a.id, a.concept)
-  for (const p of c.chain ?? []) ids.push(p.phase) // phases are valid ref targets (§4.4)
+  for (const a of c.acronyms ?? []) ids.push(a.id)
+  for (const p of c.chain ?? []) ids.push(p.phase)
   for (const t of c.clinicalTopics ?? []) ids.push(t.id)
-  for (const r of c.practicalRules ?? []) ids.push(r.id)
   return ids.filter((v, i, arr) => arr.indexOf(v) === i)
 }
 
@@ -1145,8 +1146,8 @@ export function findDuplicateIds(c: any): string[] {
   const counts = new Map<string, number>()
   const bump = (id: string) => counts.set(id, (counts.get(id) ?? 0) + 1)
   for (const a of c.acronyms ?? []) bump(a.id)
+  for (const p of c.chain ?? []) bump(p.phase)
   for (const t of c.clinicalTopics ?? []) bump(t.id)
-  for (const r of c.practicalRules ?? []) bump(r.id)
   return [...counts.entries()].filter(([, n]) => n > 1).map(([id]) => id)
 }
 
@@ -1384,9 +1385,10 @@ import { validContent } from '../../fixtures/content.fixture'
 describe('rationale map', () => {
   it('indexes rationale by concept id from every source', () => {
     const m = buildRationaleMap(validContent)
-    expect(getRationale('habcde', m)).toContain('mata primero')
-    expect(getRationale('shock', m)).toContain('Hipoperfusión')
-    expect(getRationale('primaria', m)).toBeDefined() // acronym.concept
+    expect(getRationale('habcde', m)).toContain('mata primero') // acronym id
+    expect(getRationale('shock', m)).toContain('Hipoperfusión')  // clinicalTopic id
+    expect(getRationale('scene', m)).toBeDefined()               // chain phase id
+    expect(getRationale('primaria', m)).toBeUndefined()          // concept is NOT a key
   })
 
   it('returns undefined for an unknown concept', () => {
@@ -1408,10 +1410,9 @@ import type { Content } from '@/shared/content/types'
 
 export function buildRationaleMap(content: Content): Map<string, string> {
   const m = new Map<string, string>()
-  for (const a of content.acronyms) {
-    m.set(a.id, a.rationale)
-    m.set(a.concept, a.rationale)
-  }
+  // Key by unique ids only. `concept` is a category (e.g. tev and mdd both have
+  // concept "escena"); keying by it would silently overwrite one rationale.
+  for (const a of content.acronyms) m.set(a.id, a.rationale)
   for (const phase of content.chain) m.set(phase.phase, phase.rationale)
   for (const t of content.clinicalTopics) m.set(t.id, t.rationale)
   return m
@@ -2470,7 +2471,7 @@ function secondaryNodes(content: Content): ChainNode[] {
     icon: 'vitalSigns',
     kind: 'topic',
     items: (content.vitalSigns.components ?? []).map(c => ({ label: c, detail: '' })),
-    rationaleId: 'secundaria',
+    rationaleId: 'secondary',
   })
   for (const [id, icon] of wanted) {
     const n = acronymNode(content, id, icon)
@@ -2492,7 +2493,7 @@ function sceneNodes(content: Content): ChainNode[] {
     icon: 'scene',
     kind: 'topic',
     items: [{ label: 'Seguridad', detail: typeof c.buscar_ayuda === 'string' ? c.buscar_ayuda : 'Deténgase y piense. Protéjase.' }],
-    rationaleId: 'escena',
+    rationaleId: 'scene',
   })
   return nodes
 }
@@ -2507,7 +2508,7 @@ function evacuationNodes(content: Content): ChainNode[] {
       icon: 'evacuation',
       kind: 'reference',
       items: content.evacLevels.map(e => ({ label: e.level, detail: e.criterion })),
-      rationaleId: 'evacuacion',
+      rationaleId: 'evacuation',
     },
   ]
 }
