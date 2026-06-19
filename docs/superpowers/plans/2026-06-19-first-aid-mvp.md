@@ -64,13 +64,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run content:build && tsc -b && vite build",
+    "build": "npm run content:build && tsc --noEmit -p tsconfig.json && vite build",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
     "test:cov": "vitest run --coverage",
     "lint": "eslint . --max-warnings 0",
-    "typecheck": "tsc -b --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
     "format": "prettier -w .",
     "format:check": "prettier -c .",
     "content:build": "tsx scripts/build-content.ts",
@@ -89,11 +89,13 @@
     "@testing-library/jest-dom": "^6.4.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.0",
+    "@types/node": "^20.14.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.0",
     "fake-indexeddb": "^6.0.0",
     "jsdom": "^24.1.0",
+    "prettier": "^3.3.0",
     "tsx": "^4.16.0",
     "typescript": "^5.5.0",
     "vite": "^5.3.0",
@@ -149,27 +151,31 @@
       "@/modules/*": ["src/modules/*"]
     }
   },
-  "include": ["src", "tests"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "tests"]
 }
 ```
+
+> Note: the root config and the node config are type-checked independently (no project references / no `tsc -b`), which avoids the composite-emit conflict (TS6310). `@types/node` is required for `node:path`/`__dirname` in `vite.config.ts`.
 
 - [ ] **Step 4: Create `tsconfig.node.json`**
 
 ```json
 {
   "compilerOptions": {
-    "composite": true,
+    "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
+    "types": ["node"],
     "strict": true,
     "skipLibCheck": true
   },
   "include": ["vite.config.ts", "vitest.config.ts", "scripts/**/*.ts"]
 }
 ```
+
+> Note: `target: ES2020` is required because `scripts/integrity.ts` spreads a `Map` iterator (`[...counts.entries()]`). Scripts and tests that legitimately use `any` (build-content.ts, vite.config.ts, integrity.test.ts) carry a top-of-file `/* eslint-disable @typescript-eslint/no-explicit-any */`, matching the convention in `mapping.ts`/`integrity.ts`.
 
 - [ ] **Step 5: Create `vite.config.ts`** (PWA added in Task 20; minimal for now)
 
@@ -287,22 +293,23 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'unused-imports/no-unused-imports': 'error',
       'import/order': ['warn', { 'newlines-between': 'always', alphabetize: { order: 'asc' } }],
-      // Layer boundaries (spec §3.2): shared must not import modules.
-      'no-restricted-imports': [
-        'error',
-        { patterns: [{ group: ['@/modules/*'], message: 'shared/ must not import from modules/' }] },
-      ],
     },
   },
   {
-    // modules may not import other modules
-    files: ['src/modules/**/*.{ts,tsx}'],
+    // Layer boundaries (spec §3.2): the PURE shared layers must not depend on
+    // feature modules. The composition root (src/shared/app) is exempt — it is
+    // the one place that wires modules into the router.
+    files: [
+      'src/shared/content/**/*.{ts,tsx}',
+      'src/shared/domain/**/*.{ts,tsx}',
+      'src/shared/ui/**/*.{ts,tsx}',
+    ],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
-            { group: ['@/modules/!(learn)/**'], message: 'a module must not import another module' },
+            { group: ['@/modules/*', '@/modules/**'], message: 'shared/{content,domain,ui} must not import from modules/' },
           ],
         },
       ],
@@ -310,6 +317,8 @@ export default tseslint.config(
   },
 )
 ```
+
+> Note: the composition root `src/shared/app/router.tsx` legitimately imports `learnRoutes` from `@/modules/learn` — that is why the import ban is scoped to `content/domain/ui`, not all of `shared`. A cross-module import ban (`@/modules/<X>` from `@/modules/<Y>`) is deferred until a second module exists (YAGNI — v1 has only `learn`).
 
 - [ ] **Step 4: Run lint to verify config loads**
 
@@ -866,6 +875,13 @@ export function mapCard(c: any) {
   }
 }
 
+export function mapCase(c: any) {
+  // CaseSchema requires `title`; the YAML uses `titulo`. Other case fields pass
+  // through (cases are the Module 3 contract, validated but unused in v1).
+  const { titulo, ...rest } = c
+  return { ...rest, title: titulo }
+}
+
 export function mapPosition(p: any) {
   return { situation: p.situacion, position: p.posicion }
 }
@@ -912,7 +928,7 @@ worked_example:
     - fase: "escena"
       estado: "Tu compañero cae varios metros en un canal de pedrero. Sangra del muslo y no se mueve."
       accion: "Mirás el terreno, asegurás la zona y te ponés guantes antes de acercarte."
-      racional_ref: "escena"
+      racional_ref: "scene"
     - fase: "primaria"
       estado: "No responde, respira; sangrado pulsátil en el muslo; casco puesto."
       accion: "H: controlás la hemorragia masiva con presión directa antes que nada."
@@ -964,7 +980,7 @@ import { parse as parseYaml } from 'yaml'
 import { ContentSchema, CasesSchema } from '../src/shared/content/schemas'
 import {
   mapAcronym, mapChainPhase, mapEvacLevel, mapPracticalRule,
-  mapClinicalTopic, mapCard, mapPosition, mapWorkedExample,
+  mapClinicalTopic, mapCard, mapPosition, mapWorkedExample, mapCase,
 } from '../src/shared/content/mapping'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
@@ -1019,7 +1035,7 @@ function main() {
   }
   const content = contentResult.data
 
-  const casesResult = CasesSchema.safeParse(rawCases.casos ?? [])
+  const casesResult = CasesSchema.safeParse((rawCases.casos ?? []).map(mapCase))
   if (!casesResult.success) {
     fail(casesResult.error.issues.map(i => `  ${i.path.join('.')}: ${i.message}`).join('\n'))
   }
@@ -1082,8 +1098,8 @@ const base = {
 } as any
 
 describe('integrity', () => {
-  it('collects all concept ids', () => {
-    expect(collectConceptIds(base)).toEqual(expect.arrayContaining(['habcde', 'shock', 'hemorragia']))
+  it('collects the rationale-key surface (acronym id, phase, topic id)', () => {
+    expect(collectConceptIds(base)).toEqual(expect.arrayContaining(['habcde', 'primary', 'shock']))
   })
 
   it('detects duplicate ids across sources', () => {
@@ -1116,12 +1132,14 @@ Expected: FAIL (missing `scripts/integrity`).
 ```ts
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// Every source that produces a concept id used as a rationale key (spec §4.4).
+// Valid rationale-ref targets = the rationale-map key surface (spec §4.4):
+// acronym id, chain phase id, clinicalTopic id. `concept` is a category (not
+// unique, not a key); practicalRules carry no rationale text.
 export function collectConceptIds(c: any): string[] {
   const ids: string[] = []
-  for (const a of c.acronyms ?? []) ids.push(a.id, a.concept)
+  for (const a of c.acronyms ?? []) ids.push(a.id)
+  for (const p of c.chain ?? []) ids.push(p.phase)
   for (const t of c.clinicalTopics ?? []) ids.push(t.id)
-  for (const r of c.practicalRules ?? []) ids.push(r.id)
   return ids.filter((v, i, arr) => arr.indexOf(v) === i)
 }
 
@@ -1131,8 +1149,8 @@ export function findDuplicateIds(c: any): string[] {
   const counts = new Map<string, number>()
   const bump = (id: string) => counts.set(id, (counts.get(id) ?? 0) + 1)
   for (const a of c.acronyms ?? []) bump(a.id)
+  for (const p of c.chain ?? []) bump(p.phase)
   for (const t of c.clinicalTopics ?? []) bump(t.id)
-  for (const r of c.practicalRules ?? []) bump(r.id)
   return [...counts.entries()].filter(([, n]) => n > 1).map(([id]) => id)
 }
 
@@ -1142,11 +1160,20 @@ export function findDanglingRefs(c: any): string[] {
   const check = (ref?: string) => {
     if (ref && !known.has(ref)) dangling.push(ref)
   }
+  // v1 validates only content it consumes. Card (Module 2) rationale refs are
+  // validated when Module 2 is built and those concepts get stable ids.
   for (const s of c.workedExample?.steps ?? []) check(s.rationaleRef)
-  for (const card of c.cards ?? []) check(card.rationaleRef)
   return dangling.filter((v, i, arr) => arr.indexOf(v) === i)
 }
 ```
+
+> **Scope decision:** the real `tarjetas` (Module-2 cards) reference concepts (`secundaria`, `signos_vitales`, `niveles_evacuacion`) that have no stable concept id in the v1 model, so v1 does NOT ref-validate card refs — only `worked_example` (which v1 renders). Card-ref integrity is enforced when Module 2 lands. Add a test asserting a dangling *card* ref yields no findings in v1:
+> ```ts
+> it('does not validate card rationaleRef in v1 (deferred to Module 2)', () => {
+>   const withBadCard = { ...base, cards: [{ id: 'c1', rationaleRef: 'does-not-exist' }] }
+>   expect(findDanglingRefs(withBadCard)).toEqual([])
+> })
+> ```
 
 - [ ] **Step 4: Wire it into `build-content.ts`** — replace the placeholder `runIntegrityChecks`
 
@@ -1361,9 +1388,10 @@ import { validContent } from '../../fixtures/content.fixture'
 describe('rationale map', () => {
   it('indexes rationale by concept id from every source', () => {
     const m = buildRationaleMap(validContent)
-    expect(getRationale('habcde', m)).toContain('mata primero')
-    expect(getRationale('shock', m)).toContain('Hipoperfusión')
-    expect(getRationale('primaria', m)).toBeDefined() // acronym.concept
+    expect(getRationale('habcde', m)).toContain('mata primero') // acronym id
+    expect(getRationale('shock', m)).toContain('Hipoperfusión')  // clinicalTopic id
+    expect(getRationale('scene', m)).toBeDefined()               // chain phase id
+    expect(getRationale('primaria', m)).toBeUndefined()          // concept is NOT a key
   })
 
   it('returns undefined for an unknown concept', () => {
@@ -1385,10 +1413,9 @@ import type { Content } from '@/shared/content/types'
 
 export function buildRationaleMap(content: Content): Map<string, string> {
   const m = new Map<string, string>()
-  for (const a of content.acronyms) {
-    m.set(a.id, a.rationale)
-    m.set(a.concept, a.rationale)
-  }
+  // Key by unique ids only. `concept` is a category (e.g. tev and mdd both have
+  // concept "escena"); keying by it would silently overwrite one rationale.
+  for (const a of content.acronyms) m.set(a.id, a.rationale)
   for (const phase of content.chain) m.set(phase.phase, phase.rationale)
   for (const t of content.clinicalTopics) m.set(t.id, t.rationale)
   return m
@@ -2075,8 +2102,8 @@ git commit -m "feat(pwa): add manifest and workbox precaching"
 - [ ] **Step 1: Write the failing test**
 
 ```tsx
-import { describe, it, expect, act } from 'vitest'
-import { renderHook } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import { renderHook, act } from '@testing-library/react' // act is exported here, not by vitest
 import { useOnlineStatus } from '@/shared/app/pwa'
 
 describe('useOnlineStatus', () => {
@@ -2127,7 +2154,7 @@ import { Component, type ReactNode } from 'react'
 interface State { hasError: boolean }
 
 export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
-  state: State = { hasError: false }
+  override state: State = { hasError: false } // `override` required by noImplicitOverride
 
   static getDerivedStateFromError(): State {
     return { hasError: true }
@@ -2447,7 +2474,7 @@ function secondaryNodes(content: Content): ChainNode[] {
     icon: 'vitalSigns',
     kind: 'topic',
     items: (content.vitalSigns.components ?? []).map(c => ({ label: c, detail: '' })),
-    rationaleId: 'secundaria',
+    rationaleId: 'secondary',
   })
   for (const [id, icon] of wanted) {
     const n = acronymNode(content, id, icon)
@@ -2469,7 +2496,7 @@ function sceneNodes(content: Content): ChainNode[] {
     icon: 'scene',
     kind: 'topic',
     items: [{ label: 'Seguridad', detail: typeof c.buscar_ayuda === 'string' ? c.buscar_ayuda : 'Deténgase y piense. Protéjase.' }],
-    rationaleId: 'escena',
+    rationaleId: 'scene',
   })
   return nodes
 }
@@ -2484,7 +2511,7 @@ function evacuationNodes(content: Content): ChainNode[] {
       icon: 'evacuation',
       kind: 'reference',
       items: content.evacLevels.map(e => ({ label: e.level, detail: e.criterion })),
-      rationaleId: 'evacuacion',
+      rationaleId: 'evacuation',
     },
   ]
 }
