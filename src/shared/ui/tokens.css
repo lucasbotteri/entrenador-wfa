@@ -1,0 +1,18 @@
+:root {
+  /* paper */
+  --bg: #f4ede0; --surface: #fdf8ee; --ink: #2d2418;
+  --ink-soft: #5a4b30; --muted: #7a5f3d; --border: #d9c8a0;
+  /* accent */
+  --primary: #7a1f1c;
+  /* severity (rojo/ámbar/verde) */
+  --critical: #7a1f1c; --serious: #b87333; --mild: #4f6b3a;
+  --on-critical: #f4ede0; --on-serious: #ffffff; --on-mild: #f4ede0;
+  /* type */
+  --font-serif: Georgia, 'Charter', 'Iowan Old Style', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  /* scale */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px;
+  --radius-pill: 999px; --radius-sm: 6px; --radius-md: 10px; --radius-lg: 12px;
+  --shadow-card: 0 1px 0 var(--border);
+}
