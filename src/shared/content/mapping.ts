@@ -74,6 +74,14 @@ export function mapPosition(p: any) {
   return { situation: p.situacion, position: p.posicion }
 }
 
+// Cases are a Module 3 contract (validated, unused in v1). Only the structural
+// keys the CaseSchema reads are anglicized (titulo → title); the rich Spanish
+// scenario body passes through untouched.
+export function mapCase(c: any) {
+  const { titulo, ...rest } = c
+  return { ...rest, title: titulo }
+}
+
 export function mapWorkedExample(w: any) {
   return {
     title: w.titulo,
