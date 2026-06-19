@@ -1,3 +1,12 @@
+import { RouterProvider } from 'react-router-dom'
+
+import { ErrorBoundary } from './ErrorBoundary'
+import { router } from './router'
+
 export function App() {
-  return <main>Entrenador WFA</main>
+  return (
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
+  )
 }
