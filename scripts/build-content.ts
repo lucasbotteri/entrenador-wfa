@@ -42,7 +42,7 @@ function mapContent(raw: any) {
     evacLevels: (raw.niveles_evacuacion ?? []).map(mapEvacLevel),
     clinicalTopics: (raw.temas_clinicos ?? []).map(mapClinicalTopic),
     cards: (raw.tarjetas ?? []).map(mapCard),
-    workedExample: mapWorkedExample(raw.worked_example),
+    workedExample: mapWorkedExample(raw.worked_example ?? {}),
   }
 }
 

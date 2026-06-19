@@ -10,7 +10,8 @@ describe('rationale map', () => {
     const m = buildRationaleMap(validContent)
     expect(getRationale('habcde', m)).toContain('mata primero')
     expect(getRationale('shock', m)).toContain('Hipoperfusión')
-    expect(getRationale('primaria', m)).toBeDefined() // acronym.concept
+    expect(getRationale('scene', m)).toBeDefined()        // chain phase id resolves
+    expect(getRationale('primaria', m)).toBeUndefined()   // acronym.concept is NOT a key
   })
 
   it('returns undefined for an unknown concept', () => {

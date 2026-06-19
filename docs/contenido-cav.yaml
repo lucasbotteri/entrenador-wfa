@@ -358,7 +358,7 @@ worked_example:
     - fase: "escena"
       estado: "Tu compañero cae varios metros en un canal de pedrero. Sangra del muslo y no se mueve."
       accion: "Mirás el terreno, asegurás la zona y te ponés guantes antes de acercarte."
-      racional_ref: "escena"
+      racional_ref: "scene"
     - fase: "primaria"
       estado: "No responde, respira; sangrado pulsátil en el muslo; casco puesto."
       accion: "H: controlás la hemorragia masiva con presión directa antes que nada."

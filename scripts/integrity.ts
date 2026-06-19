@@ -3,10 +3,9 @@
 // Every source that produces a concept id used as a rationale key (spec §4.4).
 export function collectConceptIds(c: any): string[] {
   const ids: string[] = []
-  for (const a of c.acronyms ?? []) ids.push(a.id, a.concept)
-  for (const t of c.clinicalTopics ?? []) ids.push(t.id)
-  for (const r of c.practicalRules ?? []) ids.push(r.id)
+  for (const a of c.acronyms ?? []) ids.push(a.id)
   for (const p of c.chain ?? []) ids.push(p.phase)
+  for (const t of c.clinicalTopics ?? []) ids.push(t.id)
   return ids.filter((v, i, arr) => arr.indexOf(v) === i)
 }
 
@@ -16,8 +15,8 @@ export function findDuplicateIds(c: any): string[] {
   const counts = new Map<string, number>()
   const bump = (id: string) => counts.set(id, (counts.get(id) ?? 0) + 1)
   for (const a of c.acronyms ?? []) bump(a.id)
+  for (const p of c.chain ?? []) bump(p.phase)
   for (const t of c.clinicalTopics ?? []) bump(t.id)
-  for (const r of c.practicalRules ?? []) bump(r.id)
   return [...counts.entries()].filter(([, n]) => n > 1).map(([id]) => id)
 }
 

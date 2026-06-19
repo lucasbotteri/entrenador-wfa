@@ -18,7 +18,7 @@ const base = {
 describe('integrity', () => {
   it('collects all concept ids', () => {
     expect(collectConceptIds(base)).toEqual(
-      expect.arrayContaining(['habcde', 'shock', 'hemorragia']),
+      expect.arrayContaining(['habcde', 'shock', 'primary']),
     )
   })
 
