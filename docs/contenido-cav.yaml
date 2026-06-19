@@ -1,0 +1,349 @@
+# =====================================================================
+# contenido-cav.yaml  ·  FUENTE DE VERDAD DE CONTENIDO  (v0.2 — núcleo profundo)
+# Núcleo de la Cadena de Atención a la Víctima (CAV)
+# Basado en: AIDER — "Primeros Socorros Estándares en Lugares Remotos",
+#            Guía del alumno, 2.ª ed. (Cap. 3 + anexo SOAP). Excluye lo legal.
+#
+# Alimenta: Módulo 1 (Aprender) y Módulo 2 (Practicar lo teórico).
+# Los módulos 2 y 3 enlazan el feedback a estos conceptos por su `id`.
+# IMPORTANTE: el contenido clínico se edita ACÁ (no hardcodear en la UI)
+# y se revisa contra el manual. No inventar pasos clínicos.
+#
+# Validado contra el PDF (jun 2026). Notas de validación:
+#  - TEV: el cuerpo dice "tríada"; la lista de abreviaturas dice "triángulo".
+#  - MUESTRA · E: el desglose del cuerpo es "Eventos" (la lista resume "episodios").
+# =====================================================================
+
+meta:
+  fuente: "AIDER — Primeros Socorros Estándares en Lugares Remotos, Guía del alumno, 2.ª ed."
+  alcance: "Núcleo: Cadena de Atención a la Víctima (Cap. 3 + SOAP). Excluye lo legal/ético."
+  idioma: "es"
+  version: "0.2"
+
+# ---------------------------------------------------------------------
+# SIGLAS / REGLAS MNEMOTÉCNICAS
+# `letras`: para siglas que expanden palabra. `componentes`: para las que no.
+# `racional`: explicación canónica corta, reutilizable como feedback.
+# ---------------------------------------------------------------------
+siglas:
+  - id: "habcde"
+    sigla: "HABCDE"
+    nombre: "Evaluación primaria"
+    concepto: "primaria"
+    es_secuencia: true            # el orden importa (orden estricto)
+    letras:
+      - {letra: "H", significado: "Hemorragia", detalle: "Detener hemorragia profusa/severa con presión directa."}
+      - {letra: "A", significado: "Apertura de la vía aérea", detalle: "Con control de la columna cervical si hay sospecha de trauma."}
+      - {letra: "B", significado: "Buena ventilación", detalle: "¿Respira normal? Esfuerzo, frecuencia, disnea."}
+      - {letra: "C", significado: "Circulación y sangrados", detalle: "Sangrados ocultos y signos de shock (piel pálida, fría, húmeda)."}
+      - {letra: "D", significado: "Déficit neurológico", detalle: "Conciencia (AVDN), parálisis, sensibilidad. Inmovilizar columna si hay trauma."}
+      - {letra: "E", significado: "Exploración + Estabilización térmica", detalle: "Lesiones ocultas + estabilizar temperatura (en general, abrigar)."}
+    racional: "Detecta y trata lo que pone en peligro la vida en los primeros minutos, en orden de prioridad."
+
+  - id: "avdn"
+    sigla: "AVDN"
+    nombre: "Escala de conciencia"
+    concepto: "conciencia"
+    es_secuencia: false
+    letras:
+      - {letra: "A", significado: "Alerta", detalle: "Orientada en tiempo, espacio y persona. Alteración menor = A−."}
+      - {letra: "V", significado: "responde a estímulo Verbal", detalle: "Responde solo con monosílabos/quejas/frases sin sentido."}
+      - {letra: "D", significado: "responde a estímulos Dolorosos", detalle: "Retira la mano, se mueve o gime ante el dolor."}
+      - {letra: "N", significado: "No responde", detalle: "No responde a ningún estímulo. Inconsciencia."}
+    racional: "Mide el nivel de conciencia en 4 grados; clave para detectar deterioro neurológico."
+
+  - id: "muestra"
+    sigla: "MUESTRA"
+    nombre: "Anamnesis (historia)"
+    concepto: "anamnesis"
+    es_secuencia: false
+    nota: "No es obligatorio respetar el orden de las letras; conviene empezar por los síntomas/dolencias principales."
+    letras:
+      - {letra: "M", significado: "Medicación", detalle: "¿Qué toma? ¿dosis?, ¿la tomó hoy?, ¿para qué? (tomar de más o de menos puede causar el cuadro)."}
+      - {letra: "U", significado: "Última ingesta oral", detalle: "¿Cuándo comió/bebió por última vez? (incluye alcohol/drogas)."}
+      - {letra: "E", significado: "Eventos que llevaron a la lesión/enfermedad", detalle: "¿Qué pasó? ¿Qué es lo último que recuerda? (la lista de abreviaturas lo resume como 'episodios')."}
+      - {letra: "S", significado: "Síntomas (signos y síntomas)", detalle: "Dolencia principal: ¿cómo es el dolor?, ¿dónde? Síntoma = subjetivo; signo = objetivo/medible."}
+      - {letra: "T", significado: "Trastornos médicos", detalle: "Antecedentes: asma, cardiovascular, hipertensión, epilepsia, diabetes…"}
+      - {letra: "R", significado: "Respuesta al medio", detalle: "¿Reacciona bien al interrogatorio o está confundida? Observar su evolución."}
+      - {letra: "A", significado: "Alergias", detalle: "¿Alergias a medicación, comida u otros? ¿Qué reacción?"}
+    racional: "Cuestionario para detectar el problema de quien enfermó súbitamente y su historia. Empezar por los síntomas."
+
+  - id: "dias"
+    sigla: "DIAS"
+    nombre: "Examen físico"
+    concepto: "examen_fisico"
+    es_secuencia: false
+    letras:
+      - {letra: "D", significado: "Deformidades", detalle: "Asimetrías, angulaciones."}
+      - {letra: "I", significado: "Inflamación", detalle: "Hinchazón, edema."}
+      - {letra: "A", significado: "heridas Abiertas", detalle: "Heridas, sangrados."}
+      - {letra: "S", significado: "Sensibilidad al tacto", detalle: "Dolor a la palpación."}
+    racional: "Qué buscar al explorar de cabeza a pies. Se empieza por el examen físico cuando el mecanismo es traumatismo."
+
+  - id: "pilar"
+    sigla: "PILAR"
+    nombre: "Evaluación de pupilas"
+    concepto: "pupilas"
+    es_secuencia: false
+    letras:
+      - {letra: "P", significado: "Pupilas", detalle: "Observar ambas pupilas."}
+      - {letra: "I", significado: "Iguales", detalle: "Simétricas, de igual tamaño."}
+      - {letra: "L", significado: "reactivas a la Luz", detalle: "Se contraen ante la luz."}
+      - {letra: "A", significado: "Adecuadas en tamaño", detalle: "Ni muy dilatadas ni muy contraídas."}
+      - {letra: "R", significado: "Redondas", detalle: "Forma regular. Anotar anomalías y la hora."}
+    racional: "Cómo deben ser y reaccionar las pupilas; su alteración informa sobre el SNC."
+
+  - id: "soap"
+    sigla: "SOAP"
+    nombre: "Ficha de registro (FEV)"
+    concepto: "registro"
+    es_secuencia: true
+    letras:
+      - {letra: "S", significado: "Subjetivo", detalle: "Lo que refiere la víctima."}
+      - {letra: "O", significado: "Objetivo", detalle: "Hallazgos y signos medidos."}
+      - {letra: "A", significado: "Análisis", detalle: "Interpretación del cuadro."}
+      - {letra: "P", significado: "Plan", detalle: "Conducta y evacuación."}
+    racional: "Estructura para documentar y comunicar; pasa a ser parte de la historia clínica de la víctima."
+
+  - id: "tev"
+    sigla: "TEV"
+    nombre: "Tríada / Triángulo de Evaluación Vital"
+    concepto: "escena"
+    es_secuencia: false
+    componentes:
+      - {nombre: "Respiración", detalle: "Movimientos, postura (trípode), sonidos anómalos (ronquido, silbido, burbujeo)."}
+      - {nombre: "Circulación", detalle: "Coloración de la piel."}
+      - {nombre: "Aspecto/estado general", detalle: "Impresión global de gravedad."}
+    racional: "Evaluación rápida SIN tocar a la víctima, al acercarse. Da una idea de la gravedad antes del HABCDE."
+
+  - id: "msc"
+    sigla: "MSC"
+    nombre: "Evaluación distal de extremidades"
+    concepto: "extremidades"
+    es_secuencia: false
+    componentes:
+      - {nombre: "Motor", detalle: "¿Mueve la extremidad?"}
+      - {nombre: "Sensitivo", detalle: "¿Tiene sensibilidad?"}
+      - {nombre: "Circulatorio", detalle: "¿Tiene pulso/llenado distal?"}
+    racional: "Qué evaluar distal a una lesión de extremidad (se comprueba en las 4 extremidades)."
+
+  - id: "mdd"
+    sigla: "MDD"
+    nombre: "Mecanismo de daño"
+    concepto: "escena"
+    es_secuencia: false
+    definicion: "Cómo se produjo la lesión (caída de altura, golpe, etc.). Orienta la sospecha de lesiones (p. ej. columna) y decisiones posteriores."
+    racional: "El mecanismo manda: ante duda por mecanismo de alta energía, asumir lesión cervical."
+
+# ---------------------------------------------------------------------
+# LA CADENA DE ATENCIÓN A LA VÍCTIMA  (4 fases, con contenido profundo)
+# Cada fase trae `contenido` para el Módulo 1 (Aprender).
+# ---------------------------------------------------------------------
+cadena:
+
+  - fase: "escena"
+    nombre: "Evaluación de la escena"
+    racional: "Todo lo que se hace ANTES de tocar a la víctima. La seguridad es siempre la prioridad: ¡deténgase y piense!"
+    contenido:
+      seguridad:
+        regla: "Deténgase y piense. Protéjase. No puede ayudar a nadie si se convierte en víctima."
+        riesgos: ["Clima adverso", "Avalancha o caída de rocas", "Terreno abrupto", "Aguas rápidas", "Tránsito (personas/máquinas)", "Fuego o humo", "Materiales peligrosos", "Colapsos estructurales", "Electricidad o rayos", "Animales peligrosos", "Espacios confinados / gases"]
+      bioseguridad:
+        definicion: "Normas para evitar el contagio. Asuma que TODO fluido corporal (sangre, mucosidad, tejido) es un posible riesgo."
+        epp: ["Guantes (nitrilo recomendado; látex o vinilo)", "Protección ocular (antiparras o anteojos)", "Mascarilla / barrera para ventilaciones de rescate"]
+        transmision_sangre: ["Hepatitis B y C", "VIH"]
+        transmision_aire: ["Tuberculosis", "COVID-19", "otras respiratorias"]
+        lavado_manos: "Lavarse las manos tras atender (agua potable y jabón neutro, ≥30 s); gel en seco si no hay agua."
+      mecanismo_dano:
+        definicion: "Estimar la causa de las lesiones con la info de la escena, para anticipar lesiones (incluso ocultas) y no hacer maniobras incorrectas."
+        evaluar: ["Cantidad de fuerza aplicada", "Tiempo durante el que se aplicó", "Área del cuerpo involucrada"]
+        sospechar_lesiones_graves: ["Caída de 2-3 veces la altura del cuerpo", "Colisión a alta velocidad (moto, vehículo, esquí, snowboard, bici)", "Herida de arma de fuego en cabeza/cuello/tronco"]
+        regla: "Ante mecanismo de alta energía o duda, asumir lesión de columna cervical."
+      numero_victimas:
+        definicion: "Identificar cuántos heridos hay; buscar más de uno."
+        triage: "Si las víctimas exceden a los socorristas, clasificar por prioridades (triage) según gravedad."
+        nota: "En zona remota el riesgo de hipotermia/deshidratación es mayor; actuar rápido y eficiente."
+      impresion_general:
+        ref_sigla: "tev"
+      buscar_ayuda: "Tras la impresión general, buscar ayuda / activar el número local de emergencias (delegar la llamada y seguir atendiendo)."
+
+  - fase: "primaria"
+    nombre: "Evaluación primaria (HABCDE)"
+    ref_sigla: "habcde"
+    orden_estricto: true
+    racional: "Lo que mata primero, primero. Orden estricto H→A→B→C→D→E."
+    contenido:
+      previo: "Si NO responde y NO respira → seguir la secuencia de paro cardiorrespiratorio (RCP/DEA)."
+      presentacion: "Si está consciente: preséntese, pida consentimiento, mantenga contacto visual y distancia adecuada."
+      detalle_por_letra: "ver siglas.habcde.letras"
+      reglas: ["via-sin-trauma", "via-con-trauma", "habla-via", "hemorragia", "shock-piel", "pls"]
+
+  - fase: "secundaria"
+    nombre: "Evaluación secundaria"
+    racional: "Una vez controladas las amenazas vitales, buscar el resto del cuadro y seguir la tendencia."
+    contenido:
+      intro: "Tomarse unos minutos para evaluar estado general, posibilidades de evacuación, terreno/clima, equipo y evolución."
+      linea_base: "La primera toma de signos vitales es la 'línea de base' para comparar la evolución; conviene hacerla en el terreno aunque se evacúe."
+      orden: "Trauma → empezar por el examen físico (DIAS). Enfermedad súbita → empezar por la anamnesis (MUESTRA)."
+      reevaluacion: {estable: "cada 15-20 min", inestable: "cada 5 min"}
+      signos_vitales: "ver signos_vitales"
+      anamnesis: {ref_sigla: "muestra"}
+      examen_fisico:
+        ref_sigla: "dias"
+        secuencia: "De cabeza a pies: cabeza, cuello, tórax, abdomen, pelvis (crestas ilíacas y sínfisis púbica), espalda (cervical/torácica/lumbar/sacra/coccígea), 4 extremidades."
+        extremidades: "Palpar DIAS + tono muscular + movilidad articular; comprobar MSC distal en las 4 extremidades."
+
+  - fase: "evacuacion"
+    nombre: "Evacuación y control"
+    ref: "niveles_evacuacion"
+    racional: "Determinar la gravedad define cómo seguir actuando."
+    contenido:
+      contactar_ae: "Contactar a la ayuda externa de forma temprana; la planificación previa es la clave del éxito."
+      evaluacion_continua: "Reevaluar y registrar signos vitales en la ficha SOAP/FEV; repetir la evaluación y verificar las intervenciones."
+      comunicacion: "Que la víctima esté cómoda; escucharla; contacto visual. Si está inconsciente, buscar identificación médica (collares, brazaletes), testigos y pistas en la escena."
+      posicion: "ver posicion_victima"
+      niveles: "ver niveles_evacuacion"
+
+# ---------------------------------------------------------------------
+# SIGNOS VITALES  (detalle y valores normales)
+# ---------------------------------------------------------------------
+signos_vitales:
+  componentes: ["Frecuencia respiratoria", "Frecuencia cardíaca", "Presión arterial", "Temperatura", "Piel (color y llenado capilar)", "Pupilas (PILAR)", "Nivel de conciencia (AVDN)"]
+  frecuencia_respiratoria:
+    unidad: "respiraciones/min"
+    adulto: "12-20"
+    nino: "20-35"
+    bebe: "20-50"
+    tecnica: "Contar 30 s y multiplicar por 2; mejor que la víctima no sepa que se la está midiendo (si no, lo cambia)."
+  frecuencia_cardiaca:
+    unidad: "pulsaciones/min"
+    adulto: "60-100"
+    nino: "80-140"
+    bebe: "120-160"
+    sitio: "Radial (muñeca) en la secundaria; braquial en bebés."
+    amplitud: "fuerte o débil (filiforme)"
+    regularidad: "regular o irregular"
+  presion_arterial:
+    normal: "120/80 mmHg (sistólica/diastólica)"
+    hipertension: "> 140/90 mmHg"
+    hipotension: "< 90/60 mmHg"
+    metodo: "Auscultación (tensiómetro + estetoscopio) o palpación."
+  piel:
+    color: "rosada / pálida / azul / roja / amarilla (en piel oscura, revisar comisuras de la boca y conjuntiva)"
+    temperatura: "tibia / caliente / fría"
+    humedad: "seca / húmeda / mojada"
+    shock: "pálida, fría y húmeda"
+  relleno_capilar:
+    normal: "< 2 segundos"
+    tecnica: "Apretar la punta del dedo y observar el retorno de la sangre."
+  reevaluacion: {estable: "15-20 min", inestable: "5 min"}
+
+# ---------------------------------------------------------------------
+# POSICIÓN DE LA VÍCTIMA
+# ---------------------------------------------------------------------
+posicion_victima:
+  - {situacion: "Consciente, sin contraindicación por columna", posicion: "La más confortable (p. ej. semisentada si tiene dificultad respiratoria)."}
+  - {situacion: "Nivel de conciencia disminuido", posicion: "De costado (Posición Lateral de Seguridad, PLS)."}
+  - {situacion: "Posible lesión de columna e inconsciente", posicion: "Sobre la espalda (boca arriba), inmovilizada."}
+
+# ---------------------------------------------------------------------
+# REGLAS PRÁCTICAS  (acciones clave; se muestran en Aprender y como feedback)
+# ---------------------------------------------------------------------
+reglas_practicas:
+  - {id: "via-sin-trauma", regla: "Sin sospecha de lesión cervical: maniobra frente-mentón.", concepto: "habcde"}
+  - {id: "via-con-trauma", regla: "Con sospecha de lesión cervical: maniobra de subluxación de la mandíbula.", concepto: "habcde"}
+  - {id: "habla-via", regla: "Si la víctima puede hablar, gritar o llorar, tiene la vía aérea abierta y está ventilando.", concepto: "habcde"}
+  - {id: "hemorragia", regla: "Hemorragia importante: presión directa con mano enguantada; si no cede en los primeros minutos, torniquete a 5-8 cm de la herida, nunca sobre articulación, anotar la hora.", concepto: "habcde"}
+  - {id: "shock-piel", regla: "Signos de shock: piel pálida, fría y húmeda.", concepto: "shock"}
+  - {id: "pls", regla: "Inconsciente que respira normal (sin sospecha de columna): Posición Lateral de Seguridad (PLS).", concepto: "habcde"}
+  - {id: "no-comer-beber", regla: "No dar de comer ni beber ante sospecha de lesión abdominal o shock.", concepto: "secundaria"}
+
+# ---------------------------------------------------------------------
+# NIVELES DE EVACUACIÓN
+# ---------------------------------------------------------------------
+niveles_evacuacion:
+  - nivel: "CRÍTICO"
+    color: "rojo"
+    criterio: "Amenaza inmediata para la vida. Evacuar lo antes posible."
+  - nivel: "GRAVE"
+    color: "ámbar"
+    criterio: "Sin amenaza inmediata, pero puede dejar secuelas o volverse crítico. Se recomienda evacuar."
+  - nivel: "LEVE"
+    color: "verde"
+    criterio: "Sin amenaza para la vida. Se puede analizar continuar en el terreno."
+
+# ---------------------------------------------------------------------
+# TEMAS CLÍNICOS  ·  racional para conceptos que no son sigla ni fase
+# ---------------------------------------------------------------------
+temas_clinicos:
+  - id: "termica"
+    nombre: "Hipotermia"
+    racional: "Descenso de la temperatura central por debajo de 35 °C. Frenar la pérdida de calor es el tratamiento. Recalentamiento CONTROLADO; NO friccionar las extremidades, NO dar alcohol, NO aplicar calor directo o rápido (riesgo de shock térmico). Si deja de tiritar y cae el AVDN, empeoró a grave: mover muy suave (riesgo de fibrilación ventricular) y evacuar."
+  - id: "shock"
+    nombre: "Shock"
+    racional: "Hipoperfusión. Signo clave en la piel: pálida, fría y húmeda. Buscar sangrados ocultos; el sangrado interno no se controla en el terreno → evacuación crítica."
+  - id: "empaque"
+    nombre: "Empaque de hipotermia"
+    racional: "Aislar a la víctima con varios materiales para limitar la pérdida de calor por todos los mecanismos; los medios de calor externos no deben ir en contacto directo con la piel."
+
+# ---------------------------------------------------------------------
+# MAZO DE TARJETAS  ·  Módulo 2 (Practicar lo teórico)
+# tipo: ordenar | escribir | cloze | elegir   (recuperación GENERATIVA por defecto)
+#   ordenar  -> respuesta = secuencia correcta
+#   escribir -> respuesta = lista de palabras clave aceptadas (normalizar: minúsculas, sin tildes)
+#   cloze    -> texto con {{hueco}} y respuesta = palabra(s)
+#   elegir   -> usar SOLO cuando generar no aplica; muchos distractores (mín. 5)
+# racional_ref: id de sigla/fase/tema/sección para el feedback elaborativo.
+# ---------------------------------------------------------------------
+tarjetas:
+  # --- Cadena / framework ---
+  - {id: "t-cadena-orden", tema: "Cadena", tipo: "ordenar", prompt: "Ordená las 4 fases de la Cadena de Atención", respuesta: ["Escena","Primaria","Secundaria","Evacuación"], racional_ref: "primaria"}
+  - {id: "t-escena-4", tema: "Escena", tipo: "escribir", prompt: "¿Qué 4 cosas evaluás en la escena?", respuesta: ["seguridad mecanismo de dano numero de victimas impresion general"], racional_ref: "escena"}
+  - {id: "t-escena-prio", tema: "Escena", tipo: "escribir", prompt: "¿Cuál es SIEMPRE la prioridad al llegar?", respuesta: ["la seguridad","seguridad"], racional_ref: "escena"}
+  - {id: "t-epp", tema: "Bioseguridad", tipo: "escribir", prompt: "Nombrá 2 elementos de EPP", respuesta: ["guantes","proteccion ocular","mascarilla","antiparras"], racional_ref: "escena"}
+  - {id: "t-mdd-grave", tema: "Mecanismo", tipo: "escribir", prompt: "¿Qué altura de caída hace sospechar lesiones graves?", respuesta: ["2-3 veces la altura del cuerpo","2 a 3 veces la altura del cuerpo"], racional_ref: "mdd"}
+  - {id: "t-mdd-regla", tema: "Mecanismo", tipo: "escribir", prompt: "Ante mecanismo de alta energía o duda, ¿qué se asume?", respuesta: ["lesion de columna cervical","lesion de columna","trauma cervical"], racional_ref: "mdd"}
+  # --- HABCDE ---
+  - {id: "t-habcde-orden", tema: "HABCDE", tipo: "ordenar", prompt: "Ordená los pasos de la evaluación primaria", respuesta: ["H","A","B","C","D","E"], racional_ref: "habcde"}
+  - {id: "t-habcde-h", tema: "HABCDE", tipo: "escribir", prompt: "¿Qué significa la H de HABCDE?", respuesta: ["hemorragia"], racional_ref: "habcde"}
+  - {id: "t-habcde-a", tema: "HABCDE", tipo: "escribir", prompt: "¿Qué significa la A de HABCDE?", respuesta: ["apertura de la via aerea","via aerea","apertura"], racional_ref: "habcde"}
+  - {id: "t-habcde-b", tema: "HABCDE", tipo: "escribir", prompt: "¿Qué significa la B de HABCDE?", respuesta: ["buena ventilacion","ventilacion"], racional_ref: "habcde"}
+  - {id: "t-habcde-c", tema: "HABCDE", tipo: "escribir", prompt: "¿Qué significa la C de HABCDE?", respuesta: ["circulacion","circulacion y sangrados"], racional_ref: "habcde"}
+  - {id: "t-habcde-d", tema: "HABCDE", tipo: "escribir", prompt: "¿Qué significa la D de HABCDE?", respuesta: ["deficit neurologico","deficit"], racional_ref: "habcde"}
+  - {id: "t-habcde-e", tema: "HABCDE", tipo: "escribir", prompt: "¿Qué significa la E de HABCDE?", respuesta: ["exploracion y estabilizacion de la temperatura","exploracion","temperatura"], racional_ref: "habcde"}
+  # --- Vía aérea / reglas prácticas ---
+  - {id: "t-via-sin", tema: "Vía aérea", tipo: "escribir", prompt: "Abrir la vía aérea SIN sospecha de lesión cervical: ¿qué maniobra?", respuesta: ["frente menton","frente-menton"], racional_ref: "habcde"}
+  - {id: "t-via-con", tema: "Vía aérea", tipo: "escribir", prompt: "Abrir la vía aérea CON sospecha de lesión cervical: ¿qué maniobra?", respuesta: ["subluxacion de la mandibula","subluxacion mandibular","subluxacion"], racional_ref: "habcde"}
+  - {id: "t-habla", tema: "Vía aérea", tipo: "cloze", prompt: "Si la víctima puede hablar, gritar o llorar, tiene la {{vía aérea}} abierta y está ventilando.", respuesta: ["via aerea"], racional_ref: "habcde"}
+  - {id: "t-hemo", tema: "Manejo", tipo: "escribir", prompt: "¿Cómo se controla PRIMERO una hemorragia importante?", respuesta: ["presion directa"], racional_ref: "habcde"}
+  - {id: "t-torniquete", tema: "Manejo", tipo: "escribir", prompt: "¿A qué distancia de la herida se coloca el torniquete?", respuesta: ["5-8 cm","5 a 8 cm"], racional_ref: "habcde"}
+  - {id: "t-shock", tema: "Signos", tipo: "escribir", prompt: "Signos de shock en la piel (3)", respuesta: ["palida humeda y fria","palida fria humeda"], racional_ref: "shock"}
+  - {id: "t-pls", tema: "Manejo", tipo: "escribir", prompt: "Inconsciente que respira normal, sin sospecha de columna: ¿posición?", respuesta: ["posicion lateral de seguridad","pls","posicion de recuperacion"], racional_ref: "habcde"}
+  - {id: "t-no-comer", tema: "Manejo", tipo: "elegir", prompt: "Sospecha de lesión abdominal/shock: ¿se le da agua?", opciones: ["No, nada por boca","Sí, agua","Sí, bebida azucarada"], respuesta: ["No, nada por boca"], racional_ref: "secundaria"}
+  # --- TEV / Escena ---
+  - {id: "t-tev", tema: "TEV", tipo: "escribir", prompt: "¿Qué 3 cosas evalúa la TEV sin tocar a la víctima?", respuesta: ["respiracion circulacion aspecto general"], racional_ref: "tev"}
+  # --- AVDN ---
+  - {id: "t-avdn-orden", tema: "AVDN", tipo: "ordenar", prompt: "Ordená AVDN de mayor a menor conciencia", respuesta: ["A","V","D","N"], racional_ref: "avdn"}
+  - {id: "t-avdn-a", tema: "AVDN", tipo: "escribir", prompt: "¿Cuándo una víctima está 'Alerta' (A)?", respuesta: ["orientada en tiempo espacio y persona","tiempo espacio y persona"], racional_ref: "avdn"}
+  - {id: "t-avdn-sig", tema: "AVDN", tipo: "cloze", prompt: "AVDN: Alerta, {{Verbal}}, {{Dolor}}, No responde", respuesta: ["verbal","dolor"], racional_ref: "avdn"}
+  # --- Pupilas ---
+  - {id: "t-pilar", tema: "PILAR", tipo: "cloze", prompt: "PILAR: Pupilas, {{Iguales}}, reactivas a la {{Luz}}, Adecuadas, {{Redondas}}", respuesta: ["iguales","luz","redondas"], racional_ref: "pilar"}
+  # --- Signos vitales (valores) ---
+  - {id: "t-fr", tema: "Signos vitales", tipo: "escribir", prompt: "Frecuencia respiratoria normal del adulto (rango)", respuesta: ["12-20","12 a 20"], racional_ref: "signos_vitales"}
+  - {id: "t-fc", tema: "Signos vitales", tipo: "escribir", prompt: "Frecuencia cardíaca normal del adulto (rango)", respuesta: ["60-100","60 a 100"], racional_ref: "signos_vitales"}
+  - {id: "t-pa", tema: "Signos vitales", tipo: "escribir", prompt: "Presión arterial normal (referencia)", respuesta: ["120/80","120 80"], racional_ref: "signos_vitales"}
+  - {id: "t-relleno", tema: "Signos vitales", tipo: "escribir", prompt: "Relleno capilar normal (segundos)", respuesta: ["< 2 segundos","2 segundos","menos de 2 segundos","<2"], racional_ref: "signos_vitales"}
+  - {id: "t-pulso-sitio", tema: "Signos vitales", tipo: "escribir", prompt: "¿Dónde se toma el pulso en la secundaria (adulto)?", respuesta: ["radial","muneca","arteria radial"], racional_ref: "signos_vitales"}
+  - {id: "t-reeval", tema: "Signos vitales", tipo: "elegir", prompt: "Víctima INESTABLE: ¿cada cuánto reevaluar signos vitales?", opciones: ["Cada 5 min","Cada 15-20 min","Cada hora","Una sola vez"], respuesta: ["Cada 5 min"], racional_ref: "signos_vitales"}
+  # --- Anamnesis / examen físico ---
+  - {id: "t-muestra-e", tema: "MUESTRA", tipo: "escribir", prompt: "¿Qué es la 'E' de MUESTRA?", respuesta: ["eventos","eventos que llevaron a la lesion","episodios"], racional_ref: "muestra"}
+  - {id: "t-muestra-u", tema: "MUESTRA", tipo: "escribir", prompt: "¿Qué es la 'U' de MUESTRA?", respuesta: ["ultima ingesta oral","ultima ingesta"], racional_ref: "muestra"}
+  - {id: "t-dias", tema: "DIAS", tipo: "escribir", prompt: "Nombrá los 4 ítems de DIAS", respuesta: ["deformidades inflamacion heridas abiertas sensibilidad"], racional_ref: "dias"}
+  - {id: "t-examen-orden", tema: "Examen físico", tipo: "elegir", prompt: "En TRAUMA, ¿con qué se empieza la secundaria?", opciones: ["Examen físico (DIAS)","Anamnesis (MUESTRA)","Signos vitales solamente","Evacuar sin evaluar"], respuesta: ["Examen físico (DIAS)"], racional_ref: "dias"}
+  - {id: "t-msc", tema: "Extremidades", tipo: "escribir", prompt: "¿Qué evalúa MSC distal en las extremidades?", respuesta: ["motor sensitivo circulatorio"], racional_ref: "msc"}
+  # --- Registro / evacuación / posición ---
+  - {id: "t-soap", tema: "SOAP", tipo: "ordenar", prompt: "Ordená la ficha SOAP", respuesta: ["S","O","A","P"], racional_ref: "soap"}
+  - {id: "t-evac-niveles", tema: "Evacuación", tipo: "ordenar", prompt: "Ordená los niveles de gravedad de mayor a menor", respuesta: ["CRÍTICO","GRAVE","LEVE"], racional_ref: "niveles_evacuacion"}
+  - {id: "t-evac-critico", tema: "Evacuación", tipo: "elegir", prompt: "Hipotermia grave (deja de tiritar, AVDN cae). Nivel:", opciones: ["CRÍTICO","GRAVE","LEVE","No evacuar"], respuesta: ["CRÍTICO"], racional_ref: "niveles_evacuacion"}
+  - {id: "t-posicion-avdn", tema: "Posición", tipo: "escribir", prompt: "Víctima con nivel de conciencia disminuido: ¿posición?", respuesta: ["de costado","pls","posicion lateral de seguridad"], racional_ref: "habcde"}
+  - {id: "t-posicion-columna", tema: "Posición", tipo: "elegir", prompt: "Posible lesión de columna E inconsciente: ¿posición?", opciones: ["Boca arriba (sobre la espalda)","De costado (PLS)","Semisentada","Boca abajo"], respuesta: ["Boca arriba (sobre la espalda)"], racional_ref: "habcde"}

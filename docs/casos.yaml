@@ -1,0 +1,177 @@
+# =====================================================================
+# casos.yaml  ·  CASOS DEL MOTOR DE ESCENARIOS (Módulo 3)
+# Esquema y lógica: ver "Motor de Escenarios - Diseño.md".
+# Un mismo caso alimenta los 3 modos: banco de acciones (B),
+# recordar-primero (A) y detectar-el-error (C).
+#
+# Por fase:
+#   acciones_clave: lo correcto/crítico (key features). Campo `orden` solo
+#                   en la fase primaria (orden estricto HABCDE).
+#   distractores:   acciones que un socorrista competente-pero-imperfecto
+#                   PODRÍA elegir. tipo: prioridad | contexto | misconcepcion
+#                   | tecnica | ineficiencia. (NO errores absurdos.)
+#   revelaciones:   cómo cambia el estado según lo que se hace (divulgación
+#                   progresiva).
+#   `concepto`/`racional_ref` enlazan al feedback en contenido-cav.yaml.
+# Fiel al manual AIDER. El contenido clínico se edita acá, no en la UI.
+# =====================================================================
+
+meta:
+  version: "0.1"
+  orden_estricto_primaria: true
+  autocalificacion: "honestidad"      # modo A: el jugador se autocalifica
+  tono_debrief: "exigente con la norma, respetuoso con la persona (Debriefing with Good Judgment)"
+
+casos:
+
+  # ===================================================================
+  # CASO 1 — TRAUMA
+  # ===================================================================
+  - id: "descenso-bloques"
+    titulo: "Caída en un descenso, terreno de bloques"
+    tag: "Trauma · hemorragia"
+    contexto: "Descenso de una cumbre por un canal de pedrero, zona remota, ~2 h de la zona de aproximación. Tu compañero pisa un bloque suelto, resbala y cae varios metros golpeando contra las rocas. Lo ves tendido, con un corte importante en el muslo que sangra abundante y pulsátil, y no se mueve."
+    conceptos: ["escena", "habcde", "shock", "avdn", "muestra", "dias", "evacuacion"]
+    fases:
+
+      - id: "escena"
+        estado: "Canal de pedrero con bloques inestables y riesgo de caída de piedras, sangrado visible, dos compañeros cerca y el resto de la cordada por encima."
+        acciones_clave:
+          - {id: "seguridad", texto: "Mirar el terreno y asegurar la zona (bloques inestables, caída de piedras)", critico: true, concepto: "escena", racional: "No convertirte en segunda víctima."}
+          - {id: "bioseguridad", texto: "Ponerte guantes (bioseguridad / EPP)", critico: true, concepto: "escena", racional: "EPP antes de tocar sangre."}
+          - {id: "mecanismo", texto: "Identificar el mecanismo: golpe contra rocas → sospechar trauma de columna", critico: false, concepto: "mdd", racional: "El mecanismo informa la maniobra de vía aérea después."}
+          - {id: "tev", texto: "Impresión general / TEV sin tocar (¿respira?, ¿responde?, color)", critico: false, concepto: "tev", racional: "Idea de gravedad antes del HABCDE."}
+          - {id: "ayuda", texto: "Designar a alguien para llamar a emergencias", critico: false, concepto: "escena", racional: "Activar la evacuación temprano."}
+        distractores:
+          - {id: "ir-directo", texto: "Ir directo a asistir a tu compañero (sin asegurar la zona)", tipo: "misconcepcion", por_que_no: "El impulso natural; pero podés volverte 2ª víctima. La discriminación real de esta fase.", concepto: "escena"}
+          - {id: "vitales-ya", texto: "Tomar signos vitales / anamnesis apenas llegás", tipo: "prioridad", por_que_no: "Eso es secundaria; primero escena y primaria.", concepto: "secundaria"}
+          - {id: "llamar-quedarse", texto: "Llamar a emergencias vos mismo y quedarte al teléfono", tipo: "prioridad", por_que_no: "Mejor delegar la llamada y seguir atendiendo.", concepto: "escena"}
+          - {id: "pls", texto: "Ponerlo en posición lateral de seguridad (PLS)", tipo: "contexto", por_que_no: "PLS sería correcta si NO hubiera sospecha de trauma; acá sí la hay.", concepto: "habcde"}
+        revelaciones:
+          - {si_hace: "seguridad", revela: "Te acercás con seguridad: respira pero no responde a tu voz; el sangrado del muslo es a chorro, pulsátil."}
+        transicion: "Completadas las acciones_clave críticas de escena."
+
+      - id: "primaria"
+        orden_estricto: true
+        estado: "Víctima tendida, no responde, respira; sangrado pulsátil en el muslo; casco puesto; cayó contra rocas."
+        acciones_clave:
+          - {id: "H", orden: 1, texto: "Control de hemorragia masiva: presión directa; si no cede en los primeros minutos, torniquete a 5–8 cm de la herida (nunca sobre articulación), anotar la hora", critico: true, concepto: "habcde", racional: "Lo primero que mata, primero."}
+          - {id: "A", orden: 2, texto: "Abrir la vía aérea CON control cervical (subluxación de la mandíbula)", critico: true, concepto: "habcde", racional: "Hay mecanismo de trauma."}
+          - {id: "B", orden: 3, texto: "Verificar buena ventilación (¿respira normal?, esfuerzo, frecuencia)", critico: true, concepto: "habcde", racional: "Ventilación."}
+          - {id: "C", orden: 4, texto: "Buscar sangrados ocultos + signos de shock (piel pálida, fría, húmeda)", critico: true, concepto: "habcde", racional: "Circulación."}
+          - {id: "D", orden: 5, texto: "Déficit neurológico: nivel de conciencia (AVDN) + inmovilizar columna", critico: false, concepto: "habcde", racional: "Déficit neurológico."}
+          - {id: "E", orden: 6, texto: "Exponer lesiones ocultas + abrigar (estabilizar temperatura)", critico: false, concepto: "habcde", racional: "Exploración y temperatura."}
+        distractores:
+          - {id: "frente-menton", texto: "Abrir la vía aérea con maniobra frente-mentón", tipo: "tecnica", por_que_no: "Hiperextiende el cuello; con sospecha de columna va subluxación mandibular.", concepto: "habcde"}
+          - {id: "orden-ab", texto: "Empezar por A o B antes de frenar el sangrado masivo", tipo: "prioridad", por_que_no: "Con hemorragia masiva, la H va primera.", concepto: "habcde"}
+          - {id: "torniquete-directo", texto: "Colocar el torniquete de entrada", tipo: "misconcepcion", por_que_no: "Primero presión directa; torniquete recién si no cede en los primeros minutos.", concepto: "habcde"}
+          - {id: "agua", texto: "Darle agua porque está pálido", tipo: "misconcepcion", por_que_no: "Con sospecha de shock/lesión abdominal no se da de beber.", concepto: "habcde"}
+          - {id: "sentarlo", texto: "Sentarlo para que respire mejor", tipo: "contexto", por_que_no: "Correcto en disnea sin trauma; acá hay sospecha de columna.", concepto: "habcde"}
+          - {id: "fc-exacta", texto: "Cronometrar la FC exacta ahora", tipo: "ineficiencia", por_que_no: "El dato fino es de la evaluación secundaria.", concepto: "secundaria"}
+        revelaciones:
+          - {si_hace: "E", revela: "Al exponer aparece un hematoma en el abdomen y la piel está fría y húmeda → sospecha de shock por sangrado interno."}
+        transicion: "Acciones críticas H–C resueltas en orden."
+
+      - id: "secundaria"
+        estado: "Hemorragia del muslo controlada; consciente pero alterado; pálido, frío, húmedo; dolor abdominal; hematoma."
+        acciones_clave:
+          - {id: "vitales", texto: "Signos vitales: FR y FC; reconocer taquicardia/taquipnea como shock (normal adulto FC 60–100, FR 12–20)", critico: false, concepto: "secundaria", racional: "Confirma la gravedad."}
+          - {id: "avdn", texto: "Catalogar el nivel de conciencia (AVDN)", critico: false, concepto: "avdn", racional: "Tendencia neurológica."}
+          - {id: "muestra", texto: "Anamnesis (MUESTRA)", critico: false, concepto: "muestra", racional: "Contexto clínico."}
+          - {id: "dias", texto: "Examen físico de cabeza a pies (DIAS)", critico: false, concepto: "dias", racional: "Buscar lo que falta."}
+          - {id: "reevaluar", texto: "Reevaluar (no quedarse con la primera toma)", critico: false, concepto: "secundaria", racional: "El cuadro evoluciona."}
+        distractores:
+          - {id: "comer-beber", texto: "Darle de comer/beber", tipo: "misconcepcion", por_que_no: "Hay sospecha de lesión abdominal.", concepto: "secundaria"}
+          - {id: "sobre-evaluar", texto: "Demorarte en una secundaria exhaustiva", tipo: "prioridad", por_que_no: "El cuadro ya pide evacuación.", concepto: "evacuacion"}
+          - {id: "pupilas-foco", texto: "Enfocarte en PILAR/pupilas en detalle", tipo: "contexto", por_que_no: "Lo que define la conducta acá es el shock.", concepto: "pilar"}
+          - {id: "termometro", texto: "Medir la temperatura con termómetro exacto", tipo: "ineficiencia", por_que_no: "Útil, no determinante acá.", concepto: "secundaria"}
+
+      - id: "evacuacion"
+        estado: "Shock con sospecha de sangrado interno, zona remota a ~2 h."
+        decision:
+          correcta: "CRÍTICO"
+          opciones:
+            - {nivel: "CRÍTICO", correcta: true, fb: "Shock = amenaza inmediata; el sangrado interno no se resuelve en el terreno. Evacuación urgente."}
+            - {nivel: "GRAVE", correcta: false, fb: "El shock establecido es amenaza inmediata: CRÍTICO, no GRAVE."}
+            - {nivel: "LEVE", correcta: false, fb: "Signos de shock nunca son leves."}
+
+    debrief_modelo:
+      - "Aseguraste la escena y frenaste la hemorragia primero (prioridad vital correcta)."
+      - "Abriste la vía aérea con control cervical (no frente-mentón)."
+      - "Reconociste el shock por la piel (pálida, fría, húmeda)."
+      - "Respetaste el orden H→A→B y la decisión final fue CRÍTICO."
+
+  # ===================================================================
+  # CASO 2 — AMBIENTAL (HIPOTERMIA)
+  # ===================================================================
+  - id: "hipotermia-vivac"
+    titulo: "Hipotermia: vivac forzado en tormenta"
+    tag: "Ambiental · térmica"
+    contexto: "Cumbre larga; en el descenso los agarra mal tiempo (viento y lluvia/nieve, todos mojados) y deben vivaquear. Una compañera habla cada vez menos, tirita fuerte y no coordina bien las manos para armar el refugio. Están a ~3–4 h del refugio, ya cayendo la tarde."
+    conceptos: ["escena", "avdn", "habcde", "termica", "empaque", "evacuacion"]
+    fases:
+
+      - id: "escena"
+        estado: "Tormenta y viento, el grupo mojado, la luz cayendo; la compañera tiritando, lenta y torpe."
+        acciones_clave:
+          - {id: "entorno", texto: "Leer el entorno y las condiciones predisponentes (viento, humedad, agotamiento, sin abrigo seco)", critico: false, concepto: "escena", racional: "La hipotermia es insidiosa: el contexto la anticipa."}
+          - {id: "grupo", texto: "Resguardar al grupo / no arriesgar a todos", critico: false, concepto: "escena", racional: "Seguridad del equipo primero."}
+          - {id: "refugio", texto: "Armar refugio del viento y aislarla del suelo", critico: true, concepto: "termica", racional: "Frenar la pérdida de calor es el tratamiento."}
+          - {id: "tev", texto: "Impresión general (TEV): tirita, consciente pero lenta", critico: false, concepto: "tev", racional: "Estima la gravedad sin tocar."}
+          - {id: "no-sola", texto: "No dejarla sola; asignar a alguien", critico: false, concepto: "termica", racional: "Nunca dejar sola a una víctima hipotérmica."}
+        distractores:
+          - {id: "alcohol", texto: "Darle un trago de alcohol para entrar en calor", tipo: "misconcepcion", por_que_no: "El alcohol predispone a la hipotermia (vasodilata).", concepto: "termica"}
+          - {id: "apurar", texto: "Apurarla a caminar 3 h al refugio sin protegerla antes", tipo: "prioridad", por_que_no: "Está descoordinada y empeorando; primero frenar el frío.", concepto: "termica"}
+          - {id: "vitales-apuro", texto: "Tomarle signos vitales con apuro", tipo: "prioridad", por_que_no: "Sin apuro; primero aislarla del frío.", concepto: "secundaria"}
+        revelaciones:
+          - {si_hace: "refugio", revela: "Al resguardarla ves piel fría, pálida y azulada; está orientada pero lenta → compatible con hipotermia leve-moderada."}
+
+      - id: "primaria"
+        orden_estricto: false        # foco en la "E"; la vía aérea está OK porque habla
+        estado: "Consciente, responde pero lenta; tiritando fuerte; piel fría/azulada; ropa mojada."
+        acciones_clave:
+          - {id: "via", texto: "Confirmar vía aérea/ventilación (habla → OK)", critico: false, concepto: "habcde", racional: "Descarta amenaza inmediata."}
+          - {id: "avdn", texto: "AVDN: ¿sigue Alerta o ya responde solo a Verbal?", critico: false, concepto: "avdn", racional: "Marca el nivel de hipotermia."}
+          - {id: "E", texto: "E — quitar la ropa húmeda, capas secas, cubrir la cabeza, aislar del suelo, refugio", critico: true, concepto: "habcde", racional: "Frenar la pérdida de calor; el corazón del caso."}
+          - {id: "no-cortar", texto: "No cortar la ropa; aislarla rápido del suelo", critico: false, concepto: "termica", racional: "Evita más pérdida de calor."}
+        distractores:
+          - {id: "friccionar", texto: "Friccionarle/frotarle brazos y piernas para activar la circulación", tipo: "misconcepcion", por_que_no: "Lleva sangre fría del centro a la periferia → shock térmico / PCR.", concepto: "termica"}
+          - {id: "agua-caliente", texto: "Meterla en agua caliente o apoyar una botella hirviendo directa sobre la piel / recalentar rápido", tipo: "misconcepcion", por_que_no: "Quemaduras y afterdrop; el recalentamiento debe ser controlado.", concepto: "termica"}
+          - {id: "alcohol2", texto: "Darle alcohol", tipo: "misconcepcion", por_que_no: "Predispone a la hipotermia.", concepto: "termica"}
+          - {id: "pls", texto: "Ponerla en PLS", tipo: "contexto", por_que_no: "Está consciente; no corresponde.", concepto: "habcde"}
+          - {id: "temp-exacta", texto: "Medir la temperatura exacta antes de aislarla del frío", tipo: "prioridad", por_que_no: "Primero frenar la pérdida de calor.", concepto: "secundaria"}
+        revelaciones:
+          - {si_hace: "E", revela: "Con ropa seca y refugio sigue tiritando — y eso es bueno: los temblores generan calor. Sigue orientada → leve-moderada."}
+
+      - id: "secundaria"
+        estado: "Tiritando, orientada pero lenta."
+        acciones_clave:
+          - {id: "clasificar", texto: "Clasificar el nivel: >32 °C tiembla y AVDN alto; <32 °C deja de temblar y AVDN cae (V/D/N)", critico: false, concepto: "termica", racional: "Define la conducta."}
+          - {id: "bebidas", texto: "Bebidas tibias y dulces + algo de comer", critico: false, concepto: "termica", racional: "Combustible para generar calor."}
+          - {id: "temblar", texto: "Que siga temblando dentro del saco; abrigar", critico: false, concepto: "termica", racional: "Los temblores son calor gratis."}
+          - {id: "reevaluar", texto: "Reevaluar la tendencia (¿mejora o empeora?)", critico: true, concepto: "secundaria", racional: "La hipotermia evoluciona."}
+        distractores:
+          - {id: "deja-tiritar", texto: "Si deja de tiritar y se la ve 'más tranquila', interpretarlo como que mejora", tipo: "misconcepcion", por_que_no: "Es al revés: dejar de tiritar = pasó a grave. (recognition trap clave)", concepto: "termica"}
+          - {id: "dormir-sola", texto: "Dejarla dormir sola para que descanse", tipo: "misconcepcion", por_que_no: "Nunca dejar sola; hay que vigilar.", concepto: "termica"}
+          - {id: "anamnesis-larga", texto: "Una anamnesis larguísima mientras sigue perdiendo calor", tipo: "prioridad", por_que_no: "Prioriza frenar el frío y seguir la tendencia.", concepto: "muestra"}
+        revelaciones:
+          - {si_hace: "reevaluar", revela: "Pasa el rato y deja de tiritar, se pone apática y más torpe, cuesta despertarla → está empeorando a grave."}
+
+      - id: "evacuacion"
+        estado: "Sin temblores, apática, AVDN en V → hipotermia grave en curso."
+        acciones_clave:
+          - {id: "empaque", texto: "Tratarla como grave: empaque de hipotermia, calor al torso (no directo a la piel), cabeza cubierta, posición horizontal", critico: true, concepto: "termica", racional: "Frenar pérdida de calor; recalentamiento controlado."}
+          - {id: "suave", texto: "Moverla muy suavemente", critico: true, concepto: "termica", racional: "Bajo 32 °C el corazón es hipersensible → riesgo de fibrilación ventricular."}
+          - {id: "evacuar", texto: "Evacuación urgente; no dejarla sola; no cambiar el plan aunque mejore", critico: true, concepto: "evacuacion", racional: "El tratamiento ideal es en el CAD."}
+        decision:
+          correcta: "CRÍTICO"
+          opciones:
+            - {nivel: "CRÍTICO", correcta: true, fb: "El nivel pasó de Leve a CRÍTICO (grave): evacuación urgente; recalentamiento controlado en el CAD."}
+            - {nivel: "GRAVE", correcta: false, fb: "La hipotermia grave es urgente: CRÍTICO."}
+            - {nivel: "LEVE", correcta: false, fb: "Subestima; dejar que se reponga sola en el refugio es peligroso."}
+
+    debrief_modelo:
+      - "Leíste el entorno y frenaste la pérdida de calor (ropa seca, aislar del suelo, refugio)."
+      - "No la frotaste, no le diste alcohol, no aplicaste calor directo ni rápido."
+      - "Reconociste que dejar de tiritar = empeora (pasó a grave), no que mejora."
+      - "La moviste con suavidad (riesgo de FV) y subiste la evacuación a CRÍTICO."
