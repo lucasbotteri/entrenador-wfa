@@ -2102,8 +2102,8 @@ git commit -m "feat(pwa): add manifest and workbox precaching"
 - [ ] **Step 1: Write the failing test**
 
 ```tsx
-import { describe, it, expect, act } from 'vitest'
-import { renderHook } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import { renderHook, act } from '@testing-library/react' // act is exported here, not by vitest
 import { useOnlineStatus } from '@/shared/app/pwa'
 
 describe('useOnlineStatus', () => {
@@ -2154,7 +2154,7 @@ import { Component, type ReactNode } from 'react'
 interface State { hasError: boolean }
 
 export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
-  state: State = { hasError: false }
+  override state: State = { hasError: false } // `override` required by noImplicitOverride
 
   static getDerivedStateFromError(): State {
     return { hasError: true }
