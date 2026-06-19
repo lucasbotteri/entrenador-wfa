@@ -64,13 +64,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run content:build && tsc -b && vite build",
+    "build": "npm run content:build && tsc --noEmit -p tsconfig.json && vite build",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",
     "test:cov": "vitest run --coverage",
     "lint": "eslint . --max-warnings 0",
-    "typecheck": "tsc -b --noEmit",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json",
     "format": "prettier -w .",
     "format:check": "prettier -c .",
     "content:build": "tsx scripts/build-content.ts",
@@ -89,6 +89,7 @@
     "@testing-library/jest-dom": "^6.4.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.0",
+    "@types/node": "^20.14.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.0",
@@ -149,21 +150,22 @@
       "@/modules/*": ["src/modules/*"]
     }
   },
-  "include": ["src", "tests"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "tests"]
 }
 ```
+
+> Note: the root config and the node config are type-checked independently (no project references / no `tsc -b`), which avoids the composite-emit conflict (TS6310). `@types/node` is required for `node:path`/`__dirname` in `vite.config.ts`.
 
 - [ ] **Step 4: Create `tsconfig.node.json`**
 
 ```json
 {
   "compilerOptions": {
-    "composite": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
+    "types": ["node"],
     "strict": true,
     "skipLibCheck": true
   },
