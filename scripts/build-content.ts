@@ -17,6 +17,8 @@ import {
 } from '../src/shared/content/mapping'
 import { ContentSchema, CasesSchema } from '../src/shared/content/schemas'
 
+import { findDuplicateIds, findDanglingRefs } from './integrity'
+
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const checkOnly = process.argv.includes('--check')
 
@@ -92,8 +94,11 @@ function main() {
   }
 }
 
-// Defined in Task 11; placeholder import-free declaration kept here so the file
-// compiles in this task. Replaced by the real implementation in Task 11.
-function runIntegrityChecks(_content: unknown) {}
+function runIntegrityChecks(content: any) {
+  const dups = findDuplicateIds(content)
+  if (dups.length) fail(dups.map(id => `  Duplicate concept id: ${id}`).join('\n'))
+  const dangling = findDanglingRefs(content)
+  if (dangling.length) fail(dangling.map(r => `  Dangling rationaleRef: ${r}`).join('\n'))
+}
 
 main()
