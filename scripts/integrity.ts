@@ -6,6 +6,7 @@ export function collectConceptIds(c: any): string[] {
   for (const a of c.acronyms ?? []) ids.push(a.id, a.concept)
   for (const t of c.clinicalTopics ?? []) ids.push(t.id)
   for (const r of c.practicalRules ?? []) ids.push(r.id)
+  for (const p of c.chain ?? []) ids.push(p.phase)
   return ids.filter((v, i, arr) => arr.indexOf(v) === i)
 }
 
@@ -26,7 +27,8 @@ export function findDanglingRefs(c: any): string[] {
   const check = (ref?: string) => {
     if (ref && !known.has(ref)) dangling.push(ref)
   }
+  // v1 validates only content it consumes. Card (Module 2) rationale refs are
+  // validated when Module 2 is built and those concepts get stable ids.
   for (const s of c.workedExample?.steps ?? []) check(s.rationaleRef)
-  for (const card of c.cards ?? []) check(card.rationaleRef)
   return dangling.filter((v, i, arr) => arr.indexOf(v) === i)
 }

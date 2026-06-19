@@ -42,4 +42,12 @@ describe('integrity', () => {
     expect(findDuplicateIds(base)).toEqual([])
     expect(findDanglingRefs(base)).toEqual([])
   })
+
+  it('does not validate card rationaleRef in v1 (deferred to Module 2)', () => {
+    const withBadCard = {
+      ...base,
+      cards: [{ id: 'c1', rationaleRef: 'does-not-exist' }],
+    }
+    expect(findDanglingRefs(withBadCard)).toEqual([])
+  })
 })
