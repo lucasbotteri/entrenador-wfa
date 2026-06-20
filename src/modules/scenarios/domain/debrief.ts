@@ -4,7 +4,7 @@ import { scoreRun, type RunScore } from './scoring'
 import type { Case } from '@/shared/content/types'
 import { linkForRef } from '@/shared/domain/conceptLinks'
 
-export interface DebriefItem { text: string; concept: string; link: string }
+export interface DebriefItem { text: string; concept: string; link: string; detail?: string }
 export interface Debrief {
   summary: RunScore
   did: DebriefItem[]
@@ -35,7 +35,7 @@ export function buildDebrief(c: Case, run: RunState): Debrief {
   const dangerous: DebriefItem[] = []
   for (const phase of c.phases) {
     for (const d of phase.distractors) {
-      if (done.has(d.id)) dangerous.push({ text: d.text, concept: d.concept, link: linkForRef(d.concept) })
+      if (done.has(d.id)) dangerous.push({ text: d.text, concept: d.concept, link: linkForRef(d.concept), detail: d.whyNot })
     }
   }
 

@@ -30,6 +30,7 @@ describe('buildDebrief', () => {
     expect(d.missed.map(i => i.text)).toContain('Vía aérea')
     expect(d.dangerous[0]).toMatchObject({ text: 'Darle agua' })
     expect(d.dangerous[0]!.link).toBe('/chain/primary-habcde-h')
+    expect(d.dangerous[0]!.detail).toBe('No con shock')
     expect(d.priorities.ok).toBe(true)
     expect(d.evacuation).toMatchObject({ chosen: 'CRÍTICO', correct: 'CRÍTICO', ok: true, feedback: 'urgente' })
   })
