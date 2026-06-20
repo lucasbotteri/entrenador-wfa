@@ -411,9 +411,11 @@ describe('scene ordered projection', () => {
   it('nests bioseguridad inside the safety node (not a separate node)', () => {
     const safety = scene.nodes[0]!
     expect(scene.nodes.some(n => n.id === 'scene-biosafety')).toBe(false)
-    const bio = safety.items.find(it => it.heading === 'Bioseguridad')
-    expect(bio).toBeTruthy()
-    expect(bio?.detail).toContain('Guantes')
+    // The "Bioseguridad" heading marks the START of the nested block (on the
+    // first bioseguridad item); EPP content appears within the block.
+    const bioStart = safety.items.findIndex(it => it.heading === 'Bioseguridad')
+    expect(bioStart).toBeGreaterThanOrEqual(0)
+    expect(safety.items.slice(bioStart).some(it => it.detail.includes('Guantes'))).toBe(true)
   })
 
   it('makes buscar_ayuda a non-numbered bridge node', () => {
