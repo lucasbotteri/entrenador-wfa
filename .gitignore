@@ -8,3 +8,5 @@ dist/
 *.log
 src/shared/content/generated/
 *.tsbuildinfo
+pnpm-lock.yaml
+*.pdf
