@@ -98,7 +98,10 @@ export const validContent: Content = {
   ],
   workedExample: {
     title: 'Caída en descenso',
+    pause: { question: '¿Qué observarías antes de tocar?', reveal: 'No responde, respira, piel pálida.' },
     steps: [
+      { phase: 'scene', state: 'Cae en un pedrero.', action: '1 · Seguridad: asegurás la zona.', rationaleRef: 'scene' },
+      { phase: 'scene', state: 'Te acercás.', action: '4 · Impresión general (TEV).', rationaleRef: 'tev' },
       {
         phase: 'primary',
         state: 'Sangrado pulsátil.',
