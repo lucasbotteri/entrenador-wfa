@@ -43,6 +43,17 @@ export function mapChainPhase(p: any) {
     rationale: p.racional,
     ...(p.orden_estricto ? { strictOrder: true } : {}),
     ...(p.ref_sigla ? { refAcronym: p.ref_sigla } : {}),
+    ...(p.secuencia
+      ? {
+          sequence: p.secuencia.map((s: any) => ({
+            order: s.orden,
+            part: s.parte,
+            ...(s.prioridad ? { priority: true } : {}),
+            ...(s.incluye ? { includes: s.incluye } : {}),
+          })),
+        }
+      : {}),
+    ...(p.luego ? { next: p.luego } : {}),
     content: p.contenido ?? {},
   }
 }
@@ -52,7 +63,12 @@ export function mapEvacLevel(e: any) {
 }
 
 export function mapPracticalRule(r: any) {
-  return { id: r.id, rule: r.regla, concept: r.concepto }
+  return {
+    id: r.id,
+    rule: r.regla,
+    concept: r.concepto,
+    ...(r.letra ? { letter: r.letra } : {}),
+  }
 }
 
 export function mapClinicalTopic(t: any) {

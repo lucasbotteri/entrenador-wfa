@@ -56,6 +56,7 @@ function anglicizeVitals(v: any) {
     bloodPressure: v.presion_arterial,
     skin: v.piel,
     capillaryRefill: v.relleno_capilar,
+    reevaluacion: v.reevaluacion,
   }
 }
 

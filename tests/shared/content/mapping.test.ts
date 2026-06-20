@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest'
 
-import { mapAcronym, mapChainPhase, mapEvacLevel } from '@/shared/content/mapping'
+import {
+  mapAcronym,
+  mapChainPhase,
+  mapEvacLevel,
+  mapPracticalRule,
+} from '@/shared/content/mapping'
 
 describe('mapping es → en', () => {
   it('maps a letter acronym', () => {
@@ -59,5 +64,21 @@ describe('mapping es → en', () => {
       color: 'rojo',
       criterion: 'Evacuar ya.',
     })
+  })
+})
+
+describe('fixes mapping', () => {
+  it('maps secuencia → sequence and luego → next', () => {
+    const out = mapChainPhase({
+      fase: 'escena', nombre: 'Escena', racional: 'r', orden_estricto: true,
+      secuencia: [{ orden: 1, parte: 'seguridad', prioridad: true, incluye: ['bioseguridad'] }],
+      luego: 'buscar_ayuda', contenido: { seguridad: {} },
+    })
+    expect(out.sequence).toEqual([{ order: 1, part: 'seguridad', priority: true, includes: ['bioseguridad'] }])
+    expect(out.next).toBe('buscar_ayuda')
+  })
+  it('maps regla.letra → letter (omitted when absent)', () => {
+    expect(mapPracticalRule({ id: 'x', regla: 'r', concepto: 'habcde', letra: 'A' })).toEqual({ id: 'x', rule: 'r', concept: 'habcde', letter: 'A' })
+    expect('letter' in mapPracticalRule({ id: 'y', regla: 'r', concepto: 'secundaria' })).toBe(false)
   })
 })
