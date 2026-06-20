@@ -18,7 +18,7 @@ meta:
   fuente: "AIDER — Primeros Socorros Estándares en Lugares Remotos, Guía del alumno, 2.ª ed."
   alcance: "Núcleo: Cadena de Atención a la Víctima (Cap. 3 + SOAP). Excluye lo legal/ético."
   idioma: "es"
-  version: "0.2"
+  version: "0.3"   # v0.3: orden explícito de la fase escena (4 partes + buscar ayuda)
 
 # ---------------------------------------------------------------------
 # SIGLAS / REGLAS MNEMOTÉCNICAS
@@ -143,7 +143,14 @@ cadena:
 
   - fase: "escena"
     nombre: "Evaluación de la escena"
-    racional: "Todo lo que se hace ANTES de tocar a la víctima. La seguridad es siempre la prioridad: ¡deténgase y piense!"
+    racional: "Todo lo que se hace ANTES de tocar a la víctima. Consta de 4 partes EN ORDEN: Seguridad → Mecanismo de daño → Número de víctimas → Impresión general (la seguridad es siempre la prioridad: ¡deténgase y piense!). Luego, buscar ayuda."
+    orden_estricto: true          # las 4 partes tienen un orden; Seguridad es siempre la 1.ª (la prioridad)
+    secuencia:                    # "consta de 4 partes" (manual AIDER), en este orden
+      - {orden: 1, parte: "seguridad", prioridad: true, incluye: ["bioseguridad"]}
+      - {orden: 2, parte: "mecanismo_dano"}
+      - {orden: 3, parte: "numero_victimas"}
+      - {orden: 4, parte: "impresion_general"}
+    luego: "buscar_ayuda"         # paso puente hacia la evaluación primaria (después de las 4 partes)
     contenido:
       seguridad:
         regla: "Deténgase y piense. Protéjase. No puede ayudar a nadie si se convierte en víctima."
@@ -250,12 +257,12 @@ posicion_victima:
 # REGLAS PRÁCTICAS  (acciones clave; se muestran en Aprender y como feedback)
 # ---------------------------------------------------------------------
 reglas_practicas:
-  - {id: "via-sin-trauma", regla: "Sin sospecha de lesión cervical: maniobra frente-mentón.", concepto: "habcde"}
-  - {id: "via-con-trauma", regla: "Con sospecha de lesión cervical: maniobra de subluxación de la mandíbula.", concepto: "habcde"}
-  - {id: "habla-via", regla: "Si la víctima puede hablar, gritar o llorar, tiene la vía aérea abierta y está ventilando.", concepto: "habcde"}
-  - {id: "hemorragia", regla: "Hemorragia importante: presión directa con mano enguantada; si no cede en los primeros minutos, torniquete a 5-8 cm de la herida, nunca sobre articulación, anotar la hora.", concepto: "habcde"}
-  - {id: "shock-piel", regla: "Signos de shock: piel pálida, fría y húmeda.", concepto: "shock"}
-  - {id: "pls", regla: "Inconsciente que respira normal (sin sospecha de columna): Posición Lateral de Seguridad (PLS).", concepto: "habcde"}
+  - {id: "via-sin-trauma", regla: "Sin sospecha de lesión cervical: maniobra frente-mentón.", concepto: "habcde", letra: "A"}
+  - {id: "via-con-trauma", regla: "Con sospecha de lesión cervical: maniobra de subluxación de la mandíbula.", concepto: "habcde", letra: "A"}
+  - {id: "habla-via", regla: "Si la víctima puede hablar, gritar o llorar, tiene la vía aérea abierta y está ventilando.", concepto: "habcde", letra: "A"}
+  - {id: "hemorragia", regla: "Hemorragia importante: presión directa con mano enguantada; si no cede en los primeros minutos, torniquete a 5-8 cm de la herida, nunca sobre articulación, anotar la hora.", concepto: "habcde", letra: "H"}
+  - {id: "shock-piel", regla: "Signos de shock: piel pálida, fría y húmeda.", concepto: "shock", letra: "C"}
+  - {id: "pls", regla: "Inconsciente que respira normal (sin sospecha de columna): Posición Lateral de Seguridad (PLS).", concepto: "habcde", letra: "A"}
   - {id: "no-comer-beber", regla: "No dar de comer ni beber ante sospecha de lesión abdominal o shock.", concepto: "secundaria"}
 
 # ---------------------------------------------------------------------
