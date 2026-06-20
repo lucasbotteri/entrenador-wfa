@@ -91,12 +91,47 @@ export function mapPosition(p: any) {
   return { situation: p.situacion, position: p.posicion }
 }
 
-// Cases are a Module 3 contract (validated, unused in v1). Only the structural
-// keys the CaseSchema reads are anglicized (titulo → title); the rich Spanish
-// scenario body passes through untouched.
+// Cases (Module 3 — Escenarios). Recursive es→en mapper over the whole
+// scenario body; user-facing strings are preserved, only keys are anglicized.
+function mapKeyAction(a: any) {
+  return {
+    id: a.id, text: a.texto, critical: a.critico, concept: a.concepto, rationale: a.racional,
+    ...(a.orden != null ? { order: a.orden } : {}),
+  }
+}
+function mapDistractor(d: any) {
+  return { id: d.id, text: d.texto, type: d.tipo, whyNot: d.por_que_no, concept: d.concepto }
+}
+function mapDecision(dec: any) {
+  return {
+    correct: dec.correcta,
+    options: (dec.opciones ?? []).map((o: any) => ({ level: o.nivel, correct: o.correcta, feedback: o.fb })),
+  }
+}
+function mapScenarioPhase(p: any) {
+  const phase = PHASE_MAP[p.id]
+  if (!phase) throw new Error(`Unknown scenario phase: ${p.id}`)
+  return {
+    id: phase,
+    state: p.estado,
+    ...(p.orden_estricto != null ? { strictOrder: p.orden_estricto } : {}),
+    keyActions: (p.acciones_clave ?? []).map(mapKeyAction),
+    distractors: (p.distractores ?? []).map(mapDistractor),
+    reveals: (p.revelaciones ?? []).map((r: any) => ({ ifDone: r.si_hace, text: r.revela })),
+    ...(p.transicion ? { transition: p.transicion } : {}),
+    ...(p.decision ? { decision: mapDecision(p.decision) } : {}),
+  }
+}
 export function mapCase(c: any) {
-  const { titulo, ...rest } = c
-  return { ...rest, title: titulo }
+  return {
+    id: c.id,
+    title: c.titulo,
+    tag: c.tag,
+    context: c.contexto,
+    concepts: c.conceptos ?? [],
+    phases: (c.fases ?? []).map(mapScenarioPhase),
+    modelDebrief: c.debrief_modelo ?? [],
+  }
 }
 
 export function mapWorkedExample(w: any) {

@@ -44,3 +44,17 @@ export function findElegirWithoutOptions(c: any): string[] {
     .filter((card: any) => card.type === 'elegir' && (card.options?.length ?? 0) < 2)
     .map((card: any) => card.id)
 }
+
+// Every concept used by a case action (keyAction/distractor) must resolve to a
+// concept id produced by the content sources, so the debrief can deep-link it.
+export function findCaseConceptDangling(content: any, cases: any[]): string[] {
+  const known = new Set(collectConceptIds(content))
+  const dangling: string[] = []
+  for (const c of cases ?? []) {
+    for (const ph of c.phases ?? []) {
+      for (const a of ph.keyActions ?? []) if (a.concept && !known.has(a.concept)) dangling.push(a.concept)
+      for (const d of ph.distractors ?? []) if (d.concept && !known.has(d.concept)) dangling.push(d.concept)
+    }
+  }
+  return dangling.filter((v, i, arr) => arr.indexOf(v) === i)
+}

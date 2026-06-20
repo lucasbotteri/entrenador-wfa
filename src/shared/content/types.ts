@@ -6,7 +6,9 @@ import {
   AcronymComponentSchema,
   ChainPhaseSchema,
   ContentSchema,
+  CaseSchema,
   CasesSchema,
+  ScenarioPhaseSchema,
   EvacLevelSchema,
   PracticalRuleSchema,
   ClinicalTopicSchema,
@@ -21,6 +23,8 @@ export type AcronymLetter = z.infer<typeof AcronymLetterSchema>
 export type AcronymComponent = z.infer<typeof AcronymComponentSchema>
 export type ChainPhaseRaw = z.infer<typeof ChainPhaseSchema>
 export type Content = z.infer<typeof ContentSchema>
+export type Case = z.infer<typeof CaseSchema>
+export type ScenarioPhase = z.infer<typeof ScenarioPhaseSchema>
 export type Cases = z.infer<typeof CasesSchema>
 export type EvacLevel = z.infer<typeof EvacLevelSchema>
 export type PracticalRule = z.infer<typeof PracticalRuleSchema>

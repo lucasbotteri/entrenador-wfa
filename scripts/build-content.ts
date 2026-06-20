@@ -18,7 +18,12 @@ import {
 } from '../src/shared/content/mapping'
 import { ContentSchema, CasesSchema } from '../src/shared/content/schemas'
 
-import { findDuplicateIds, findDanglingRefs, findElegirWithoutOptions } from './integrity'
+import {
+  findDuplicateIds,
+  findDanglingRefs,
+  findElegirWithoutOptions,
+  findCaseConceptDangling,
+} from './integrity'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const checkOnly = process.argv.includes('--check')
@@ -84,6 +89,9 @@ function main() {
 
   // Integrity checks (Task 11) are invoked here.
   runIntegrityChecks(content)
+
+  const caseDangling = findCaseConceptDangling(content, casesResult.data)
+  if (caseDangling.length) fail(caseDangling.map(c => `  Dangling case concept: ${c}`).join('\n'))
 
   if (!checkOnly) {
     const outDir = resolve(root, 'src/shared/content/generated')

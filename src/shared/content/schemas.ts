@@ -117,6 +117,43 @@ export const ContentSchema = z.object({
   workedExample: WorkedExampleSchema,
 })
 
-// Cases (Module 3 contract; validated, unused in v1)
-export const CaseSchema = z.object({ id: z.string(), title: z.string() }).passthrough()
+// Cases (Module 3 — Escenarios). Full typed schema over the anglicized,
+// es→en-mapped scenario body produced by mapCase.
+const KeyActionSchema = z.object({
+  id: z.string().min(1),
+  text: z.string().min(1),
+  critical: z.boolean(),
+  concept: z.string().min(1),
+  rationale: z.string().min(1),
+  order: z.number().optional(),
+})
+const DistractorSchema = z.object({
+  id: z.string().min(1),
+  text: z.string().min(1),
+  type: z.enum(['prioridad', 'contexto', 'misconcepcion', 'tecnica', 'ineficiencia']),
+  whyNot: z.string().min(1),
+  concept: z.string().min(1),
+})
+const RevealSchema = z.object({ ifDone: z.string().min(1), text: z.string().min(1) })
+const DecisionOptionSchema = z.object({ level: z.string().min(1), correct: z.boolean(), feedback: z.string().min(1) })
+const DecisionSchema = z.object({ correct: z.string().min(1), options: z.array(DecisionOptionSchema).min(2) })
+export const ScenarioPhaseSchema = z.object({
+  id: PhaseIdSchema,
+  state: z.string().min(1),
+  strictOrder: z.boolean().optional(),
+  keyActions: z.array(KeyActionSchema).default([]),
+  distractors: z.array(DistractorSchema).default([]),
+  reveals: z.array(RevealSchema).default([]),
+  transition: z.string().optional(),
+  decision: DecisionSchema.optional(),
+})
+export const CaseSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  tag: z.string().min(1),
+  context: z.string().min(1),
+  concepts: z.array(z.string()).default([]),
+  phases: z.array(ScenarioPhaseSchema).min(1),
+  modelDebrief: z.array(z.string()).default([]),
+})
 export const CasesSchema = z.array(CaseSchema)

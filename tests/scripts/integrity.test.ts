@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect } from 'vitest'
 
-import { collectConceptIds, findDuplicateIds, findDanglingRefs } from '../../scripts/integrity'
+import {
+  collectConceptIds,
+  findDuplicateIds,
+  findDanglingRefs,
+  findCaseConceptDangling,
+} from '../../scripts/integrity'
 
 const base = {
   acronyms: [{ id: 'habcde', concept: 'primaria', rationale: 'r' }],
@@ -51,5 +56,17 @@ describe('integrity', () => {
   it('accepts Spanish phase aliases as known ids', () => {
     const withAliasCard = { ...base, cards: [{ id: 'c2', rationaleRef: 'primaria' }] }
     expect(findDanglingRefs(withAliasCard)).toEqual([])
+  })
+})
+
+describe('case concept guard (M3)', () => {
+  const cases = [{ phases: [{ keyActions: [{ concept: 'habcde' }], distractors: [{ concept: 'ghost' }] }] }]
+  it('flags a case concept that does not resolve', () => {
+    expect(findCaseConceptDangling(base, cases as any)).toContain('ghost')
+  })
+  it('accepts resolvable concepts (incl. the Spanish phase alias)', () => {
+    // `base` has a 'primary' chain phase → its alias 'primaria' resolves via collectConceptIds.
+    const ok = [{ phases: [{ keyActions: [{ concept: 'primaria' }], distractors: [{ concept: 'shock' }] }] }]
+    expect(findCaseConceptDangling(base, ok as any)).toEqual([])
   })
 })
