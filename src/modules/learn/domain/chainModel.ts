@@ -22,6 +22,7 @@ export interface ChainNode {
   kind: NodeKind
   items: NodeItem[]
   rationaleId?: string
+  whyText?: string
 }
 
 export interface ChainPhase {
@@ -67,11 +68,31 @@ function rulesForLetter(content: Content, letter: string): NodeItem[] {
     .map((r, i): NodeItem => ({ label: 'Regla', detail: r.rule, ...(i === 0 ? { heading: 'Reglas clave' } : {}) }))
 }
 
-// Primary phase: one node per HABCDE letter (matches the chain-map design).
+// The pre-HABCDE safety branch (P1): shown as the first node of the primary phase.
+function primaryBeforeNode(content: Content): ChainNode | null {
+  const phase = content.chain.find(p => p.phase === 'primary')
+  const c = (phase?.content ?? {}) as Record<string, unknown>
+  const items: NodeItem[] = []
+  if (typeof c.previo === 'string') items.push({ label: 'Si no responde y no respira', detail: c.previo })
+  if (typeof c.presentacion === 'string') items.push({ label: 'Si está consciente', detail: c.presentacion })
+  if (items.length === 0) return null
+  return {
+    id: 'primary-before',
+    phase: 'primary',
+    title: 'Antes de empezar',
+    kind: 'topic',
+    items,
+    rationaleId: 'primary',
+  }
+}
+
+// Primary phase: the safety branch first, then one node per HABCDE letter.
+// Each letter node carries its own whyText (P3) when the content provides one,
+// falling back to the acronym-level rationale via rationaleId.
 function primaryNodes(content: Content): ChainNode[] {
   const habcde = acronymById(content, 'habcde')
   if (!habcde?.letters) return []
-  return habcde.letters.map(l => ({
+  const letterNodes: ChainNode[] = habcde.letters.map(l => ({
     id: `primary-habcde-${l.letter.toLowerCase()}`,
     phase: 'primary' as const,
     title: l.meaning,
@@ -80,7 +101,10 @@ function primaryNodes(content: Content): ChainNode[] {
     kind: 'acronymLetter' as const,
     items: [{ label: l.meaning, detail: l.detail }, ...rulesForLetter(content, l.letter)],
     rationaleId: habcde.id,
+    ...(l.rationale ? { whyText: l.rationale } : {}),
   }))
+  const before = primaryBeforeNode(content)
+  return before ? [before, ...letterNodes] : letterNodes
 }
 
 // Secondary phase: the acronyms used in the secondary survey, each as one node

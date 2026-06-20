@@ -10,7 +10,7 @@ export const validContent: Content = {
       concept: 'primaria',
       isSequence: true,
       letters: [
-        { letter: 'H', meaning: 'Hemorragia', detail: 'Detener hemorragia.' },
+        { letter: 'H', meaning: 'Hemorragia', detail: 'Detener hemorragia.', rationale: 'La hemorragia mata en minutos: primero.' },
         { letter: 'A', meaning: 'Apertura de la vía aérea', detail: 'Con control cervical.' },
       ],
       rationale: 'Lo que mata primero, primero.',
@@ -60,7 +60,10 @@ export const validContent: Content = {
       rationale: 'Orden estricto.',
       strictOrder: true,
       refAcronym: 'habcde',
-      content: {},
+      content: {
+        previo: 'Si no responde y no respira → secuencia de paro (RCP/DEA).',
+        presentacion: 'Si está consciente: presentate, pedí consentimiento.',
+      },
     },
     { phase: 'secondary', name: 'Secundaria', rationale: 'Buscar el resto.', content: {} },
     { phase: 'evacuation', name: 'Evacuación', rationale: 'Definir gravedad.', content: {} },

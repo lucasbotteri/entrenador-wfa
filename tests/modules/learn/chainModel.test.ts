@@ -14,12 +14,13 @@ describe('buildChainModel', () => {
 
   it('expands HABCDE into one node per letter', () => {
     const primary = model.find(p => p.id === 'primary')!
-    expect(primary.nodes.map(n => n.letter)).toEqual(['H', 'A'])
-    expect(primary.nodes[0]?.id).toBe('primary-habcde-h')
+    const letterNodes = primary.nodes.filter(n => n.kind === 'acronymLetter')
+    expect(letterNodes.map(n => n.letter)).toEqual(['H', 'A'])
+    expect(letterNodes[0]?.id).toBe('primary-habcde-h')
   })
 
   it('each letter node carries meaning/detail and a resolvable rationale', () => {
-    const h = model.find(p => p.id === 'primary')!.nodes[0]!
+    const h = model.find(p => p.id === 'primary')!.nodes.find(n => n.id === 'primary-habcde-h')!
     expect(h.title).toBe('Hemorragia')
     expect(h.items[0]?.detail).toContain('Detener')
     expect(h.rationaleId).toBe('habcde')
@@ -91,5 +92,32 @@ describe('vital values / rules / position', () => {
     const evac = model.find(p => p.id === 'evacuation')!.nodes[0]!
     const pos = evac.items.find(i => i.heading === 'Posición de la víctima')
     expect(pos?.detail).toBe('La más confortable.')
+  })
+})
+
+describe('chainModel — Fixes2 round (P1/P3)', () => {
+  it('primary phase prepends an "Antes de empezar" node first (P1)', () => {
+    const model = buildChainModel(validContent)
+    const primary = model.find(p => p.id === 'primary')!
+    expect(primary.nodes[0]?.id).toBe('primary-before')
+    expect(primary.nodes[0]?.title).toBe('Antes de empezar')
+    const labels = primary.nodes[0]!.items.map(i => i.label)
+    expect(labels).toContain('Si no responde y no respira')
+    expect(labels).toContain('Si está consciente')
+  })
+
+  it('the H letter node carries its own whyText (P3), not just the acronym rationale', () => {
+    const model = buildChainModel(validContent)
+    const primary = model.find(p => p.id === 'primary')!
+    const h = primary.nodes.find(n => n.id === 'primary-habcde-h')!
+    expect(h.whyText).toBe('La hemorragia mata en minutos: primero.')
+  })
+
+  it('a letter without its own rationale has no whyText but keeps the rationaleId fallback (P3)', () => {
+    const model = buildChainModel(validContent)
+    const primary = model.find(p => p.id === 'primary')!
+    const a = primary.nodes.find(n => n.id === 'primary-habcde-a')!
+    expect(a.whyText).toBeUndefined()
+    expect(a.rationaleId).toBe('habcde')
   })
 })
