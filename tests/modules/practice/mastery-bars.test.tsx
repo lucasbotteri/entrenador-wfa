@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 
-import { MasteryBars } from '@/modules/practice/ui/MasteryBars'
 import type { TopicMastery } from '@/modules/practice/domain/mastery'
+import { MasteryBars } from '@/modules/practice/ui/MasteryBars'
 
 const items: TopicMastery[] = [
   { topic: 'HABCDE', pct: 80, count: 6, enabled: true },
