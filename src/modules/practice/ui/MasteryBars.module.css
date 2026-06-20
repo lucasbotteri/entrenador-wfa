@@ -5,3 +5,5 @@
 .fill { height: 100%; border-radius: 99px; background: var(--mild); }
 .mid { background: var(--serious); }
 .low { background: var(--primary); }
+.disabled { opacity: 0.5; }
+.tag { color: var(--muted); font-style: italic; }
