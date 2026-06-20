@@ -18,7 +18,7 @@ meta:
   fuente: "AIDER — Primeros Socorros Estándares en Lugares Remotos, Guía del alumno, 2.ª ed."
   alcance: "Núcleo: Cadena de Atención a la Víctima (Cap. 3 + SOAP). Excluye lo legal/ético."
   idioma: "es"
-  version: "0.6"   # v0.6: 'mecanismo de daño' con orígenes/enf. súbita/ambiente
+  version: "0.7"   # v0.7: bioseguridad con técnica para quitarse los guantes (PDF p.40)
 
 # ---------------------------------------------------------------------
 # SIGLAS / REGLAS MNEMOTÉCNICAS
@@ -158,6 +158,12 @@ cadena:
       bioseguridad:
         definicion: "Normas para evitar el contagio. Asuma que TODO fluido corporal (sangre, mucosidad, tejido) es un posible riesgo."
         epp: ["Guantes (nitrilo recomendado; látex o vinilo)", "Protección ocular (antiparras o anteojos)", "Mascarilla / barrera para ventilaciones de rescate"]
+        quitarse_guantes:
+          - "Tomá un guante por su extremo posterior, en pinza con la otra mano, tocando siempre la parte EXTERNA."
+          - "Tirá hasta quitarlo del todo y envolverlo dentro de la mano enguantada."
+          - "Meté dos dedos de la mano libre por DENTRO de la mano enguantada (tocando solo la piel y la cara interna del guante)."
+          - "Arrastrá hasta quitar y envolver los dos guantes; la cara interna del segundo queda hacia afuera."
+          - "Descartá los guantes en un recipiente para residuos patológicos o bolsa roja."
         transmision_sangre: ["Hepatitis B y C", "VIH"]
         transmision_aire: ["Tuberculosis", "COVID-19", "otras respiratorias"]
         lavado_manos: "Lavarse las manos tras atender (agua potable y jabón neutro, ≥30 s); gel en seco si no hay agua."
