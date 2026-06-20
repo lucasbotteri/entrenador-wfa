@@ -18,7 +18,7 @@ meta:
   fuente: "AIDER — Primeros Socorros Estándares en Lugares Remotos, Guía del alumno, 2.ª ed."
   alcance: "Núcleo: Cadena de Atención a la Víctima (Cap. 3 + SOAP). Excluye lo legal/ético."
   idioma: "es"
-  version: "0.3"   # v0.3: orden explícito de la fase escena (4 partes + buscar ayuda)
+  version: "0.4"   # v0.4: racional por letra (HABCDE), TEV ampliado, buscar ayuda (SEM/AE)
 
 # ---------------------------------------------------------------------
 # SIGLAS / REGLAS MNEMOTÉCNICAS
@@ -32,12 +32,12 @@ siglas:
     concepto: "primaria"
     es_secuencia: true            # el orden importa (orden estricto)
     letras:
-      - {letra: "H", significado: "Hemorragia", detalle: "Detener hemorragia profusa/severa con presión directa."}
-      - {letra: "A", significado: "Apertura de la vía aérea", detalle: "Con control de la columna cervical si hay sospecha de trauma."}
-      - {letra: "B", significado: "Buena ventilación", detalle: "¿Respira normal? Esfuerzo, frecuencia, disnea."}
-      - {letra: "C", significado: "Circulación y sangrados", detalle: "Sangrados ocultos y signos de shock (piel pálida, fría, húmeda)."}
-      - {letra: "D", significado: "Déficit neurológico", detalle: "Conciencia (AVDN), parálisis, sensibilidad. Inmovilizar columna si hay trauma."}
-      - {letra: "E", significado: "Exploración + Estabilización térmica", detalle: "Lesiones ocultas + estabilizar temperatura (en general, abrigar)."}
+      - {letra: "H", significado: "Hemorragia", detalle: "Detener hemorragia profusa/severa con presión directa.", porque: "Una hemorragia masiva mata en minutos, antes que cualquier otra cosa: por eso va primero."}
+      - {letra: "A", significado: "Apertura de la vía aérea", detalle: "Con control de la columna cervical si hay sospecha de trauma.", porque: "Sin vía aérea no llega oxígeno; con trauma se abre SIN mover la columna para no causar una lesión peor."}
+      - {letra: "B", significado: "Buena ventilación", detalle: "¿Respira normal? Esfuerzo, frecuencia, disnea.", porque: "Que la vía esté abierta no basta: hay que confirmar que el aire entra y sale de verdad."}
+      - {letra: "C", significado: "Circulación y sangrados", detalle: "Sangrados ocultos y signos de shock (piel pálida, fría, húmeda).", porque: "Un sangrado puede estar oculto; reconocer el shock temprano cambia la conducta y la urgencia."}
+      - {letra: "D", significado: "Déficit neurológico", detalle: "Conciencia (AVDN), parálisis, sensibilidad. Inmovilizar columna si hay trauma.", porque: "Un cambio de conciencia o de sensibilidad avisa de daño neurológico que hay que frenar (inmovilizar)."}
+      - {letra: "E", significado: "Exploración + Estabilización térmica", detalle: "Lesiones ocultas + estabilizar temperatura (en general, abrigar).", porque: "Lo que no se ve también lesiona, y el frío del terreno suma daño: por eso se expone y se abriga."}
     racional: "Detecta y trata lo que pone en peligro la vida en los primeros minutos, en orden de prioridad."
 
   - id: "avdn"
@@ -111,9 +111,9 @@ siglas:
     concepto: "escena"
     es_secuencia: false
     componentes:
-      - {nombre: "Respiración", detalle: "Movimientos, postura (trípode), sonidos anómalos (ronquido, silbido, burbujeo)."}
-      - {nombre: "Circulación", detalle: "Coloración de la piel."}
-      - {nombre: "Aspecto/estado general", detalle: "Impresión global de gravedad."}
+      - {nombre: "Respiración", detalle: "Vemos: movimientos anómalos del tórax, postura de trípode (brazos apoyados), respiración muy rápida o muy lenta, tiraje en cuello/tórax. Oímos: ronquido, silbido, burbujeo, no puede hablar."}
+      - {nombre: "Circulación", detalle: "Coloración de la piel: pálida, sudorosa, azulada (cianótica) o rojiza."}
+      - {nombre: "Sistema neurológico (aspecto general)", detalle: "Lo más importante: falta de tono muscular (flacidez), interacción inadecuada con el entorno, agitación, lenguaje inadecuado, mirada perdida, inconsciencia."}
     racional: "Evaluación rápida SIN tocar a la víctima, al acercarse. Da una idea de la gravedad antes del HABCDE."
 
   - id: "msc"
@@ -172,7 +172,7 @@ cadena:
         nota: "En zona remota el riesgo de hipotermia/deshidratación es mayor; actuar rápido y eficiente."
       impresion_general:
         ref_sigla: "tev"
-      buscar_ayuda: "Tras la impresión general, buscar ayuda / activar el número local de emergencias (delegar la llamada y seguir atendiendo)."
+      buscar_ayuda: "Tres niveles: (1) buscar ayuda — saber cómo comunicarte con tu grupo de rescate; (2) llamar al número local de emergencias / SEM (no cortar hasta que el operador lo indique); (3) en lugares remotos, coordinar la ayuda externa (AE) y decidir cuándo activarla. Delegá la llamada y seguí atendiendo."
 
   - fase: "primaria"
     nombre: "Evaluación primaria (HABCDE)"
@@ -367,24 +367,15 @@ tarjetas:
 # ---------------------------------------------------------------------
 worked_example:
   titulo: "Caída en un descenso, terreno de bloques"
+  pausa:
+    pregunta: "¿Qué observarías antes de tocar?"
+    revela: "Sin tocarla: respira pero no responde a tu voz; la piel está pálida. Esa impresión general (TEV) te da la gravedad antes de entrar al HABCDE."
   steps:
-    - fase: "escena"
-      estado: "Tu compañero cae varios metros en un canal de pedrero. Sangra del muslo y no se mueve."
-      accion: "Mirás el terreno, asegurás la zona y te ponés guantes antes de acercarte."
-      racional_ref: "scene"
-    - fase: "primaria"
-      estado: "No responde, respira; sangrado pulsátil en el muslo; casco puesto."
-      accion: "H: controlás la hemorragia masiva con presión directa antes que nada."
-      racional_ref: "habcde"
-    - fase: "primaria"
-      estado: "Hemorragia controlada; hay mecanismo de trauma."
-      accion: "A: abrís la vía aérea con subluxación mandibular (control cervical)."
-      racional_ref: "habcde"
-    - fase: "secundaria"
-      estado: "Consciente pero alterado; pálido, frío y húmedo; dolor abdominal."
-      accion: "Reconocés el shock por la piel y tomás signos vitales de base."
-      racional_ref: "shock"
-    - fase: "evacuacion"
-      estado: "Shock con sospecha de sangrado interno, zona remota a 2 h."
-      accion: "Decidís evacuación CRÍTICA: el sangrado interno no se resuelve en el terreno."
-      racional_ref: "shock"
+    - {fase: "escena", estado: "Tu compañero cae varios metros en un canal de pedrero y queda tendido.", accion: "1 · Seguridad: mirás el terreno, asegurás la zona y te ponés guantes antes de acercarte.", racional_ref: "scene"}
+    - {fase: "escena", estado: "Cayó golpeando contra las rocas.", accion: "2 · Mecanismo: golpe contra rocas → sospechás trauma de columna.", racional_ref: "mdd"}
+    - {fase: "escena", estado: "Dos compañeros cerca; el resto de la cordada por encima.", accion: "3 · Número de víctimas: una; el resto está bien. Delegás la llamada al SEM.", racional_ref: "scene"}
+    - {fase: "escena", estado: "Te acercás con seguridad.", accion: "4 · Impresión general (TEV) sin tocar: no responde, respira, piel pálida.", racional_ref: "tev"}
+    - {fase: "primaria", estado: "No responde, respira; sangrado pulsátil en el muslo; casco puesto.", accion: "H: controlás la hemorragia masiva con presión directa antes que nada.", racional_ref: "habcde"}
+    - {fase: "primaria", estado: "Hemorragia controlada; hay mecanismo de trauma.", accion: "A: abrís la vía aérea con subluxación mandibular (control cervical).", racional_ref: "habcde"}
+    - {fase: "secundaria", estado: "Consciente pero alterado; pálido, frío y húmedo; dolor abdominal.", accion: "Reconocés el shock por la piel y tomás signos vitales de base.", racional_ref: "shock"}
+    - {fase: "evacuacion", estado: "Shock con sospecha de sangrado interno, zona remota a 2 h.", accion: "Decidís evacuación CRÍTICA: el sangrado interno no se resuelve en el terreno.", racional_ref: "shock"}
