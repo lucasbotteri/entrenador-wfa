@@ -1,0 +1,24 @@
+.button {
+  display: block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  border: 1.5px dashed var(--accent, #c9a86a);
+  background: var(--surface-soft, #fbf3df);
+  border-radius: var(--radius-md, 12px);
+  padding: var(--space-3, 14px);
+  font-family: var(--font-serif);
+  color: var(--ink, #2d2418);
+}
+.question {
+  display: block;
+  font-weight: 700;
+  font-size: 15px;
+}
+.hint {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--ink-soft, #9a7b2e);
+  margin-top: 4px;
+}

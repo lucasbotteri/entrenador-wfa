@@ -5,6 +5,7 @@ import { getNodeById } from '@/modules/learn/content/selectors'
 import { buildChainModel } from '@/modules/learn/domain/chainModel'
 import { findPrevNext } from '@/modules/learn/domain/navigation'
 import { ExpandableItem } from '@/modules/learn/ui/ExpandableItem'
+import { RecallPrompt } from '@/modules/learn/ui/RecallPrompt'
 import { loadContent } from '@/shared/content/loader'
 import { buildRationaleMap, getRationale } from '@/shared/domain/rationale'
 import { getStorage } from '@/shared/domain/storage'
@@ -20,9 +21,9 @@ export function NodeDetail() {
   const content = loadContent()
   const model = buildChainModel(content)
   const node = getNodeById(model, nodeId)
-  const rationale = node?.rationaleId
-    ? getRationale(node.rationaleId, buildRationaleMap(content))
-    : undefined
+  const why =
+    node?.whyText ??
+    (node?.rationaleId ? getRationale(node.rationaleId, buildRationaleMap(content)) : undefined)
   const { prev, next } = findPrevNext(model, nodeId)
 
   useEffect(() => {
@@ -74,9 +75,11 @@ export function NodeDetail() {
         <ExpandableItem key={`${it.label}-${i}`} item={it} />
       ))}
 
-      {rationale && (
+      {why && (
         <div style={{ marginTop: 'var(--space-4)' }}>
-          <Section label="Por qué">{rationale}</Section>
+          <RecallPrompt key={nodeId} question="¿Por qué?">
+            <Section label="Por qué">{why}</Section>
+          </RecallPrompt>
         </div>
       )}
 

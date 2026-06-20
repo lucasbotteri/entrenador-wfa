@@ -1,5 +1,6 @@
 import 'fake-indexeddb/auto'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { describe, it, expect, vi } from 'vitest'
 
@@ -20,12 +21,13 @@ function renderAt(path: string) {
 }
 
 describe('NodeDetail', () => {
-  it('shows the node title, its item detail, and the rationale (por qué)', () => {
+  it('shows the node title and its item detail; rationale is hidden until revealed', async () => {
     renderAt('/chain/primary-habcde-h')
     expect(screen.getByRole('heading', { name: 'Hemorragia' })).toBeInTheDocument()
     expect(screen.getByText(/Detener hemorragia/i)).toBeInTheDocument()
-    expect(screen.getByText(/Por qué/i)).toBeInTheDocument()
-    expect(screen.getByText(/mata primero/i)).toBeInTheDocument()
+    expect(screen.queryByText(/mata en minutos/i)).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: /Revelar/i }))
+    expect(screen.getByText(/mata en minutos/i)).toBeInTheDocument()
   })
 
   it('renders next link to the following node', () => {
