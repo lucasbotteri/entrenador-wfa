@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { getDueCards } from '@/modules/practice/content/selectors'
 import { todayIso } from '@/modules/practice/domain/dates'
 import { masteryByTopic, type TopicMastery } from '@/modules/practice/domain/mastery'
+import { inScopeCards } from '@/modules/practice/domain/scope'
 import { loadStates, loadStreak } from '@/modules/practice/domain/store'
 import { MasteryBars } from '@/modules/practice/ui/MasteryBars'
 import { loadContent } from '@/shared/content/loader'
@@ -17,7 +18,7 @@ export function PracticeHome() {
   useEffect(() => {
     const today = todayIso()
     void Promise.all([loadStates(), loadStreak()]).then(([states, s]) => {
-      setDue(getDueCards(content.cards, states, today).length)
+      setDue(getDueCards(inScopeCards(content.cards), states, today).length)
       setStreak(s.current)
       setMastery(masteryByTopic(content.cards, states))
     })

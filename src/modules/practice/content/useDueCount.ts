@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 
 import { getDueCards } from '@/modules/practice/content/selectors'
 import { todayIso } from '@/modules/practice/domain/dates'
+import { inScopeCards } from '@/modules/practice/domain/scope'
 import { loadStates } from '@/modules/practice/domain/store'
 import { loadContent } from '@/shared/content/loader'
 
@@ -15,7 +16,7 @@ export function useDueCount(): number {
     const content = loadContent()
     const today = todayIso()
     void loadStates().then(states => {
-      if (active) setN(getDueCards(content.cards, states, today).length)
+      if (active) setN(getDueCards(inScopeCards(content.cards), states, today).length)
     })
     return () => {
       active = false

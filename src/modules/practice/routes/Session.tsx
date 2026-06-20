@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { todayIso } from '@/modules/practice/domain/dates'
+import { inScopeCards } from '@/modules/practice/domain/scope'
 import { buildSession } from '@/modules/practice/domain/session'
 import { loadStates, loadStreak, saveStreak } from '@/modules/practice/domain/store'
 import { updateStreak } from '@/modules/practice/domain/streak'
@@ -19,7 +20,7 @@ export function Session() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    loadStates().then(states => setQueue(buildSession(content.cards, states, today)))
+    loadStates().then(states => setQueue(buildSession(inScopeCards(content.cards), states, today)))
   }, [content, today])
 
   const onDone = async (s: SessionSummary) => {
