@@ -15,4 +15,14 @@ describe('conceptLinks invariant (M2)', () => {
       expect(ok, `card ${card.id} ref "${card.rationaleRef}" → ${link}`).toBe(true)
     }
   })
+
+  it('clinicalTopic "termica" resolves to a real route, not the "/" fallback', () => {
+    const content = loadContent()
+    const nodeIds = new Set(buildChainModel(content).flatMap(p => p.nodes).map(n => n.id))
+    const staticRoutes = new Set(['/', '/quickref', '/example'])
+    const link = linkForRef('termica')
+    expect(link, 'termica must map to a non-fallback route').not.toBe('/')
+    const ok = staticRoutes.has(link) || (link.startsWith('/chain/') && nodeIds.has(link.slice('/chain/'.length)))
+    expect(ok, `termica → ${link}`).toBe(true)
+  })
 })

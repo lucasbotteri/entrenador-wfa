@@ -14,6 +14,7 @@ const CONCEPT_TO_NODE: Record<string, string> = {
   mdd: '/chain/scene-mechanism',
   msc: '/chain/scene-mechanism',
   soap: '/quickref',
+  termica: '/quickref',
   evacuacion: '/chain/evacuation-decision',
   niveles_evacuacion: '/chain/evacuation-decision',
 }
