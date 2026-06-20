@@ -86,3 +86,21 @@ export function remainingBank(c: Case, run: RunState): Array<KeyAction | Distrac
     .filter(a => !done.has(a.id))
     .sort((x, y) => (x.id < y.id ? -1 : x.id > y.id ? 1 : 0))
 }
+
+export function canAdvance(c: Case, run: RunState): boolean {
+  const phase = currentPhase(c, run)
+  const done = new Set(run.log.map(r => r.id))
+  return phase.keyActions.filter(k => k.critical).every(k => done.has(k.id))
+}
+
+export function advance(run: RunState): RunState {
+  return { ...run, phaseIndex: run.phaseIndex + 1 }
+}
+
+export function decide(run: RunState, level: string): RunState {
+  return { ...run, decision: level }
+}
+
+export function isLastPhase(c: Case, run: RunState): boolean {
+  return run.phaseIndex >= c.phases.length - 1
+}
