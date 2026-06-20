@@ -1,0 +1,23 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import './shared/ui/tokens.css';
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+#root { min-height: 100vh; }
+a { color: var(--primary); }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.skip-link {
+  position: absolute; left: -9999px; top: 0; background: var(--primary);
+  color: var(--on-critical); padding: var(--space-2) var(--space-4); z-index: 100;
+}
+.skip-link:focus { left: 0; }

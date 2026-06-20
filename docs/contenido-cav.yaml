@@ -347,3 +347,31 @@ tarjetas:
   - {id: "t-evac-critico", tema: "Evacuación", tipo: "elegir", prompt: "Hipotermia grave (deja de tiritar, AVDN cae). Nivel:", opciones: ["CRÍTICO","GRAVE","LEVE","No evacuar"], respuesta: ["CRÍTICO"], racional_ref: "niveles_evacuacion"}
   - {id: "t-posicion-avdn", tema: "Posición", tipo: "escribir", prompt: "Víctima con nivel de conciencia disminuido: ¿posición?", respuesta: ["de costado","pls","posicion lateral de seguridad"], racional_ref: "habcde"}
   - {id: "t-posicion-columna", tema: "Posición", tipo: "elegir", prompt: "Posible lesión de columna E inconsciente: ¿posición?", opciones: ["Boca arriba (sobre la espalda)","De costado (PLS)","Semisentada","Boca abajo"], respuesta: ["Boca arriba (sobre la espalda)"], racional_ref: "habcde"}
+
+# ---------------------------------------------------------------------
+# WORKED EXAMPLE  ·  Módulo 1 (R1.6) — una pasada limpia por la cadena
+# Cada racional_ref debe resolver a un id existente (sigla/fase/tema/regla).
+# ---------------------------------------------------------------------
+worked_example:
+  titulo: "Caída en un descenso, terreno de bloques"
+  steps:
+    - fase: "escena"
+      estado: "Tu compañero cae varios metros en un canal de pedrero. Sangra del muslo y no se mueve."
+      accion: "Mirás el terreno, asegurás la zona y te ponés guantes antes de acercarte."
+      racional_ref: "scene"
+    - fase: "primaria"
+      estado: "No responde, respira; sangrado pulsátil en el muslo; casco puesto."
+      accion: "H: controlás la hemorragia masiva con presión directa antes que nada."
+      racional_ref: "habcde"
+    - fase: "primaria"
+      estado: "Hemorragia controlada; hay mecanismo de trauma."
+      accion: "A: abrís la vía aérea con subluxación mandibular (control cervical)."
+      racional_ref: "habcde"
+    - fase: "secundaria"
+      estado: "Consciente pero alterado; pálido, frío y húmedo; dolor abdominal."
+      accion: "Reconocés el shock por la piel y tomás signos vitales de base."
+      racional_ref: "shock"
+    - fase: "evacuacion"
+      estado: "Shock con sospecha de sangrado interno, zona remota a 2 h."
+      accion: "Decidís evacuación CRÍTICA: el sangrado interno no se resuelve en el terreno."
+      racional_ref: "shock"

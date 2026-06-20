@@ -1,0 +1,19 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: 13px;
+}
+.table td {
+  padding: 4px 0;
+  border-top: 1px solid var(--border);
+}
+.table td:first-child {
+  font-weight: 600;
+  padding-right: var(--space-4);
+}
+.heading {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  margin: var(--space-4) 0 var(--space-2);
+}

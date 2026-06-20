@@ -1,0 +1,13 @@
+.chip {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.critical { background: var(--critical); color: var(--on-critical); }
+.serious { background: var(--serious); color: var(--on-serious); }
+.mild { background: var(--mild); color: var(--on-mild); }
