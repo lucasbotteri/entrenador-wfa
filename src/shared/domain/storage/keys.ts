@@ -3,4 +3,5 @@ export const KEYS = {
   lastLearnNode: 'progress:learn:lastNode',
   practiceSrs: 'practice:srs',
   practiceStreak: 'practice:streak',
+  scenariosProgress: 'scenarios:progress',
 } as const
