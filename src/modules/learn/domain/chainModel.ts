@@ -229,6 +229,7 @@ const SCENE_PART_DEFS: Record<string, ScenePartDef> = {
 const BIOSAFETY_FIELDS: Array<[string, string]> = [
   ['definicion', 'Qué es'],
   ['epp', 'Equipo de protección (EPP)'],
+  ['quitarse_guantes', 'Cómo quitarse los guantes'],
   ['transmision_sangre', 'Transmisión por sangre'],
   ['transmision_aire', 'Transmisión por aire'],
   ['lavado_manos', 'Lavado de manos'],
@@ -304,6 +305,12 @@ function sceneNodes(content: Content): ChainNode[] {
   return nodes
 }
 
+const EVAC_GUIDANCE_FIELDS: Array<[string, string]> = [
+  ['comunicacion', 'Comunicación'],
+  ['evaluacion_continua', 'Evaluación continua'],
+  ['contactar_ae', 'Contactar ayuda externa'],
+]
+
 function evacuationNodes(content: Content): ChainNode[] {
   const levelItems: NodeItem[] = content.evacLevels.map(e => ({ label: e.level, detail: e.criterion }))
   const positionItems: NodeItem[] = (content.positions ?? []).map((p, i) => ({
@@ -311,6 +318,10 @@ function evacuationNodes(content: Content): ChainNode[] {
     detail: p.position,
     ...(i === 0 ? { heading: 'Posición de la víctima' } : {}),
   }))
+  const phase = content.chain.find(p => p.phase === 'evacuation')
+  const c = (phase?.content ?? {}) as Record<string, unknown>
+  // The phase content carries during-evacuation guidance; surface it under one heading.
+  const guidanceItems = withHeading(fieldItems(c, EVAC_GUIDANCE_FIELDS), 'Durante la evacuación')
   return [
     {
       id: 'evacuation-decision',
@@ -319,7 +330,7 @@ function evacuationNodes(content: Content): ChainNode[] {
       subtitle: 'CRÍTICO · GRAVE · LEVE',
       icon: 'evacuation',
       kind: 'reference',
-      items: [...levelItems, ...positionItems],
+      items: [...levelItems, ...positionItems, ...guidanceItems],
       rationaleId: 'evacuation',
     },
   ]

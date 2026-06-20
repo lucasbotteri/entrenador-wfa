@@ -49,7 +49,11 @@ export const validContent: Content = {
       next: 'buscar_ayuda',
       content: {
         seguridad: { regla: 'Deténgase y piense.', riesgos: ['Clima', 'Rocas'] },
-        bioseguridad: { definicion: 'Evitar contagio.', epp: ['Guantes', 'Antiparras'] },
+        bioseguridad: {
+          definicion: 'Evitar contagio.',
+          epp: ['Guantes', 'Antiparras'],
+          quitarse_guantes: ['Tomá un guante por la parte externa.', 'Descartá los dos guantes.'],
+        },
         mecanismo_dano: {
           definicion: 'Estimar causa.',
           origenes: 'Trauma, ambiente, enfermedad súbita o combinación.',
@@ -81,7 +85,16 @@ export const validContent: Content = {
       },
     },
     { phase: 'secondary', name: 'Secundaria', rationale: 'Buscar el resto.', content: {} },
-    { phase: 'evacuation', name: 'Evacuación', rationale: 'Definir gravedad.', content: {} },
+    {
+      phase: 'evacuation',
+      name: 'Evacuación',
+      rationale: 'Definir gravedad.',
+      content: {
+        comunicacion: 'Que esté cómoda; escuchala; contacto visual.',
+        evaluacion_continua: 'Reevaluar y registrar signos vitales.',
+        contactar_ae: 'Contactar la ayuda externa temprano.',
+      },
+    },
   ],
   vitalSigns: {
     components: ['Frecuencia cardíaca'],

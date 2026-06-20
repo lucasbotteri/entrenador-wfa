@@ -142,3 +142,25 @@ describe('chainModel — Fixes3 round (richer scene nodes P1/P2)', () => {
     expect(labels).toContain('Qué evaluar (en trauma)')
   })
 })
+
+describe('chainModel — Fixes4 round (close scene/CAV)', () => {
+  const model = buildChainModel(validContent)
+
+  it('the safety node surfaces the glove-removal technique within bioseguridad (P1)', () => {
+    const scene = model.find(p => p.id === 'scene')!
+    const safety = scene.nodes.find(n => n.id === 'scene-safety')!
+    const item = safety.items.find(i => i.label === 'Cómo quitarse los guantes')
+    expect(item).toBeDefined()
+    expect(item!.detail).toContain('guante')
+  })
+
+  it('the evacuation node surfaces comunicación / evaluación continua / contacto AE under a heading (P2)', () => {
+    const evac = model.find(p => p.id === 'evacuation')!.nodes[0]!
+    const labels = evac.items.map(i => i.label)
+    expect(labels).toContain('Comunicación')
+    expect(labels).toContain('Evaluación continua')
+    expect(labels).toContain('Contactar ayuda externa')
+    const com = evac.items.find(i => i.label === 'Comunicación')!
+    expect(com.heading).toBe('Durante la evacuación')
+  })
+})
