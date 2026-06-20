@@ -39,7 +39,7 @@ describe('scene ordered projection', () => {
 
   it('orders parts by sequence with numeric order + priority on safety', () => {
     expect(scene.nodes.map(n => n.id)).toEqual([
-      'scene-safety', 'scene-mechanism', 'scene-impression', 'scene-help',
+      'scene-safety', 'scene-mechanism', 'scene-victims', 'scene-impression', 'scene-help',
     ])
     const safety = scene.nodes[0]!
     expect(safety.order).toBe(1)
@@ -119,5 +119,26 @@ describe('chainModel — Fixes2 round (P1/P3)', () => {
     const a = primary.nodes.find(n => n.id === 'primary-habcde-a')!
     expect(a.whyText).toBeUndefined()
     expect(a.rationaleId).toBe('habcde')
+  })
+})
+
+describe('chainModel — Fixes3 round (richer scene nodes P1/P2)', () => {
+  const scene = buildChainModel(validContent).find(p => p.id === 'scene')!
+
+  it('the victims node is titled "Números" and surfaces Recursos + Testigos (P1)', () => {
+    const victims = scene.nodes.find(n => n.id === 'scene-victims')!
+    expect(victims.title).toBe('Números')
+    const byLabel = (l: string) => victims.items.find(i => i.label === l)?.detail
+    expect(byLabel('Recursos')).toContain('recursos')
+    expect(byLabel('Testigos / ayuda')).toContain('recurso')
+  })
+
+  it('the mechanism node surfaces orígenes / enfermedad súbita / ambiente and relabels evaluar (P2)', () => {
+    const mech = scene.nodes.find(n => n.id === 'scene-mechanism')!
+    const labels = mech.items.map(i => i.label)
+    expect(labels).toContain('Orígenes posibles')
+    expect(labels).toContain('Si es enfermedad súbita')
+    expect(labels).toContain('Ambiente')
+    expect(labels).toContain('Qué evaluar (en trauma)')
   })
 })
