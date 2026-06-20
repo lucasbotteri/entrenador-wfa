@@ -82,6 +82,7 @@ export function mapCard(c: any) {
     type: c.tipo,
     prompt: c.prompt,
     answer: c.respuesta,
+    ...(c.opciones ? { options: c.opciones } : {}),
     rationaleRef: c.racional_ref,
   }
 }

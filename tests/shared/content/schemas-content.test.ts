@@ -5,6 +5,7 @@ import {
   ChainPhaseSchema,
   PracticalRuleSchema,
   VitalSignsSchema,
+  CardSchema,
 } from '@/shared/content/schemas'
 
 const minimal = {
@@ -62,5 +63,15 @@ describe('fixes schemas', () => {
   it('carries vitalSigns.reevaluacion', () => {
     const vs = VitalSignsSchema.parse({ reevaluacion: { estable: '15-20 min', inestable: '5 min' } })
     expect((vs.reevaluacion as Record<string, string>).estable).toBe('15-20 min')
+  })
+})
+
+describe('CardSchema options (M2)', () => {
+  it('accepts an elegir card with options', () => {
+    const c = CardSchema.parse({
+      id: 't-x', topic: 'Manejo', type: 'elegir', prompt: '¿?',
+      answer: ['No'], options: ['No', 'Sí'], rationaleRef: 'habcde',
+    })
+    expect(c.options).toEqual(['No', 'Sí'])
   })
 })

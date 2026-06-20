@@ -5,6 +5,7 @@ import {
   mapChainPhase,
   mapEvacLevel,
   mapPracticalRule,
+  mapCard,
 } from '@/shared/content/mapping'
 
 describe('mapping es → en', () => {
@@ -80,5 +81,12 @@ describe('fixes mapping', () => {
   it('maps regla.letra → letter (omitted when absent)', () => {
     expect(mapPracticalRule({ id: 'x', regla: 'r', concepto: 'habcde', letra: 'A' })).toEqual({ id: 'x', rule: 'r', concept: 'habcde', letter: 'A' })
     expect('letter' in mapPracticalRule({ id: 'y', regla: 'r', concepto: 'secundaria' })).toBe(false)
+  })
+})
+
+describe('mapCard options (M2)', () => {
+  it('maps opciones → options, omits when absent', () => {
+    expect(mapCard({ id: 'c', tema: 'T', tipo: 'elegir', prompt: 'p', respuesta: ['a'], opciones: ['a', 'b'], racional_ref: 'r' }).options).toEqual(['a', 'b'])
+    expect('options' in mapCard({ id: 'c', tema: 'T', tipo: 'escribir', prompt: 'p', respuesta: ['a'], racional_ref: 'r' })).toBe(false)
   })
 })

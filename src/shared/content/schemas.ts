@@ -87,6 +87,7 @@ export const CardSchema = z
     type: z.enum(['ordenar', 'escribir', 'cloze', 'elegir']),
     prompt: z.string().min(1),
     answer: z.array(z.string()).min(1),
+    options: z.array(z.string()).optional(),
     rationaleRef: z.string().min(1),
   })
   .passthrough()
