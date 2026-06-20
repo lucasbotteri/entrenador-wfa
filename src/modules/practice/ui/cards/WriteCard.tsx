@@ -1,13 +1,14 @@
 import { useState } from 'react'
 
-import { CardShell, shellStyles } from '../CardShell'
+import { shellStyles } from '../CardShell'
+import { SelfGradeCard } from '../SelfGradeCard'
 
 import type { Card } from '@/shared/content/types'
 
-export function WriteCard({ card, onAnswer }: { card: Card; onAnswer: (a: string) => void }) {
+export function WriteCard({ card, onResolve }: { card: Card; onResolve: (correct: boolean) => void }) {
   const [value, setValue] = useState('')
   return (
-    <CardShell card={card} onSubmit={() => onAnswer(value)}>
+    <SelfGradeCard card={card} onResolve={onResolve}>
       <input
         className={shellStyles.input}
         value={value}
@@ -15,6 +16,6 @@ export function WriteCard({ card, onAnswer }: { card: Card; onAnswer: (a: string
         placeholder="Escribí tu respuesta…"
         aria-label="Respuesta"
       />
-    </CardShell>
+    </SelfGradeCard>
   )
 }

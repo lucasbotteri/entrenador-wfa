@@ -15,15 +15,14 @@ describe('order + cloze cards', () => {
     fireEvent.click(screen.getByRole('button', { name: /Comprobar/i }))
     expect(onAnswer).toHaveBeenCalledWith(['A', 'B', 'H'])
   })
-  it('ClozeCard submits one value per blank', () => {
+  it('ClozeCard: renders one input per blank, reveals the answer, self-grades "No me acordé" as wrong', () => {
     const card = { id: 'c', topic: 'T', type: 'cloze', prompt: 'A {{Verbal}} y {{Dolor}}', answer: ['verbal', 'dolor'], rationaleRef: 'avdn' } as Card
-    const onAnswer = vi.fn()
-    render(<ClozeCard card={card} onAnswer={onAnswer} />)
-    const inputs = screen.getAllByRole('textbox')
-    expect(inputs).toHaveLength(2)
-    fireEvent.change(inputs[0]!, { target: { value: 'verbal' } })
-    fireEvent.change(inputs[1]!, { target: { value: 'dolor' } })
-    fireEvent.click(screen.getByRole('button', { name: /Comprobar/i }))
-    expect(onAnswer).toHaveBeenCalledWith(['verbal', 'dolor'])
+    const onResolve = vi.fn()
+    render(<ClozeCard card={card} onResolve={onResolve} />)
+    expect(screen.getAllByRole('textbox')).toHaveLength(2)
+    fireEvent.click(screen.getByRole('button', { name: /Mostrar respuesta/i }))
+    expect(screen.getByText('verbal, dolor')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'No me acordé' }))
+    expect(onResolve).toHaveBeenCalledWith(false)
   })
 })

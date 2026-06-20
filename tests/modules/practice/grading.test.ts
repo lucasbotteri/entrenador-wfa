@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 
-import { grade } from '@/modules/practice/domain/grading'
+import { grade, answerText } from '@/modules/practice/domain/grading'
 import type { Card } from '@/shared/content/types'
 
 const c = (over: Partial<Card>): Card =>
@@ -27,5 +27,14 @@ describe('grade', () => {
     const card = c({ type: 'elegir', answer: ['No, nada por boca'], options: ['No, nada por boca', 'Sí'] })
     expect(grade(card, 'No, nada por boca').correct).toBe(true)
     expect(grade(card, 'Sí').correct).toBe(false)
+  })
+})
+
+describe('answerText', () => {
+  it('joins ordenar with arrows, cloze with commas, and uses answer[0] for escribir/elegir', () => {
+    expect(answerText(c({ type: 'ordenar', answer: ['H', 'A', 'B'] }))).toBe('H → A → B')
+    expect(answerText(c({ type: 'cloze', answer: ['verbal', 'dolor'] }))).toBe('verbal, dolor')
+    expect(answerText(c({ type: 'escribir', answer: ['hemorragia'] }))).toBe('hemorragia')
+    expect(answerText(c({ type: 'elegir', answer: ['No'], options: ['No', 'Sí'] }))).toBe('No')
   })
 })

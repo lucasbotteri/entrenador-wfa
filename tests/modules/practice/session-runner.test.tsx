@@ -21,7 +21,8 @@ it('grades an answer, shows feedback, and finishes', async () => {
     </MemoryRouter>,
   )
   fireEvent.change(screen.getByRole('textbox'), { target: { value: 'hemorragia' } })
-  fireEvent.click(screen.getByRole('button', { name: /Comprobar/i }))
+  fireEvent.click(screen.getByRole('button', { name: /Mostrar respuesta/i }))
+  fireEvent.click(screen.getByRole('button', { name: 'Me acordé' }))
   expect(await screen.findByText(/¡Bien!/i)).toBeInTheDocument()
   fireEvent.click(screen.getByRole('button', { name: /Continuar/i }))
   await waitFor(() => expect(onDone).toHaveBeenCalled())

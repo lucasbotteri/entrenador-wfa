@@ -34,25 +34,37 @@ function gradeWrite(card: Card, input: string): boolean {
   })
 }
 
+// Canonical answer text to display (reveal / feedback). Pure, no judging.
+export function answerText(card: Card): string {
+  switch (card.type) {
+    case 'ordenar':
+      return card.answer.join(' → ')
+    case 'cloze':
+      return card.answer.join(', ')
+    default: // escribir, elegir
+      return card.answer[0]!
+  }
+}
+
 export function grade(card: Card, userAnswer: UserAnswer): GradeResult {
   switch (card.type) {
     case 'ordenar': {
       const ua = userAnswer as string[]
       const correct = ua.length === card.answer.length && ua.every((v, i) => v === card.answer[i])
-      return { correct, correctText: card.answer.join(' → ') }
+      return { correct, correctText: answerText(card) }
     }
     case 'cloze': {
       const ua = userAnswer as string[]
       const correct =
         ua.length === card.answer.length && ua.every((v, i) => normalize(v) === normalize(card.answer[i]!))
-      return { correct, correctText: card.answer.join(', ') }
+      return { correct, correctText: answerText(card) }
     }
     case 'elegir': {
-      return { correct: (userAnswer as string) === card.answer[0], correctText: card.answer[0]! }
+      return { correct: (userAnswer as string) === card.answer[0], correctText: answerText(card) }
     }
     case 'escribir':
     default: {
-      return { correct: gradeWrite(card, userAnswer as string), correctText: card.answer[0]! }
+      return { correct: gradeWrite(card, userAnswer as string), correctText: answerText(card) }
     }
   }
 }

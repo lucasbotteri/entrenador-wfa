@@ -8,7 +8,17 @@ const TYPE_LABEL: Record<Card['type'], string> = {
   ordenar: 'Ordenar', escribir: 'Escribir', cloze: 'Cloze', elegir: 'Elegir',
 }
 
-export function CardShell({ card, children, onSubmit }: { card: Card; children: ReactNode; onSubmit: () => void }) {
+export function CardShell({
+  card,
+  children,
+  onSubmit,
+  footer,
+}: {
+  card: Card
+  children: ReactNode
+  onSubmit?: () => void
+  footer?: ReactNode
+}) {
   return (
     <div className={styles.card}>
       <div className={styles.meta}>
@@ -17,7 +27,11 @@ export function CardShell({ card, children, onSubmit }: { card: Card; children: 
       </div>
       <p className={styles.prompt}>{card.prompt}</p>
       {children}
-      <button className={styles.submit} onClick={onSubmit}>Comprobar</button>
+      {footer ?? (
+        <button className={styles.submit} onClick={onSubmit}>
+          Comprobar
+        </button>
+      )}
     </div>
   )
 }
