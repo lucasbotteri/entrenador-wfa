@@ -38,3 +38,9 @@ export function findDanglingRefs(c: any): string[] {
   for (const card of c.cards ?? []) check(card.rationaleRef)
   return dangling.filter((v, i, arr) => arr.indexOf(v) === i)
 }
+
+export function findElegirWithoutOptions(c: any): string[] {
+  return (c.cards ?? [])
+    .filter((card: any) => card.type === 'elegir' && !(card.options?.length))
+    .map((card: any) => card.id)
+}

@@ -18,7 +18,7 @@ import {
 } from '../src/shared/content/mapping'
 import { ContentSchema, CasesSchema } from '../src/shared/content/schemas'
 
-import { findDuplicateIds, findDanglingRefs } from './integrity'
+import { findDuplicateIds, findDanglingRefs, findElegirWithoutOptions } from './integrity'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const checkOnly = process.argv.includes('--check')
@@ -101,6 +101,8 @@ function runIntegrityChecks(content: any) {
   if (dups.length) fail(dups.map(id => `  Duplicate concept id: ${id}`).join('\n'))
   const dangling = findDanglingRefs(content)
   if (dangling.length) fail(dangling.map(r => `  Dangling rationaleRef: ${r}`).join('\n'))
+  const noOpts = findElegirWithoutOptions(content)
+  if (noOpts.length) fail(noOpts.map(id => `  elegir card without options: ${id}`).join('\n'))
 }
 
 main()
