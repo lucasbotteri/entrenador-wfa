@@ -29,6 +29,10 @@ describe('engine advance/decide', () => {
     const r = advance(startRun('c'))
     expect(r.phaseIndex).toBe(1)
   })
+  it('advance clears revealedTexts (reveals are phase-scoped)', () => {
+    const withReveal = { ...startRun('c'), revealedTexts: ['old reveal'] }
+    expect(advance(withReveal).revealedTexts).toEqual([])
+  })
   it('decide records the chosen evacuation level', () => {
     expect(decide(advance(startRun('c')), 'CRÍTICO').decision).toBe('CRÍTICO')
   })

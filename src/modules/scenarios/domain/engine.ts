@@ -94,7 +94,8 @@ export function canAdvance(c: Case, run: RunState): boolean {
 }
 
 export function advance(run: RunState): RunState {
-  return { ...run, phaseIndex: run.phaseIndex + 1 }
+  // reveals are scoped to a phase; clear them so prior-phase reveals don't linger.
+  return { ...run, phaseIndex: run.phaseIndex + 1, revealedTexts: [] }
 }
 
 export function decide(run: RunState, level: string): RunState {
