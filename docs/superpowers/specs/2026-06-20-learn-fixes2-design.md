@@ -57,8 +57,8 @@ Mapped to `pause: { question, reveal }` (§4). The 4 scene steps are the first b
 
 ## 4. Schema + mapper
 
-- **`AcronymLetterSchema`** (`schemas.ts`): add `porque: z.string().optional()`.
-- **`mapAcronym`** (`mapping.ts`): in the `letras` map, anglicize `porque → rationale` on the letter object: `...(l.porque ? { rationale: l.porque } : {})`. (This `rationale` is a field of the letter, distinct from the acronym-level `rationale`.) → `AcronymLetter` type gains `rationale?: string`.
+- **`AcronymLetterSchema`** (`schemas.ts`): add `rationale: z.string().optional()`. NOTE: the schema validates the **mapped (anglicized) output**, not the raw YAML — so the field is `rationale` (the mapper anglicizes `porque → rationale`), not `porque`. `AcronymLetter` (a `z.infer`) gains `rationale?: string` automatically.
+- **`mapAcronym`** (`mapping.ts`): in the `letras` map, anglicize `porque → rationale`: `...(l.porque ? { rationale: l.porque } : {})`. (This `rationale` is a field of the letter, distinct from the acronym-level `rationale`.)
 - **`WorkedExampleSchema`** (`schemas.ts`): add `pause: z.object({ question: z.string().min(1), reveal: z.string().min(1) }).optional()`.
 - **`mapWorkedExample`** (`mapping.ts`): add `...(w.pausa ? { pause: { question: w.pausa.pregunta, reveal: w.pausa.revela } } : {})`.
 
