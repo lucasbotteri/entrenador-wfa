@@ -17,4 +17,16 @@ describe('Shell', () => {
     expect(screen.getByText('contenido')).toBeInTheDocument()
     expect(screen.getByText(/Saltar al contenido/i)).toBeInTheDocument()
   })
+
+  it('renders the tab bar with Aprender + Practicar', () => {
+    render(
+      <MemoryRouter initialEntries={['/practice']}>
+        <Shell>
+          <p>x</p>
+        </Shell>
+      </MemoryRouter>,
+    )
+    expect(screen.getByRole('link', { name: /Aprender/i })).toHaveAttribute('href', '/')
+    expect(screen.getByRole('link', { name: /Practicar/i })).toHaveAttribute('href', '/practice')
+  })
 })
