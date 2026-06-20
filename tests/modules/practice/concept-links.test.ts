@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 
 import { buildChainModel } from '@/modules/learn/domain/chainModel'
-import { linkForRef } from '@/modules/practice/domain/conceptLinks'
 import { loadContent } from '@/shared/content/loader'
+import { linkForRef } from '@/shared/domain/conceptLinks'
 
 describe('conceptLinks invariant (M2)', () => {
   it('every real card rationaleRef links to a resolvable route', () => {

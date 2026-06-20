@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 import styles from './FeedbackPanel.module.css'
 
-import { linkForRef } from '@/modules/practice/domain/conceptLinks'
+import { linkForRef } from '@/shared/domain/conceptLinks'
 
 export function FeedbackPanel({
   correct, correctText, rationale, rationaleRef, fromBox, toBox, onContinue,

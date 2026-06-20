@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect } from 'vitest'
 
-import { linkForRef } from '@/modules/practice/domain/conceptLinks'
 import { FeedbackPanel } from '@/modules/practice/ui/FeedbackPanel'
+import { linkForRef } from '@/shared/domain/conceptLinks'
 
 describe('feedback', () => {
   it('linkForRef maps a known concept to a chain route, unknown to /', () => {
