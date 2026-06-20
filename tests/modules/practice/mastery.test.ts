@@ -18,3 +18,24 @@ describe('masteryByTopic', () => {
     expect(y.pct).toBe(0)
   })
 })
+
+describe('masteryByTopic — scope flag (temporary)', () => {
+  const card = (id: string, topic: string, rationaleRef: string): Card =>
+    ({ id, topic, type: 'escribir', prompt: 'p', answer: ['a'], rationaleRef }) as Card
+
+  it('marks topics enabled when they have an in-scope card, and sorts enabled first', () => {
+    const cards = [
+      card('s1', 'Signos vitales', 'signos_vitales'), // disabled
+      card('h1', 'HABCDE', 'habcde'),                 // enabled
+      card('m1', 'Manejo', 'habcde'),                 // enabled (mixed topic)
+      card('m2', 'Manejo', 'secundaria'),
+    ]
+    const m = masteryByTopic(cards, {})
+    expect(m.find(t => t.topic === 'HABCDE')!.enabled).toBe(true)
+    expect(m.find(t => t.topic === 'Manejo')!.enabled).toBe(true)
+    expect(m.find(t => t.topic === 'Signos vitales')!.enabled).toBe(false)
+    const lastEnabled = m.findIndex(t => !t.enabled)
+    expect(m.slice(0, lastEnabled).every(t => t.enabled)).toBe(true)
+    expect(m.slice(lastEnabled).every(t => !t.enabled)).toBe(true)
+  })
+})
