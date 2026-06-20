@@ -35,6 +35,17 @@ export const ChainPhaseSchema = z.object({
   rationale: z.string().min(1),
   refAcronym: z.string().optional(),
   strictOrder: z.boolean().optional(),
+  sequence: z
+    .array(
+      z.object({
+        order: z.number(),
+        part: z.string().min(1),
+        priority: z.boolean().optional(),
+        includes: z.array(z.string()).optional(),
+      }),
+    )
+    .optional(),
+  next: z.string().optional(),
   content: z.record(z.unknown()),
 })
 
@@ -46,6 +57,7 @@ export const VitalSignsSchema = z
     bloodPressure: z.record(z.unknown()).optional(),
     skin: z.record(z.unknown()).optional(),
     capillaryRefill: z.record(z.unknown()).optional(),
+    reevaluacion: z.record(z.unknown()).optional(),
   })
   .passthrough()
 
@@ -59,6 +71,7 @@ export const PracticalRuleSchema = z.object({
   id: z.string().min(1),
   rule: z.string().min(1),
   concept: z.string().min(1),
+  letter: z.string().min(1).max(2).optional(),
 })
 
 export const ClinicalTopicSchema = z.object({
