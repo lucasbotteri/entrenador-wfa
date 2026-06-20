@@ -43,11 +43,13 @@ describe('integrity', () => {
     expect(findDanglingRefs(base)).toEqual([])
   })
 
-  it('does not validate card rationaleRef in v1 (deferred to Module 2)', () => {
-    const withBadCard = {
-      ...base,
-      cards: [{ id: 'c1', rationaleRef: 'does-not-exist' }],
-    }
-    expect(findDanglingRefs(withBadCard)).toEqual([])
+  it('validates card rationaleRef in M2 (dangling card ref → finding)', () => {
+    const withBadCard = { ...base, cards: [{ id: 'c1', rationaleRef: 'does-not-exist' }] }
+    expect(findDanglingRefs(withBadCard)).toContain('does-not-exist')
+  })
+
+  it('accepts Spanish phase aliases as known ids', () => {
+    const withAliasCard = { ...base, cards: [{ id: 'c2', rationaleRef: 'primaria' }] }
+    expect(findDanglingRefs(withAliasCard)).toEqual([])
   })
 })

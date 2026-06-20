@@ -1,10 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+const PHASE_ALIAS: Record<string, string> = {
+  scene: 'escena', primary: 'primaria', secondary: 'secundaria', evacuation: 'evacuacion',
+}
+
 // Every source that produces a concept id used as a rationale key (spec §4.4).
 export function collectConceptIds(c: any): string[] {
   const ids: string[] = []
   for (const a of c.acronyms ?? []) ids.push(a.id)
-  for (const p of c.chain ?? []) ids.push(p.phase)
+  for (const p of c.chain ?? []) {
+    ids.push(p.phase)
+    const alias = PHASE_ALIAS[p.phase]
+    if (alias) ids.push(alias)
+  }
   for (const t of c.clinicalTopics ?? []) ids.push(t.id)
   return ids.filter((v, i, arr) => arr.indexOf(v) === i)
 }
@@ -26,8 +34,7 @@ export function findDanglingRefs(c: any): string[] {
   const check = (ref?: string) => {
     if (ref && !known.has(ref)) dangling.push(ref)
   }
-  // v1 validates only content it consumes. Card (Module 2) rationale refs are
-  // validated when Module 2 is built and those concepts get stable ids.
   for (const s of c.workedExample?.steps ?? []) check(s.rationaleRef)
+  for (const card of c.cards ?? []) check(card.rationaleRef)
   return dangling.filter((v, i, arr) => arr.indexOf(v) === i)
 }

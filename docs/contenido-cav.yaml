@@ -292,6 +292,12 @@ temas_clinicos:
   - id: "empaque"
     nombre: "Empaque de hipotermia"
     racional: "Aislar a la víctima con varios materiales para limitar la pérdida de calor por todos los mecanismos; los medios de calor externos no deben ir en contacto directo con la piel."
+  - id: "signos_vitales"
+    nombre: "Signos vitales"
+    racional: "Los signos vitales (FR, FC, presión, temperatura, piel, relleno capilar) son la línea de base para seguir la evolución; se reevalúan periódicamente (estable cada 15-20 min, inestable cada 5 min)."
+  - id: "niveles_evacuacion"
+    nombre: "Niveles de evacuación"
+    racional: "La gravedad define la conducta: CRÍTICO (amenaza inmediata para la vida → evacuar lo antes posible), GRAVE (puede volverse crítico → se recomienda evacuar), LEVE (sin amenaza → se puede analizar continuar en el terreno)."
 
 # ---------------------------------------------------------------------
 # MAZO DE TARJETAS  ·  Módulo 2 (Practicar lo teórico)
