@@ -4,3 +4,7 @@ export function addDays(iso: string, n: number): string {
   d.setUTCDate(d.getUTCDate() + n)
   return d.toISOString().slice(0, 10)
 }
+
+export function todayIso(): string {
+  return new Date().toISOString().slice(0, 10)
+}
