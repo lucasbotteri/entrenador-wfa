@@ -87,7 +87,12 @@ export const validContent: Content = {
   clinicalTopics: [
     { id: 'shock', name: 'Shock', rationale: 'Hipoperfusión; piel pálida, fría y húmeda.' },
   ],
-  cards: [],
+  cards: [
+    { id: 't-w', topic: 'HABCDE', type: 'escribir', prompt: '¿H?', answer: ['hemorragia'], rationaleRef: 'habcde' },
+    { id: 't-o', topic: 'HABCDE', type: 'ordenar', prompt: 'Ordená', answer: ['H', 'A', 'B'], rationaleRef: 'habcde' },
+    { id: 't-c', topic: 'AVDN', type: 'cloze', prompt: 'A {{Verbal}}', answer: ['verbal'], rationaleRef: 'avdn' },
+    { id: 't-e', topic: 'Manejo', type: 'elegir', prompt: '¿Agua?', answer: ['No'], options: ['No', 'Sí'], rationaleRef: 'secundaria' },
+  ],
   workedExample: {
     title: 'Caída en descenso',
     steps: [
