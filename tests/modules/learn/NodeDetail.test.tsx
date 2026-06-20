@@ -35,4 +35,10 @@ describe('NodeDetail', () => {
       '/chain/primary-habcde-a',
     )
   })
+
+  it('renders a StepBadge + priority for an ordered scene node', () => {
+    renderAt('/chain/scene-safety')
+    expect(screen.getByLabelText('Paso 1')).toBeInTheDocument()
+    expect(screen.getByText('prioridad')).toBeInTheDocument()
+  })
 })
