@@ -5,9 +5,10 @@ export interface NodeItem {
   label: string
   detail: string
   why?: string
+  heading?: string
 }
 
-export type NodeKind = 'acronymLetter' | 'acronym' | 'topic' | 'reference'
+export type NodeKind = 'acronymLetter' | 'acronym' | 'topic' | 'reference' | 'bridge'
 
 export interface ChainNode {
   id: string
@@ -16,6 +17,8 @@ export interface ChainNode {
   subtitle?: string
   icon?: ConceptIcon
   letter?: string
+  order?: number
+  priority?: boolean
   kind: NodeKind
   items: NodeItem[]
   rationaleId?: string
@@ -34,6 +37,36 @@ function acronymById(content: Content, id: string): Acronym | undefined {
   return content.acronyms.find(a => a.id === id)
 }
 
+// --- vital signs values (P2) ---
+function reevalText(r?: Record<string, unknown>): string | undefined {
+  if (!r) return undefined
+  const parts: string[] = []
+  if (typeof r.estable === 'string') parts.push(`estable ${r.estable}`)
+  if (typeof r.inestable === 'string') parts.push(`inestable ${r.inestable}`)
+  return parts.length ? parts.join(' · ') : undefined
+}
+
+function vitalSignItems(vs: Content['vitalSigns']): NodeItem[] {
+  const v = vs as Record<string, Record<string, unknown> | undefined>
+  const rows: Array<[string, unknown]> = [
+    ['Frecuencia respiratoria', v.respiratoryRate?.adulto],
+    ['Frecuencia cardíaca', v.heartRate?.adulto],
+    ['Presión arterial', v.bloodPressure?.normal],
+    ['Relleno capilar', v.capillaryRefill?.normal],
+    ['Reevaluación', reevalText(v.reevaluacion)],
+  ]
+  return rows
+    .filter((r): r is [string, string] => typeof r[1] === 'string')
+    .map(([label, detail]) => ({ label, detail }))
+}
+
+// --- practical rules (P3) ---
+function rulesForLetter(content: Content, letter: string): NodeItem[] {
+  return content.practicalRules
+    .filter(r => r.letter === letter)
+    .map((r, i): NodeItem => ({ label: 'Regla', detail: r.rule, ...(i === 0 ? { heading: 'Reglas clave' } : {}) }))
+}
+
 // Primary phase: one node per HABCDE letter (matches the chain-map design).
 function primaryNodes(content: Content): ChainNode[] {
   const habcde = acronymById(content, 'habcde')
@@ -45,7 +78,7 @@ function primaryNodes(content: Content): ChainNode[] {
     subtitle: `Paso ${l.letter} de HABCDE`,
     letter: l.letter,
     kind: 'acronymLetter' as const,
-    items: [{ label: l.meaning, detail: l.detail }],
+    items: [{ label: l.meaning, detail: l.detail }, ...rulesForLetter(content, l.letter)],
     rationaleId: habcde.id,
   }))
 }
@@ -79,7 +112,6 @@ function secondaryNodes(content: Content): ChainNode[] {
     ['pilar', 'pupils'],
   ]
   const nodes: ChainNode[] = []
-  // Vital signs node first (from vitalSigns, not an acronym).
   nodes.push({
     id: 'secondary-vital-signs',
     phase: 'secondary',
@@ -87,40 +119,169 @@ function secondaryNodes(content: Content): ChainNode[] {
     subtitle: 'FC · FR · temperatura',
     icon: 'vitalSigns',
     kind: 'topic',
-    items: (content.vitalSigns.components ?? []).map(c => ({ label: c, detail: '' })),
+    items: vitalSignItems(content.vitalSigns),
     rationaleId: 'secondary',
   })
   for (const [id, icon] of wanted) {
     const n = acronymNode(content, id, icon)
     if (n) nodes.push(n)
   }
+  const looseRules = content.practicalRules.filter(r => !r.letter)
+  if (looseRules.length) {
+    nodes.push({
+      id: 'secondary-rules',
+      phase: 'secondary',
+      title: 'Reglas clave',
+      kind: 'topic',
+      rationaleId: 'secondary',
+      items: looseRules.map(r => ({ label: 'Regla', detail: r.rule })),
+    })
+  }
   return nodes
 }
 
-// Scene phase: derive nodes from the scene content envelope keys that exist.
+// --- scene helpers (P1) ---
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v)
+}
+
+function asDetail(v: unknown): string {
+  if (typeof v === 'string') return v
+  if (Array.isArray(v)) return v.filter(x => typeof x === 'string').join(' · ')
+  return ''
+}
+
+function fieldItems(source: Record<string, unknown>, fields: Array<[string, string]>): NodeItem[] {
+  return fields
+    .map(([key, label]): NodeItem => ({ label, detail: asDetail(source[key]) }))
+    .filter(it => it.detail !== '')
+}
+
+function withHeading(items: NodeItem[], heading: string): NodeItem[] {
+  return items.map((it, i) => (i === 0 ? { ...it, heading } : it))
+}
+
+interface ScenePartDef {
+  id: string
+  title: string
+  fields: Array<[string, string]>
+}
+
+const SCENE_PART_DEFS: Record<string, ScenePartDef> = {
+  seguridad: {
+    id: 'scene-safety',
+    title: 'Seguridad de la escena',
+    fields: [
+      ['regla', 'Regla'],
+      ['riesgos', 'Riesgos de la escena'],
+    ],
+  },
+  mecanismo_dano: {
+    id: 'scene-mechanism',
+    title: 'Mecanismo de daño',
+    fields: [
+      ['definicion', 'Qué es'],
+      ['evaluar', 'Qué evaluar'],
+      ['sospechar_lesiones_graves', 'Sospechar lesiones graves'],
+      ['regla', 'Regla'],
+    ],
+  },
+  numero_victimas: {
+    id: 'scene-victims',
+    title: 'Número de víctimas',
+    fields: [
+      ['definicion', 'Qué es'],
+      ['triage', 'Triage'],
+      ['nota', 'Nota'],
+    ],
+  },
+}
+
+const BIOSAFETY_FIELDS: Array<[string, string]> = [
+  ['definicion', 'Qué es'],
+  ['epp', 'Equipo de protección (EPP)'],
+  ['transmision_sangre', 'Transmisión por sangre'],
+  ['transmision_aire', 'Transmisión por aire'],
+  ['lavado_manos', 'Lavado de manos'],
+]
+
+function sceneImpressionNode(
+  content: Content,
+  c: Record<string, unknown>,
+  order: number,
+): ChainNode | null {
+  const ref = isRecord(c.impresion_general) ? c.impresion_general.ref_sigla : undefined
+  if (typeof ref !== 'string') return null
+  const a = acronymById(content, ref)
+  if (!a?.components) return null
+  return {
+    id: 'scene-impression',
+    phase: 'scene',
+    title: 'Impresión general',
+    subtitle: a.name,
+    order,
+    kind: 'topic',
+    items: a.components.map(comp => ({ label: comp.name, detail: comp.detail })),
+    rationaleId: a.id,
+  }
+}
+
 function sceneNodes(content: Content): ChainNode[] {
   const phase = content.chain.find(p => p.phase === 'scene')
-  const c = (phase?.content ?? {}) as Record<string, unknown>
+  if (!phase) return []
+  const c = phase.content as Record<string, unknown>
+  const sequence = (phase.sequence ?? []).slice().sort((a, b) => a.order - b.order)
   const nodes: ChainNode[] = []
-  nodes.push({
-    id: 'scene-safety',
-    phase: 'scene',
-    title: 'Seguridad de la escena',
-    subtitle: 'bioseguridad · mecanismo · TEV',
-    icon: 'scene',
-    kind: 'topic',
-    items: [
-      {
-        label: 'Seguridad',
-        detail: typeof c.buscar_ayuda === 'string' ? c.buscar_ayuda : '',
-      },
-    ],
-    rationaleId: 'scene',
-  })
+
+  for (const part of sequence) {
+    if (part.part === 'impresion_general') {
+      const n = sceneImpressionNode(content, c, part.order)
+      if (n) nodes.push(n)
+      continue
+    }
+    const def = SCENE_PART_DEFS[part.part]
+    const source = c[part.part]
+    if (!def || !isRecord(source)) continue
+    let items = fieldItems(source, def.fields)
+    for (const inc of part.includes ?? []) {
+      if (inc === 'bioseguridad' && isRecord(c.bioseguridad)) {
+        items = items.concat(withHeading(fieldItems(c.bioseguridad, BIOSAFETY_FIELDS), 'Bioseguridad'))
+      }
+    }
+    if (items.length === 0) continue
+    nodes.push({
+      id: def.id,
+      phase: 'scene',
+      title: def.title,
+      order: part.order,
+      kind: 'topic',
+      items,
+      ...(part.priority ? { priority: true } : {}),
+      rationaleId: 'scene',
+    })
+  }
+
+  const next = phase.next
+  if (typeof next === 'string' && typeof c[next] === 'string') {
+    nodes.push({
+      id: 'scene-help',
+      phase: 'scene',
+      title: 'Buscar ayuda',
+      kind: 'bridge',
+      items: [{ label: 'Buscar ayuda', detail: c[next] as string }],
+    })
+  }
+
   return nodes
 }
 
 function evacuationNodes(content: Content): ChainNode[] {
+  const levelItems: NodeItem[] = content.evacLevels.map(e => ({ label: e.level, detail: e.criterion }))
+  const positionItems: NodeItem[] = (content.positions ?? []).map((p, i) => ({
+    label: p.situation,
+    detail: p.position,
+    ...(i === 0 ? { heading: 'Posición de la víctima' } : {}),
+  }))
   return [
     {
       id: 'evacuation-decision',
@@ -129,7 +290,7 @@ function evacuationNodes(content: Content): ChainNode[] {
       subtitle: 'CRÍTICO · GRAVE · LEVE',
       icon: 'evacuation',
       kind: 'reference',
-      items: content.evacLevels.map(e => ({ label: e.level, detail: e.criterion })),
+      items: [...levelItems, ...positionItems],
       rationaleId: 'evacuation',
     },
   ]
