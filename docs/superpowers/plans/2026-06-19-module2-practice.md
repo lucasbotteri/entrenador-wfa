@@ -943,10 +943,12 @@ describe('order + cloze cards', () => {
     const card = { id: 'o', topic: 'T', type: 'ordenar', prompt: 'Ordená', answer: ['H', 'A', 'B'], rationaleRef: 'habcde' } as Card
     const onAnswer = vi.fn()
     render(<OrderCard card={card} onAnswer={onAnswer} />)
-    // move the 2nd item up (buttons labelled "Subir <item>")
+    // Initial order is reverse(answer) = ['B','A','H'] (deterministic, differs
+    // from the answer so the user must reorder). "Subir A" swaps A (index 1) up
+    // with B (index 0) → ['A','B','H'].
     fireEvent.click(screen.getByRole('button', { name: /Subir A/i }))
     fireEvent.click(screen.getByRole('button', { name: /Comprobar/i }))
-    expect(onAnswer).toHaveBeenCalledWith(['A', 'H', 'B'])
+    expect(onAnswer).toHaveBeenCalledWith(['A', 'B', 'H'])
   })
   it('ClozeCard submits one value per blank', () => {
     const card = { id: 'c', topic: 'T', type: 'cloze', prompt: 'A {{Verbal}} y {{Dolor}}', answer: ['verbal', 'dolor'], rationaleRef: 'avdn' } as Card
@@ -954,8 +956,8 @@ describe('order + cloze cards', () => {
     render(<ClozeCard card={card} onAnswer={onAnswer} />)
     const inputs = screen.getAllByRole('textbox')
     expect(inputs).toHaveLength(2)
-    fireEvent.change(inputs[0], { target: { value: 'verbal' } })
-    fireEvent.change(inputs[1], { target: { value: 'dolor' } })
+    fireEvent.change(inputs[0]!, { target: { value: 'verbal' } }) // ! for noUncheckedIndexedAccess
+    fireEvent.change(inputs[1]!, { target: { value: 'dolor' } })
     fireEvent.click(screen.getByRole('button', { name: /Comprobar/i }))
     expect(onAnswer).toHaveBeenCalledWith(['verbal', 'dolor'])
   })
@@ -981,7 +983,7 @@ export function OrderCard({ card, onAnswer }: { card: Card; onAnswer: (a: string
     const j = i + dir
     if (j < 0 || j >= items.length) return
     const next = [...items]
-    ;[next[i], next[j]] = [next[j], next[i]]
+    ;[next[i], next[j]] = [next[j]!, next[i]!] // ! safe: bounds guarded above
     setItems(next)
   }
   return (
