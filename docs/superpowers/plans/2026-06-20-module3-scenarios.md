@@ -630,7 +630,7 @@ import { linkForRef } from '@/shared/domain/conceptLinks'
 import type { RunState } from './engine'
 import { scoreRun, type RunScore } from './scoring'
 
-export interface DebriefItem { text: string; concept: string; link: string }
+export interface DebriefItem { text: string; concept: string; link: string; detail?: string }
 export interface Debrief {
   summary: RunScore
   did: DebriefItem[]
@@ -661,7 +661,7 @@ export function buildDebrief(c: Case, run: RunState): Debrief {
   const dangerous: DebriefItem[] = []
   for (const phase of c.phases) {
     for (const d of phase.distractors) {
-      if (done.has(d.id)) dangerous.push({ text: d.text, concept: d.concept, link: linkForRef(d.concept) })
+      if (done.has(d.id)) dangerous.push({ text: d.text, concept: d.concept, link: linkForRef(d.concept), detail: d.whyNot })
     }
   }
 
@@ -1036,10 +1036,19 @@ function Section({ label, items }: { label: string; items: DebriefItem[] }) {
       {items.map((it, i) => (
         <div key={i} style={{ fontSize: 14, padding: '7px 0', borderBottom: '1px solid var(--border)' }}>
           {it.text}
-          <br />
-          <Link to={it.link} style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--primary)', fontWeight: 600 }}>
-            Ver "{it.concept}" en Aprender →
-          </Link>
+          {it.detail && (
+            <div style={{ fontFamily: 'var(--font-serif)', fontSize: 13, color: 'var(--ink-soft)', marginTop: 2 }}>
+              {it.detail}
+            </div>
+          )}
+          {it.link !== '/' && (
+            <>
+              <br />
+              <Link to={it.link} style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--primary)', fontWeight: 600 }}>
+                Ver "{it.concept}" en Aprender →
+              </Link>
+            </>
+          )}
         </div>
       ))}
     </div>
