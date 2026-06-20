@@ -1,3 +1,5 @@
+import { Fragment } from 'react'
+
 import { NodeCard } from './NodeCard'
 import styles from './PhaseTimeline.module.css'
 
@@ -10,7 +12,14 @@ export function PhaseTimeline({ phase, index }: { phase: ChainPhase; index: numb
       <h2 className={styles.title}>{phase.title}</h2>
       <div className={styles.nodes}>
         {phase.nodes.map(n => (
-          <NodeCard key={n.id} node={n} />
+          <Fragment key={n.id}>
+            {n.kind === 'bridge' && (
+              <p className={styles.connector} aria-hidden>
+                ↓
+              </p>
+            )}
+            <NodeCard node={n} />
+          </Fragment>
         ))}
       </div>
     </section>

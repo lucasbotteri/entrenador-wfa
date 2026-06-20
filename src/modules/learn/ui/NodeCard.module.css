@@ -41,3 +41,21 @@
   color: var(--primary);
   flex: 0 0 36px;
 }
+.prio {
+  display: inline-block;
+  margin-left: var(--space-2);
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: var(--on-critical);
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.bridge {
+  border-style: dashed;
+  background: transparent;
+}

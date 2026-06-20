@@ -2,6 +2,15 @@
   border-top: 1px solid var(--border);
   padding: var(--space-3) 0;
 }
+.heading {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin: var(--space-3) 0 var(--space-1);
+}
 .label {
   font-family: var(--font-serif);
   font-weight: 700;

@@ -116,7 +116,7 @@ function secondaryNodes(content: Content): ChainNode[] {
     id: 'secondary-vital-signs',
     phase: 'secondary',
     title: 'Signos vitales',
-    subtitle: 'FC · FR · temperatura',
+    subtitle: 'FC · FR · PA',
     icon: 'vitalSigns',
     kind: 'topic',
     items: vitalSignItems(content.vitalSigns),
