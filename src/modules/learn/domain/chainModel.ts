@@ -112,7 +112,7 @@ function sceneNodes(content: Content): ChainNode[] {
     items: [
       {
         label: 'Seguridad',
-        detail: typeof c.buscar_ayuda === 'string' ? c.buscar_ayuda : 'Deténgase y piense. Protéjase.',
+        detail: typeof c.buscar_ayuda === 'string' ? c.buscar_ayuda : '',
       },
     ],
     rationaleId: 'scene',

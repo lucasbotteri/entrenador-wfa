@@ -7,7 +7,3 @@ export function getAllNodes(model: ChainPhase[]): ChainNode[] {
 export function getNodeById(model: ChainPhase[], id: string): ChainNode | null {
   return getAllNodes(model).find(n => n.id === id) ?? null
 }
-
-export function getPhases(model: ChainPhase[]): ChainPhase[] {
-  return model
-}

@@ -25,7 +25,6 @@ export const AcronymSchema = z.object({
 })
 
 export const PhaseIdSchema = z.enum(['scene', 'primary', 'secondary', 'evacuation'])
-export type PhaseId = z.infer<typeof PhaseIdSchema>
 
 // Phase content is heterogeneous (spec §4.2). We validate the structural envelope
 // strictly and preserve the deep clinical detail with passthrough so unmodeled

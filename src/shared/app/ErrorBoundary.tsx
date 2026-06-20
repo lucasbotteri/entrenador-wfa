@@ -1,4 +1,4 @@
-import { Component, type ReactNode } from 'react'
+import { Component, type ErrorInfo, type ReactNode } from 'react'
 
 interface State {
   hasError: boolean
@@ -9,6 +9,10 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
 
   static getDerivedStateFromError(): State {
     return { hasError: true }
+  }
+
+  override componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('App error boundary caught:', error, info)
   }
 
   override render() {
