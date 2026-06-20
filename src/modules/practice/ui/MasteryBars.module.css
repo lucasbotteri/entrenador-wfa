@@ -1,0 +1,7 @@
+.row { margin-bottom: var(--space-2); }
+.head { display: flex; justify-content: space-between; font-family: var(--font-sans); font-size: 12px; margin-bottom: 3px; }
+.pct { color: var(--muted); }
+.bar { height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.fill { height: 100%; border-radius: 99px; background: var(--mild); }
+.mid { background: var(--serious); }
+.low { background: var(--primary); }
