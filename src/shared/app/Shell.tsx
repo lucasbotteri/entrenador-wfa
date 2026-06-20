@@ -6,10 +6,11 @@ import { useOnlineStatus } from './pwa'
 
 import { useDueCount } from '@/modules/practice/content/useDueCount'
 
-const TABS = [
-  { to: '/', label: 'Aprender', match: (p: string) => p === '/' || p.startsWith('/chain') || p === '/example' || p === '/quickref' },
-  { to: '/practice', label: 'Practicar', match: (p: string) => p.startsWith('/practice') },
-] as const
+const TABS: Array<{ to: string; label: string; match: (p: string) => boolean }> = [
+  { to: '/', label: 'Aprender', match: p => p === '/' || p.startsWith('/chain') || p === '/example' || p === '/quickref' },
+  { to: '/practice', label: 'Practicar', match: p => p.startsWith('/practice') },
+  { to: '/scenarios', label: 'Escenarios', match: p => p.startsWith('/scenarios') },
+]
 
 export function Shell({ children }: { children: ReactNode }) {
   const online = useOnlineStatus()
@@ -37,9 +38,6 @@ export function Shell({ children }: { children: ReactNode }) {
             {t.to === '/practice' && due > 0 && <span className={styles.badge}>{due}</span>}
           </Link>
         ))}
-        <span className={`${styles.tab} ${styles.tabDisabled}`} aria-disabled>
-          Escenarios
-        </span>
       </nav>
     </>
   )

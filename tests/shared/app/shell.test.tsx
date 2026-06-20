@@ -44,4 +44,13 @@ describe('Shell', () => {
     // badge text is a number; assert the link contains a digit
     await waitFor(() => expect(practicar.textContent).toMatch(/\d/))
   })
+
+  it('Escenarios tab is an active link on /scenarios', () => {
+    render(
+      <MemoryRouter initialEntries={['/scenarios']}>
+        <Shell><p>x</p></Shell>
+      </MemoryRouter>,
+    )
+    expect(screen.getByRole('link', { name: /Escenarios/i })).toHaveAttribute('href', '/scenarios')
+  })
 })

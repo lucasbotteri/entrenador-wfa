@@ -4,6 +4,7 @@ import { Shell } from './Shell'
 
 import { learnRoutes } from '@/modules/learn'
 import { practiceRoutes } from '@/modules/practice'
+import { scenariosRoutes } from '@/modules/scenarios'
 
 function Layout() {
   return (
@@ -16,6 +17,6 @@ function Layout() {
 export const router = createHashRouter([
   {
     element: <Layout />,
-    children: [...learnRoutes, ...practiceRoutes, { path: '*', element: <Navigate to="/" replace /> }],
+    children: [...learnRoutes, ...practiceRoutes, ...scenariosRoutes, { path: '*', element: <Navigate to="/" replace /> }],
   },
 ])
