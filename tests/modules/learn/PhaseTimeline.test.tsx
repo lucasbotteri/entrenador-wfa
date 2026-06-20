@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect } from 'vitest'
 
-import { PhaseTimeline } from '@/modules/learn/ui/PhaseTimeline'
 import type { ChainPhase } from '@/modules/learn/domain/chainModel'
+import { PhaseTimeline } from '@/modules/learn/ui/PhaseTimeline'
 
 const phase: ChainPhase = { id: 'scene', title: 'Escena', rationale: 'r', nodes: [] }
 
