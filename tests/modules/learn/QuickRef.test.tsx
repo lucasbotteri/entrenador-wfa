@@ -15,4 +15,10 @@ describe('QuickRef', () => {
     expect(screen.getByText('Grave')).toBeInTheDocument()
     expect(screen.getByText('Leve')).toBeInTheDocument()
   })
+
+  it('renders the normal vital-signs section', () => {
+    render(<QuickRef />)
+    expect(screen.getByText(/Signos vitales normales/i)).toBeInTheDocument()
+    expect(screen.getByText('60-100')).toBeInTheDocument()
+  })
 })
