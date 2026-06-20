@@ -18,7 +18,7 @@ meta:
   fuente: "AIDER — Primeros Socorros Estándares en Lugares Remotos, Guía del alumno, 2.ª ed."
   alcance: "Núcleo: Cadena de Atención a la Víctima (Cap. 3 + SOAP). Excluye lo legal/ético."
   idioma: "es"
-  version: "0.4"   # v0.4: racional por letra (HABCDE), TEV ampliado, buscar ayuda (SEM/AE)
+  version: "0.6"   # v0.6: 'mecanismo de daño' con orígenes/enf. súbita/ambiente
 
 # ---------------------------------------------------------------------
 # SIGLAS / REGLAS MNEMOTÉCNICAS
@@ -163,12 +163,17 @@ cadena:
         lavado_manos: "Lavarse las manos tras atender (agua potable y jabón neutro, ≥30 s); gel en seco si no hay agua."
       mecanismo_dano:
         definicion: "Estimar la causa de las lesiones con la info de la escena, para anticipar lesiones (incluso ocultas) y no hacer maniobras incorrectas."
+        origenes: "Las lesiones pueden deberse a un traumatismo, al medio ambiente, a una enfermedad súbita o a una combinación de todos."
         evaluar: ["Cantidad de fuerza aplicada", "Tiempo durante el que se aplicó", "Área del cuerpo involucrada"]
         sospechar_lesiones_graves: ["Caída de 2-3 veces la altura del cuerpo", "Colisión a alta velocidad (moto, vehículo, esquí, snowboard, bici)", "Herida de arma de fuego en cabeza/cuello/tronco"]
+        enfermedad_subita: "Si el origen es una enfermedad súbita, buscar pistas (suele estar en la dolencia principal); preguntar a la víctima y a los testigos."
+        ambiente: "Considerar las condiciones climáticas del lugar como posible causa o agravante."
         regla: "Ante mecanismo de alta energía o duda, asumir lesión de columna cervical."
       numero_victimas:
-        definicion: "Identificar cuántos heridos hay; buscar más de uno."
-        triage: "Si las víctimas exceden a los socorristas, clasificar por prioridades (triage) según gravedad."
+        definicion: "Cuántas víctimas hay (buscar más: puede haber más de una) Y con qué recursos contás. Es un balance víctimas ↔ recursos."
+        recursos: "Sopesar las víctimas contra los recursos materiales y humanos disponibles. En lugares remotos los recursos humanos son limitados."
+        triage: "Si el número de víctimas excede al de socorristas, clasificar por prioridades (triage): evaluar la gravedad y decidir a quién atender primero."
+        testigos: "Las personas presentes que quieran cooperar son un recurso: aportan información del hecho y pueden ayudar si las considerás capaces."
         nota: "En zona remota el riesgo de hipotermia/deshidratación es mayor; actuar rápido y eficiente."
       impresion_general:
         ref_sigla: "tev"
