@@ -21,3 +21,15 @@
 }
 .tabOn { color: var(--primary); font-weight: 700; box-shadow: inset 0 2px 0 var(--primary); }
 .tabDisabled { opacity: 0.45; }
+.badge {
+  display: inline-block;
+  margin-left: 6px;
+  min-width: 16px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: var(--on-critical);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+}

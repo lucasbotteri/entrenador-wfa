@@ -26,7 +26,7 @@ export function PracticeHome() {
   return (
     <div>
       <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 24 }}>Repaso de hoy</h1>
-      <p style={{ color: 'var(--ink-soft)' }}>{due} tarjeta{due === 1 ? '' : 's'} para repasar</p>
+      <p style={{ color: 'var(--ink-soft)' }}>{due === 0 ? 'Al día ✓' : `${due} tarjeta${due === 1 ? '' : 's'} para repasar`}</p>
       <Link
         to="/practice/session"
         style={{

@@ -4,6 +4,8 @@ import { Link, useLocation } from 'react-router-dom'
 import styles from './Shell.module.css'
 import { useOnlineStatus } from './pwa'
 
+import { useDueCount } from '@/modules/practice/content/useDueCount'
+
 const TABS = [
   { to: '/', label: 'Aprender', match: (p: string) => p === '/' || p.startsWith('/chain') || p === '/example' || p === '/quickref' },
   { to: '/practice', label: 'Practicar', match: (p: string) => p.startsWith('/practice') },
@@ -12,6 +14,7 @@ const TABS = [
 export function Shell({ children }: { children: ReactNode }) {
   const online = useOnlineStatus()
   const { pathname } = useLocation()
+  const due = useDueCount()
   return (
     <>
       <a className="skip-link" href="#main">
@@ -31,6 +34,7 @@ export function Shell({ children }: { children: ReactNode }) {
         {TABS.map(t => (
           <Link key={t.to} to={t.to} className={`${styles.tab} ${t.match(pathname) ? styles.tabOn : ''}`}>
             {t.label}
+            {t.to === '/practice' && due > 0 && <span className={styles.badge}>{due}</span>}
           </Link>
         ))}
         <span className={`${styles.tab} ${styles.tabDisabled}`} aria-disabled>

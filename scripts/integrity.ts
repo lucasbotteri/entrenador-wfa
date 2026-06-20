@@ -41,6 +41,6 @@ export function findDanglingRefs(c: any): string[] {
 
 export function findElegirWithoutOptions(c: any): string[] {
   return (c.cards ?? [])
-    .filter((card: any) => card.type === 'elegir' && !(card.options?.length))
+    .filter((card: any) => card.type === 'elegir' && (card.options?.length ?? 0) < 2)
     .map((card: any) => card.id)
 }
