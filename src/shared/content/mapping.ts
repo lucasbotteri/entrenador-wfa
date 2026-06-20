@@ -25,6 +25,7 @@ export function mapAcronym(a: any) {
             letter: l.letra,
             meaning: l.significado,
             detail: l.detalle,
+            ...(l.porque ? { rationale: l.porque } : {}),
           })),
         }
       : {}),
@@ -137,6 +138,7 @@ export function mapCase(c: any) {
 export function mapWorkedExample(w: any) {
   return {
     title: w.titulo,
+    ...(w.pausa ? { pause: { question: w.pausa.pregunta, reveal: w.pausa.revela } } : {}),
     steps: w.steps.map((s: any) => ({
       phase: PHASE_MAP[s.fase] ?? s.fase,
       state: s.estado,

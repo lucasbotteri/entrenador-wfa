@@ -6,6 +6,7 @@ import {
   mapEvacLevel,
   mapPracticalRule,
   mapCard,
+  mapWorkedExample,
 } from '@/shared/content/mapping'
 
 describe('mapping es → en', () => {
@@ -88,5 +89,38 @@ describe('mapCard options (M2)', () => {
   it('maps opciones → options, omits when absent', () => {
     expect(mapCard({ id: 'c', tema: 'T', tipo: 'elegir', prompt: 'p', respuesta: ['a'], opciones: ['a', 'b'], racional_ref: 'r' }).options).toEqual(['a', 'b'])
     expect('options' in mapCard({ id: 'c', tema: 'T', tipo: 'escribir', prompt: 'p', respuesta: ['a'], racional_ref: 'r' })).toBe(false)
+  })
+})
+
+describe('mapAcronym — per-letter rationale (P3)', () => {
+  it('anglicizes letra.porque → letter.rationale when present', () => {
+    const mapped = mapAcronym({
+      id: 'habcde', sigla: 'HABCDE', nombre: 'Primaria', concepto: 'primaria',
+      es_secuencia: true, racional: 'general',
+      letras: [
+        { letra: 'H', significado: 'Hemorragia', detalle: 'Presión directa.', porque: 'Mata en minutos: primero.' },
+        { letra: 'A', significado: 'Vía aérea', detalle: 'Control cervical.' },
+      ],
+    })
+    expect(mapped.letters?.[0]?.rationale).toBe('Mata en minutos: primero.')
+    expect(mapped.letters?.[1]?.rationale).toBeUndefined()
+  })
+})
+
+describe('mapWorkedExample — pause (P6)', () => {
+  it('anglicizes pausa.{pregunta,revela} → pause.{question,reveal}', () => {
+    const mapped = mapWorkedExample({
+      titulo: 'Caso',
+      pausa: { pregunta: '¿Qué observás?', revela: 'No responde, respira.' },
+      steps: [{ fase: 'escena', estado: 's', accion: 'a', racional_ref: 'scene' }],
+    })
+    expect(mapped.pause).toEqual({ question: '¿Qué observás?', reveal: 'No responde, respira.' })
+  })
+
+  it('omits pause when pausa is absent', () => {
+    const mapped = mapWorkedExample({
+      titulo: 'Caso', steps: [{ fase: 'primaria', estado: 's', accion: 'a', racional_ref: 'habcde' }],
+    })
+    expect('pause' in mapped).toBe(false)
   })
 })

@@ -4,6 +4,7 @@ export const AcronymLetterSchema = z.object({
   letter: z.string().min(1).max(2),
   meaning: z.string().min(1),
   detail: z.string().min(1),
+  rationale: z.string().optional(),
 })
 
 export const AcronymComponentSchema = z.object({
@@ -101,6 +102,7 @@ export const WorkedExampleStepSchema = z.object({
 
 export const WorkedExampleSchema = z.object({
   title: z.string().min(1),
+  pause: z.object({ question: z.string().min(1), reveal: z.string().min(1) }).optional(),
   steps: z.array(WorkedExampleStepSchema).min(1),
 })
 
