@@ -10,7 +10,10 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20, cache: npm }
       - run: npm ci
-      - run: npm run content:check
+      # Generate the (gitignored) content JSON before lint/typecheck/test need it.
+      # content:build runs the same validation + integrity checks as content:check,
+      # and additionally emits src/shared/content/generated/*.json.
+      - run: npm run content:build
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test:run
