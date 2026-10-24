@@ -1,0 +1,117 @@
+.context {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: var(--space-3) 0 var(--space-2);
+}
+.strip {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin: 0 -4px var(--space-3);
+  padding-left: 4px;
+  padding-right: 4px;
+  scrollbar-width: none;
+}
+.strip::-webkit-scrollbar {
+  display: none;
+}
+.chip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.chipOn {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--on-critical);
+}
+.lead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-2) 0 var(--space-3);
+}
+.iconBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: var(--icon-tint);
+  color: var(--primary);
+}
+.iconBoxSmall {
+  width: 40px;
+  height: 40px;
+}
+.h1 {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 0 0 2px;
+}
+.prio {
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: var(--on-critical);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.subtitle {
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0 0 var(--space-3);
+}
+.block {
+  margin-top: var(--space-4);
+}
+.nextTitle {
+  font-weight: 700;
+}
+.nextPhase {
+  color: var(--ink-soft);
+}
+.pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-5);
+  font-family: var(--font-sans);
+  font-size: 13px;
+}
+.pagerLink {
+  display: inline-block;
+  padding: var(--space-3) var(--space-2);
+  min-height: 44px;
+  font-weight: 600;
+}
+.pagerMap {
+  display: inline-block;
+  padding: var(--space-3) var(--space-3);
+  min-height: 44px;
+  color: var(--muted);
+}

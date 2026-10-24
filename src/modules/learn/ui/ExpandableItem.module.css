@@ -20,8 +20,24 @@
 .detail {
   font-family: var(--font-serif);
   font-size: 14px;
+  line-height: 1.5;
   margin: 0;
   color: var(--ink);
+}
+.list {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: var(--space-1) 0 0;
+  padding-left: 20px;
+  color: var(--ink);
+}
+.list li {
+  margin: 3px 0;
+  padding-left: 2px;
+}
+.list li::marker {
+  color: var(--primary);
 }
 .why {
   font-style: italic;
@@ -29,4 +45,12 @@
   padding-left: var(--space-3);
   margin-top: var(--space-2);
   color: var(--ink-soft);
+}
+.link {
+  display: inline-block;
+  margin-top: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 32px;
 }

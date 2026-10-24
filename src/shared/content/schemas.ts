@@ -5,6 +5,8 @@ export const AcronymLetterSchema = z.object({
   meaning: z.string().min(1),
   detail: z.string().min(1),
   rationale: z.string().optional(),
+  // Concrete procedure for this letter (rendered as a list under the detail).
+  steps: z.array(z.string().min(1)).optional(),
 })
 
 export const AcronymComponentSchema = z.object({
@@ -34,6 +36,8 @@ export const ChainPhaseSchema = z.object({
   phase: PhaseIdSchema,
   name: z.string().min(1),
   rationale: z.string().min(1),
+  // Guiding questions of the link (advance organizer, manual p. 22-23).
+  questions: z.array(z.string().min(1)).optional(),
   refAcronym: z.string().optional(),
   strictOrder: z.boolean().optional(),
   sequence: z
@@ -66,6 +70,27 @@ export const EvacLevelSchema = z.object({
   level: z.string().min(1),
   color: z.string().min(1),
   criterion: z.string().min(1),
+  conduct: z.string().optional(),
+})
+
+// Evacuation criterion for a concrete clinical picture (manual chapters 5-15):
+// given this picture, which level applies.
+export const EvacCriterionSchema = z.object({
+  topic: z.string().min(1),
+  condition: z.string().min(1),
+  level: z.string().min(1),
+  note: z.string().optional(),
+})
+
+// Advance organizer shown on the chain map ("La cadena en 1 minuto").
+export const IntroSchema = z.object({
+  whatIs: z.string().optional(),
+  links: z.string().optional(),
+  goal: z.string().optional(),
+  flexibility: z.string().optional(),
+  decision: z.string().optional(),
+  remote: z.string().optional(),
+  time: z.string().optional(),
 })
 
 export const PracticalRuleSchema = z.object({
@@ -79,6 +104,7 @@ export const ClinicalTopicSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   rationale: z.string().min(1),
+  details: z.array(z.string().min(1)).optional(),
 })
 
 export const CardSchema = z
@@ -108,12 +134,15 @@ export const WorkedExampleSchema = z.object({
 
 export const ContentSchema = z.object({
   meta: z.object({ source: z.string(), version: z.string(), language: z.string() }).passthrough(),
+  intro: IntroSchema.optional(),
   acronyms: z.array(AcronymSchema).min(1),
   chain: z.array(ChainPhaseSchema).min(1),
   vitalSigns: VitalSignsSchema,
   positions: z.array(z.object({ situation: z.string(), position: z.string() })).optional(),
+  recoveryPositionSteps: z.array(z.string().min(1)).default([]),
   practicalRules: z.array(PracticalRuleSchema),
   evacLevels: z.array(EvacLevelSchema).min(1),
+  evacCriteria: z.array(EvacCriterionSchema).default([]),
   clinicalTopics: z.array(ClinicalTopicSchema),
   cards: z.array(CardSchema),
   workedExample: WorkedExampleSchema,
@@ -137,8 +166,15 @@ const DistractorSchema = z.object({
   concept: z.string().min(1),
 })
 const RevealSchema = z.object({ ifDone: z.string().min(1), text: z.string().min(1) })
-const DecisionOptionSchema = z.object({ level: z.string().min(1), correct: z.boolean(), feedback: z.string().min(1) })
-const DecisionSchema = z.object({ correct: z.string().min(1), options: z.array(DecisionOptionSchema).min(2) })
+const DecisionOptionSchema = z.object({
+  level: z.string().min(1),
+  correct: z.boolean(),
+  feedback: z.string().min(1),
+})
+const DecisionSchema = z.object({
+  correct: z.string().min(1),
+  options: z.array(DecisionOptionSchema).min(2),
+})
 export const ScenarioPhaseSchema = z.object({
   id: PhaseIdSchema,
   state: z.string().min(1),

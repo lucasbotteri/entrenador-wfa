@@ -2,10 +2,18 @@ import { Link } from 'react-router-dom'
 
 import styles from './FeedbackPanel.module.css'
 
+import { loadContent } from '@/shared/content/loader'
 import { linkForRef } from '@/shared/domain/conceptLinks'
+import { buildConceptNameMap, getConceptName } from '@/shared/domain/rationale'
 
 export function FeedbackPanel({
-  correct, correctText, rationale, rationaleRef, fromBox, toBox, onContinue,
+  correct,
+  correctText,
+  rationale,
+  rationaleRef,
+  fromBox,
+  toBox,
+  onContinue,
 }: {
   correct: boolean
   correctText: string
@@ -15,6 +23,7 @@ export function FeedbackPanel({
   toBox: number
   onContinue: () => void
 }) {
+  const conceptName = getConceptName(rationaleRef, buildConceptNameMap(loadContent()))
   return (
     <div>
       <div className={`${styles.banner} ${correct ? styles.ok : styles.bad}`}>
@@ -34,11 +43,18 @@ export function FeedbackPanel({
             <p style={{ fontFamily: 'var(--font-serif)', margin: '4px 0 0' }}>{rationale}</p>
           </div>
         )}
-        <Link to={linkForRef(rationaleRef)} style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: 13 }}>
-          Ver "{rationaleRef}" en Aprender →
+        <Link
+          to={linkForRef(rationaleRef)}
+          style={{ fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: 13 }}
+        >
+          Ver "{conceptName}" en Aprender →
         </Link>
-        <p className={styles.box}>Caja {fromBox} → {toBox}</p>
-        <button className={styles.continue} onClick={onContinue}>Continuar</button>
+        <p className={styles.box}>
+          Caja {fromBox} → {toBox}
+        </p>
+        <button className={styles.continue} onClick={onContinue}>
+          Continuar
+        </button>
       </div>
     </div>
   )

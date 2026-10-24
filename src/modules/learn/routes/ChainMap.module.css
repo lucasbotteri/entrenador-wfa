@@ -1,0 +1,128 @@
+.h1 {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  margin: 0 0 4px;
+}
+.lead {
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0 0 var(--space-4);
+}
+.intro {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  margin-bottom: var(--space-4);
+}
+.introSummary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  list-style: none;
+  min-height: 44px;
+}
+.introSummary::-webkit-details-marker {
+  display: none;
+}
+.introSummary::after {
+  content: '＋';
+  margin-left: auto;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 16px;
+}
+.intro[open] .introSummary::after {
+  content: '－';
+}
+.introIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--icon-tint);
+  color: var(--primary);
+  flex: 0 0 36px;
+}
+.introTitle {
+  display: block;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 15px;
+}
+.introHint {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--muted);
+}
+.introList {
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-3);
+}
+.introRow {
+  border-top: 1px solid var(--border);
+  padding: var(--space-2) 0;
+}
+.introRow dt {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.introRow dd {
+  margin: 2px 0 0;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.resume {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-5);
+  border: 1.5px dashed var(--primary);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: var(--ink);
+  min-height: 44px;
+}
+.resumeLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.resumeTitle {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--primary);
+}
+.quickLinks {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.quickLink {
+  flex: 1;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  min-height: 44px;
+  text-decoration: none;
+}

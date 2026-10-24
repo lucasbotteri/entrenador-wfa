@@ -14,6 +14,7 @@ import { EvacuationDecision } from '@/modules/scenarios/ui/EvacuationDecision'
 import { PhaseStepper } from '@/modules/scenarios/ui/PhaseStepper'
 import { RevealCard } from '@/modules/scenarios/ui/RevealCard'
 import { loadCases } from '@/shared/content/loader'
+import { phaseShortLabel } from '@/shared/domain/phaseLabels'
 
 export function Play() {
   const { caseId = '' } = useParams()
@@ -64,7 +65,7 @@ export function Play() {
     <div>
       <PhaseStepper count={c.phases.length} current={run.phaseIndex} />
       <p style={{ fontFamily: 'var(--font-sans)', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--primary)', fontWeight: 700 }}>
-        {phase.id}{phase.strictOrder ? ' · orden estricto' : ''}
+        {phaseShortLabel(phase.id)}{phase.strictOrder ? ' · orden estricto' : ''}
       </p>
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '11px 13px', fontStyle: 'italic', marginBottom: 8 }}>{phase.state}</div>
       {run.revealedTexts.map((t, i) => <RevealCard key={i} text={t} />)}

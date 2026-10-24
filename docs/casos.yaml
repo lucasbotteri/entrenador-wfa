@@ -65,7 +65,7 @@ casos:
           - {id: "frente-menton", texto: "Abrir la vía aérea con maniobra frente-mentón", tipo: "tecnica", por_que_no: "Hiperextiende el cuello; con sospecha de columna va subluxación mandibular.", concepto: "habcde"}
           - {id: "orden-ab", texto: "Empezar por A o B antes de frenar el sangrado masivo", tipo: "prioridad", por_que_no: "Con hemorragia masiva, la H va primera.", concepto: "habcde"}
           - {id: "torniquete-directo", texto: "Colocar el torniquete de entrada", tipo: "misconcepcion", por_que_no: "Primero presión directa; torniquete recién si no cede en los primeros minutos.", concepto: "habcde"}
-          - {id: "agua", texto: "Darle agua porque está pálido", tipo: "misconcepcion", por_que_no: "Con sospecha de shock/lesión abdominal no se da de beber.", concepto: "habcde"}
+          - {id: "agua", texto: "Darle agua porque está pálido", tipo: "misconcepcion", por_que_no: "No responde: no puede tragar con seguridad. Nada por boca a quien no está completamente consciente; la palidez se trata buscando el sangrado y abrigando, no con agua.", concepto: "habcde"}
           - {id: "sentarlo", texto: "Sentarlo para que respire mejor", tipo: "contexto", por_que_no: "Correcto en disnea sin trauma; acá hay sospecha de columna.", concepto: "habcde"}
           - {id: "fc-exacta", texto: "Cronometrar la FC exacta ahora", tipo: "ineficiencia", por_que_no: "El dato fino es de la evaluación secundaria.", concepto: "secundaria"}
         revelaciones:
@@ -75,13 +75,13 @@ casos:
       - id: "secundaria"
         estado: "Hemorragia del muslo controlada; consciente pero alterado; pálido, frío, húmedo; dolor abdominal; hematoma."
         acciones_clave:
-          - {id: "vitales", texto: "Signos vitales: FR y FC; reconocer taquicardia/taquipnea como shock (normal adulto FC 60–100, FR 12–20)", critico: false, concepto: "secundaria", racional: "Confirma la gravedad."}
+          - {id: "vitales", texto: "Línea de base de signos vitales con hora: FR, FC, piel, relleno capilar, AVDN (normal adulto FC 60–100, FR 12–20); está inestable → reevaluar cada 5 min", critico: false, concepto: "secundaria", racional: "La primera toma es la línea de base; la tendencia confirma la gravedad."}
           - {id: "avdn", texto: "Catalogar el nivel de conciencia (AVDN)", critico: false, concepto: "avdn", racional: "Tendencia neurológica."}
           - {id: "muestra", texto: "Anamnesis (MUESTRA)", critico: false, concepto: "muestra", racional: "Contexto clínico."}
           - {id: "dias", texto: "Examen físico de cabeza a pies (DIAS)", critico: false, concepto: "dias", racional: "Buscar lo que falta."}
           - {id: "reevaluar", texto: "Reevaluar (no quedarse con la primera toma)", critico: false, concepto: "secundaria", racional: "El cuadro evoluciona."}
         distractores:
-          - {id: "comer-beber", texto: "Darle de comer/beber", tipo: "misconcepcion", por_que_no: "Hay sospecha de lesión abdominal.", concepto: "secundaria"}
+          - {id: "destapar", texto: "Dejarlo destapado sobre las rocas mientras revisás el abdomen con calma", tipo: "misconcepcion", por_que_no: "Perdió sangre y está en el suelo: se enfría mucho más rápido. Mantenerlo abrigado es parte del tratamiento del shock; la exploración se hace rápido y se vuelve a tapar.", concepto: "shock"}
           - {id: "sobre-evaluar", texto: "Demorarte en una secundaria exhaustiva", tipo: "prioridad", por_que_no: "El cuadro ya pide evacuación.", concepto: "evacuacion"}
           - {id: "pupilas-foco", texto: "Enfocarte en PILAR/pupilas en detalle", tipo: "contexto", por_que_no: "Lo que define la conducta acá es el shock.", concepto: "pilar"}
           - {id: "termometro", texto: "Medir la temperatura con termómetro exacto", tipo: "ineficiencia", por_que_no: "Útil, no determinante acá.", concepto: "secundaria"}
@@ -136,7 +136,7 @@ casos:
           - {id: "no-cortar", texto: "No cortar la ropa; aislarla rápido del suelo", critico: false, concepto: "termica", racional: "Evita más pérdida de calor."}
         distractores:
           - {id: "friccionar", texto: "Friccionarle/frotarle brazos y piernas para activar la circulación", tipo: "misconcepcion", por_que_no: "Lleva sangre fría del centro a la periferia → shock térmico / PCR.", concepto: "termica"}
-          - {id: "agua-caliente", texto: "Meterla en agua caliente o apoyar una botella hirviendo directa sobre la piel / recalentar rápido", tipo: "misconcepcion", por_que_no: "Quemaduras y afterdrop; el recalentamiento debe ser controlado.", concepto: "termica"}
+          - {id: "agua-caliente", texto: "Meterla en agua caliente o apoyar una botella hirviendo directa sobre la piel / recalentar rápido", tipo: "misconcepcion", por_que_no: "Quemaduras y shock térmico (la sangre fría de la periferia vuelve al centro → riesgo de paro); el recalentamiento debe ser lento y controlado, sin calor directo sobre la piel.", concepto: "termica"}
           - {id: "alcohol2", texto: "Darle alcohol", tipo: "misconcepcion", por_que_no: "Predispone a la hipotermia.", concepto: "termica"}
           - {id: "pls", texto: "Ponerla en PLS", tipo: "contexto", por_que_no: "Está consciente; no corresponde.", concepto: "habcde"}
           - {id: "temp-exacta", texto: "Medir la temperatura exacta antes de aislarla del frío", tipo: "prioridad", por_que_no: "Primero frenar la pérdida de calor.", concepto: "secundaria"}

@@ -10,6 +10,8 @@ import {
   CasesSchema,
   ScenarioPhaseSchema,
   EvacLevelSchema,
+  EvacCriterionSchema,
+  IntroSchema,
   PracticalRuleSchema,
   ClinicalTopicSchema,
   CardSchema,
@@ -27,6 +29,8 @@ export type Case = z.infer<typeof CaseSchema>
 export type ScenarioPhase = z.infer<typeof ScenarioPhaseSchema>
 export type Cases = z.infer<typeof CasesSchema>
 export type EvacLevel = z.infer<typeof EvacLevelSchema>
+export type EvacCriterion = z.infer<typeof EvacCriterionSchema>
+export type Intro = z.infer<typeof IntroSchema>
 export type PracticalRule = z.infer<typeof PracticalRuleSchema>
 export type ClinicalTopic = z.infer<typeof ClinicalTopicSchema>
 export type Card = z.infer<typeof CardSchema>
