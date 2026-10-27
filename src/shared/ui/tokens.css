@@ -4,7 +4,9 @@
   --ink-soft: #5a4b30; --muted: #6b5326; --border: #d9c8a0;
   /* accent */
   --primary: #7a1f1c;
+  --accent: #c9a86a;
   --icon-tint: #fff5d6;
+  --surface-soft: #fbf3df;
   /* severity (rojo/ámbar/verde) */
   --critical: #7a1f1c; --serious: #b87333; --mild: #4f6b3a;
   --on-critical: #f4ede0; --on-serious: #ffffff; --on-mild: #f4ede0;

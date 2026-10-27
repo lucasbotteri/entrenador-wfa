@@ -26,6 +26,7 @@ export function mapAcronym(a: any) {
             meaning: l.significado,
             detail: l.detalle,
             ...(l.porque ? { rationale: l.porque } : {}),
+            ...(l.pasos ? { steps: l.pasos } : {}),
           })),
         }
       : {}),
@@ -42,6 +43,7 @@ export function mapChainPhase(p: any) {
     phase,
     name: p.nombre,
     rationale: p.racional,
+    ...(p.preguntas ? { questions: p.preguntas } : {}),
     ...(p.orden_estricto ? { strictOrder: true } : {}),
     ...(p.ref_sigla ? { refAcronym: p.ref_sigla } : {}),
     ...(p.secuencia
@@ -60,7 +62,37 @@ export function mapChainPhase(p: any) {
 }
 
 export function mapEvacLevel(e: any) {
-  return { level: e.nivel, color: e.color, criterion: e.criterio }
+  return {
+    level: e.nivel,
+    color: e.color,
+    criterion: e.criterio,
+    ...(e.conducta ? { conduct: e.conducta } : {}),
+  }
+}
+
+export function mapEvacCriterion(c: any) {
+  return {
+    topic: c.tema,
+    condition: c.cuadro,
+    level: c.nivel,
+    ...(c.nota ? { note: c.nota } : {}),
+  }
+}
+
+const INTRO_KEYS: Array<[string, string]> = [
+  ['que_es', 'whatIs'],
+  ['eslabones', 'links'],
+  ['objetivo', 'goal'],
+  ['flexibilidad', 'flexibility'],
+  ['decision', 'decision'],
+  ['remoto', 'remote'],
+  ['tiempo', 'time'],
+]
+
+export function mapIntro(i: any) {
+  const out: Record<string, string> = {}
+  for (const [es, en] of INTRO_KEYS) if (typeof i?.[es] === 'string') out[en] = i[es]
+  return out
 }
 
 export function mapPracticalRule(r: any) {
@@ -73,7 +105,12 @@ export function mapPracticalRule(r: any) {
 }
 
 export function mapClinicalTopic(t: any) {
-  return { id: t.id, name: t.nombre, rationale: t.racional }
+  return {
+    id: t.id,
+    name: t.nombre,
+    rationale: t.racional,
+    ...(t.detalle ? { details: t.detalle } : {}),
+  }
 }
 
 export function mapCard(c: any) {
@@ -96,7 +133,11 @@ export function mapPosition(p: any) {
 // scenario body; user-facing strings are preserved, only keys are anglicized.
 function mapKeyAction(a: any) {
   return {
-    id: a.id, text: a.texto, critical: a.critico, concept: a.concepto, rationale: a.racional,
+    id: a.id,
+    text: a.texto,
+    critical: a.critico,
+    concept: a.concepto,
+    rationale: a.racional,
     ...(a.orden != null ? { order: a.orden } : {}),
   }
 }
@@ -106,7 +147,11 @@ function mapDistractor(d: any) {
 function mapDecision(dec: any) {
   return {
     correct: dec.correcta,
-    options: (dec.opciones ?? []).map((o: any) => ({ level: o.nivel, correct: o.correcta, feedback: o.fb })),
+    options: (dec.opciones ?? []).map((o: any) => ({
+      level: o.nivel,
+      correct: o.correcta,
+      feedback: o.fb,
+    })),
   }
 }
 function mapScenarioPhase(p: any) {

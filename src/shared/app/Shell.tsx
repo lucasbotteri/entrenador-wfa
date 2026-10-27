@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 import styles from './Shell.module.css'
@@ -14,8 +14,19 @@ const TABS: Array<{ to: string; label: string; match: (p: string) => boolean }> 
 
 export function Shell({ children }: { children: ReactNode }) {
   const online = useOnlineStatus()
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   const due = useDueCount()
+
+  // New route → start at the top (in-page anchors handle their own scrolling).
+  useEffect(() => {
+    if (hash) return
+    try {
+      window.scrollTo({ top: 0 })
+    } catch {
+      /* not supported (e.g. jsdom) */
+    }
+  }, [pathname, hash])
+
   return (
     <>
       <a className="skip-link" href="#main">
