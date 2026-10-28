@@ -21,6 +21,11 @@
 #    manual y se reemplazó.
 #  - Caída que hace sospechar lesiones graves: Cap. 3 dice "2 a 3 veces la
 #    altura del cuerpo"; Cap. 4 dice "2,5 a 3 veces". Se usa 2-3.
+#  - Shock (temas_clinicos.shock): los signos y la conducta ante hemorragia
+#    interna salen del manual (Cap. 3 y 5). La clasificación por tipos
+#    (hipovolémico, cardiogénico, distributivo, obstructivo) y las etapas
+#    compensado/descompensado siguen la enseñanza estándar de WFA; revisar
+#    la nomenclatura contra el Cap. 5 del manual al actualizar.
 # Las páginas citadas (p. N) son las del manual impreso.
 # =====================================================================
 
@@ -28,7 +33,7 @@ meta:
   fuente: "AIDER — Primeros Socorros Estándares en Lugares Remotos, Guía del alumno, 2.ª ed."
   alcance: "Núcleo: Cadena de Atención a la Víctima (Cap. 3 + SOAP) + criterios de evacuación por cuadro (Cap. 5-15). Excluye lo legal/ético."
   idioma: "es"
-  version: "0.8"   # v0.8: CAV completa contra el manual (técnicas, inestabilidad, buscar ayuda, SOAP, criterios por cuadro)
+  version: "0.9"   # v0.9: tema clínico «Shock» ampliado (tipos, etapas, conducta) + tarjetas; v0.8: CAV completa contra el manual
 
 # ---------------------------------------------------------------------
 # INTRODUCCIÓN · organizador previo (Cap. 1 y 3)
@@ -504,11 +509,21 @@ temas_clinicos:
       - "En la primaria: no cortar la ropa y aislarla rápido del suelo; signos vitales con calma y sin apuro. Nunca dejar sola a una víctima hipotérmica."
   - id: "shock"
     nombre: "Shock"
-    racional: "Hipoperfusión: la sangre no llega a los tejidos. Signo clave en la piel: pálida, fría y húmeda; también debilidad, pupilas dilatadas, falta de coordinación y conciencia disminuida. Buscar sangrados ocultos; el sangrado interno no se controla en el terreno → abrigada, posición cómoda, control repetido de pulso distal y conciencia, y evacuación CRÍTICA."
+    racional: "Hipoperfusión: la sangre (y con ella el oxígeno) no llega a los tejidos. Cualquiera sea la causa, el cuerpo reacciona igual: pulso y respiración rápidos, piel pálida, fría y húmeda, sed, ansiedad y, al final, conciencia disminuida. En el terreno el shock no se cura: se reconoce temprano, se trata la causa si se puede (hemorragia externa, anafilaxia), se frena la pérdida de calor y se evacúa (CRÍTICO)."
     detalle:
-      - "Causas típicas: hemorragia (externa o interna), quemaduras extensas (hipovolemia), lesión medular (vasodilatación), sepsis."
-      - "Hemorragia interna: puede tardar horas o días en manifestarse. Moretones, zonas dolorosas, vómitos o tos con sangre, materia fecal negra o con sangre roja."
-      - "Quien perdió sangre se enfría más: mantenerla abrigada y recostada; PLS si vomita; preparado para RCP si deja de responder y de respirar."
+      - "Qué es: la circulación falla y no entrega oxígeno a los tejidos. Puede fallar la bomba (corazón), el contenido (sangre o líquidos) o el continente (vasos sanguíneos demasiado dilatados). Sin tratamiento progresa a paro cardiorrespiratorio."
+      - "Tipo · Hipovolémico (el más frecuente en lugares remotos): falta volumen. Hemorragia externa o interna, quemaduras extensas (pérdida de plasma), deshidratación grave (vómitos, diarrea, calor). Conducta: controlar la hemorragia externa; la interna no se resuelve en el terreno → evacuar."
+      - "Tipo · Cardiogénico: el corazón no bombea bien (ataque cardíaco, arritmia, golpe fuerte en el pecho). Suele sumar dolor u opresión en el pecho y falta de aire. Conducta: reposo absoluto, semisentada, su medicación prescripta, evacuación pasiva."
+      - "Tipo · Distributivo: los vasos se dilatan y el volumen «no alcanza». Neurogénico (lesión medular: piel caliente y seca por debajo de la lesión, pulso lento, presión baja); anafiláctico (alergia grave: urticaria, hinchazón de cara, labios o lengua, dificultad para respirar; adrenalina autoinyectable si está prescripta); séptico (infección grave: fiebre, herida infectada que empeora)."
+      - "Tipo · Obstructivo: algo bloquea el flujo de sangre (neumotórax a tensión, taponamiento cardíaco, embolia). Poco frecuente en remoto y no se trata en el terreno: evacuar."
+      - "Desmayo (síncope o shock «psicogénico»): caída pasajera de la presión por dolor, miedo o emoción fuerte. Se recupera en segundos o minutos acostada con las piernas elevadas; nada por boca hasta que trague. No es un shock verdadero, pero si no se recupera rápido o se repite, pensar en otra causa y evacuar."
+      - "Etapa · Compensado: el cuerpo compensa con pulso y respiración rápidos, piel pálida, fría y húmeda, sed, ansiedad e inquietud; la presión arterial se mantiene normal. Es el momento de actuar: todavía es reversible."
+      - "Etapa · Descompensado: pulso muy rápido y débil (puede no palparse el radial), relleno capilar > 2 s, respiración rápida y superficial, confusión que pasa a somnolencia (AVDN que baja), presión baja. Sin tratamiento definitivo lleva al paro."
+      - "Dónde lo ves en la CAV: en la C de HABCDE (pulso rápido y débil, piel pálida, fría y húmeda, relleno capilar lento) y en la D (ansiedad, confusión, pupilas dilatadas, AVDN que cae). En la secundaria, lo que importa es la tendencia: signos vitales que empeoran entre una toma y la siguiente, aunque cada valor por sí solo parezca aceptable."
+      - "Hemorragia interna: puede tardar horas o días en manifestarse. Moretones, zonas dolorosas o rígidas (abdomen), vómitos o tos con sangre, materia fecal negra o con sangre roja. Sospecharla por el mecanismo (caída, golpe en tórax, abdomen, pelvis o muslo) aunque no haya sangre visible."
+      - "Tratamiento en el terreno: 1) controlar lo que se pueda (hemorragia externa con presión directa o torniquete; anafilaxia con la adrenalina prescripta); 2) acostada en posición cómoda, sin moverla de más si hay sospecha de columna o pelvis; 3) abrigarla y aislarla del suelo: quien perdió sangre se enfría mucho más rápido; 4) calmarla, hablarle, no dejarla sola; 5) hidratarla solo si está consciente y traga bien; 6) reevaluar cada 5 min (es inestable): pulso distal, relleno capilar, piel y AVDN, con hora en la ficha SOAP; 7) PLS si vomita; preparado para RCP si deja de responder y de respirar."
+      - "Evacuación: todo shock es CRÍTICO. No esperar a que baje la presión para decidir: la presión cae recién en la etapa descompensada, cuando ya es tarde. Activar la ayuda externa apenas se sospecha."
+      - "Errores comunes: dejar que se enfríe mientras se la examina; sentarla o pararla; dar de beber a quien no traga bien; friccionarle las extremidades; atribuir la ansiedad y la inquietud «a los nervios» en vez de a la hipoperfusión."
   - id: "empaque"
     nombre: "Empaque de hipotermia"
     racional: "Aislar a la víctima con varios materiales para limitar la pérdida de calor por todos los mecanismos; los medios de calor externos no deben ir en contacto directo con la piel."
@@ -569,9 +584,20 @@ tarjetas:
   - {id: "t-hemo", tema: "Manejo", tipo: "escribir", prompt: "¿Cómo se controla PRIMERO una hemorragia importante?", respuesta: ["presion directa"], racional_ref: "habcde"}
   - {id: "t-torniquete", tema: "Manejo", tipo: "escribir", prompt: "¿A qué distancia de la herida se coloca el torniquete?", respuesta: ["5-8 cm","5 a 8 cm"], racional_ref: "habcde"}
   - {id: "t-torniquete-nunca", tema: "Manejo", tipo: "elegir", prompt: "¿Dónde NUNCA se coloca un torniquete?", opciones: ["Sobre una articulación","En el muslo","En el brazo","A 5-8 cm de la herida","En la pierna"], respuesta: ["Sobre una articulación"], racional_ref: "habcde"}
-  - {id: "t-shock", tema: "Signos", tipo: "escribir", prompt: "Signos de shock en la piel (3)", respuesta: ["palida humeda y fria","palida fria humeda"], racional_ref: "shock"}
   - {id: "t-pls", tema: "Manejo", tipo: "escribir", prompt: "No responde pero respira normal, sin sospecha de columna: ¿posición?", respuesta: ["posicion lateral de seguridad","pls","posicion de recuperacion"], racional_ref: "habcde"}
   - {id: "t-no-comer", tema: "Manejo", tipo: "elegir", prompt: "Se desmayó y todavía no está completamente recuperada ni traga bien: ¿le das agua?", opciones: ["No: nada por boca hasta que se recupere y pueda tragar","Sí, agua","Sí, bebida azucarada","Sí, un sorbo chico","Sí, agua en la cara para despertarla"], respuesta: ["No: nada por boca hasta que se recupere y pueda tragar"], racional_ref: "secundaria"}
+  # --- Shock ---
+  - {id: "t-shock", tema: "Shock", tipo: "escribir", prompt: "Signos de shock en la piel (3)", respuesta: ["palida humeda y fria","palida fria humeda"], racional_ref: "shock"}
+  - {id: "t-shock-def", tema: "Shock", tipo: "escribir", prompt: "¿Qué es el shock, en una frase?", respuesta: ["hipoperfusion","sangre no llega a los tejidos","no llega sangre a los tejidos","oxigeno no llega a los tejidos"], racional_ref: "shock"}
+  - {id: "t-shock-tipos", tema: "Shock", tipo: "escribir", prompt: "Nombrá 3 tipos de shock", respuesta: ["hipovolemico cardiogenico distributivo","hipovolemico cardiogenico neurogenico","hipovolemico cardiogenico anafilactico","hipovolemico cardiogenico septico","hipovolemico cardiogenico obstructivo","hipovolemico neurogenico anafilactico","hipovolemico neurogenico septico","hipovolemico anafilactico septico","hipovolemico distributivo obstructivo","cardiogenico distributivo obstructivo","cardiogenico neurogenico anafilactico","cardiogenico anafilactico septico","neurogenico anafilactico septico"], racional_ref: "shock"}
+  - {id: "t-shock-frecuente", tema: "Shock", tipo: "elegir", prompt: "¿Cuál es el tipo de shock más frecuente en lugares remotos?", opciones: ["Hipovolémico","Cardiogénico","Neurogénico","Anafiláctico","Séptico","Obstructivo"], respuesta: ["Hipovolémico"], racional_ref: "shock"}
+  - {id: "t-shock-hipovolemico", tema: "Shock", tipo: "escribir", prompt: "Nombrá 2 causas de shock hipovolémico", respuesta: ["hemorragia quemaduras","hemorragia deshidratacion","quemaduras deshidratacion","sangrado quemaduras","sangrado deshidratacion","hemorragia interna externa","hemorragia sangrado"], racional_ref: "shock"}
+  - {id: "t-shock-neuro", tema: "Shock", tipo: "elegir", prompt: "Lesión medular, pulso LENTO y piel caliente y seca por debajo de la lesión: ¿qué tipo de shock?", opciones: ["Neurogénico","Hipovolémico","Cardiogénico","Anafiláctico","Séptico","Obstructivo"], respuesta: ["Neurogénico"], racional_ref: "shock"}
+  - {id: "t-shock-anafilaxia", tema: "Shock", tipo: "escribir", prompt: "Shock anafiláctico: ¿qué medicación, si la víctima la tiene prescripta?", respuesta: ["adrenalina","epinefrina","autoinyector de adrenalina"], racional_ref: "shock"}
+  - {id: "t-shock-compensado", tema: "Shock", tipo: "elegir", prompt: "Shock COMPENSADO: ¿cuál de estos signos NO esperás todavía?", opciones: ["Presión arterial baja","Pulso rápido","Piel pálida, fría y húmeda","Sed","Ansiedad e inquietud","Respiración rápida"], respuesta: ["Presión arterial baja"], racional_ref: "shock"}
+  - {id: "t-shock-etapas", tema: "Shock", tipo: "cloze", prompt: "Mientras la presión se mantiene el shock está {{compensado}}; cuando cae y baja el AVDN, está {{descompensado}}.", respuesta: ["compensado","descompensado"], racional_ref: "shock"}
+  - {id: "t-shock-evac", tema: "Shock", tipo: "cloze", prompt: "Todo shock se evacúa como {{CRÍTICO}}: no se espera a que baje la presión.", respuesta: ["critico"], racional_ref: "shock"}
+  - {id: "t-shock-terreno", tema: "Shock", tipo: "elegir", prompt: "Víctima en shock por sospecha de sangrado interno: ¿qué NO hacés?", opciones: ["Sentarla para que respire mejor","Abrigarla y aislarla del suelo","Acostarla en posición cómoda","Reevaluar pulso, piel y AVDN cada 5 min","PLS si vomita","Activar la ayuda externa"], respuesta: ["Sentarla para que respire mejor"], racional_ref: "shock"}
   # --- TEV / Escena ---
   - {id: "t-tev", tema: "TEV", tipo: "escribir", prompt: "¿Qué 3 cosas evalúa la TEV sin tocar a la víctima?", respuesta: ["respiracion circulacion aspecto general"], racional_ref: "tev"}
   # --- AVDN ---
